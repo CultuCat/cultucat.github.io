@@ -14,6 +14,11 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
       },
+      {
+        path: 'create-event', // Define the path for CreateEvent.vue
+        name: 'CreateEvent', // You can give it a name if needed
+        component: () => import('@/views/CreateEvent.vue'), // Import the CreateEvent.vue component
+      },
     ],
   },
 ]
