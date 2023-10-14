@@ -4,84 +4,84 @@ const routes = [
   {
     path: '/',
     name: 'page',
-    component: () => import('@/views/page.vue'),
+    component: () => import('../views/page.vue'),
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/views/login.vue'),
+    component: () => import('../views/login.vue'),
   },
   {
     path: '/',
-    component: () => import('@/layouts/Default.vue'),
+    component: () => import('../layouts/Default.vue'),
     children: [
       {
         path: 'home',
         name: 'home',
-        component: () => import('@/views/home.vue'),
+        component: () => import('../views/home.vue'),
       },
       {
         path: 'search',
         name: 'search',
-        component: () => import('@/views/search.vue'),
+        component: () => import('../views/search.vue'),
       },
       {
         path: 'map',
         name: 'map',
-        component: () => import('@/views/map.vue'),
+        component: () => import('../views/map.vue'),
       },
       {
         path: 'tickets',
         name: 'tickets',
-        component: () => import('@/views/tickets.vue'),
+        component: () => import('../views/tickets.vue'),
       },
       {
         path: 'chats',
         name: 'chats',
-        component: () => import('@/views/chats.vue'),
+        component: () => import('../views/chats.vue'),
       },
       {
         path: 'users/:user_id',
         name: 'profile',
-        component: () => import('@/views/user.vue'),
+        component: () => import('../views/user.vue'),
       },
       {
         path: 'settings',
         name: 'settings',
-        component: () => import('@/views/settings.vue'),
+        component: () => import('../views/settings.vue'),
       },
     ],
   },
   {
     path: '/admin',
-    component: () => import('@/layouts/Default.vue'),
+    component: () => import('../layouts/Default.vue'),
     children: [
       {
         path: 'home',
         name: 'adminHome',
-        component: () => import('@/views/admin/home.vue'),
+        component: () => import('../views/admin/home.vue'),
       },
       {
         path: 'events',
         name: 'adminEvents',
-        component: () => import('@/views/admin/events.vue'),
+        component: () => import('../views/admin/events.vue'),
       },
       {
         path: 'users',
         name: 'adminUsers',
-        component: () => import('@/views/admin/users.vue'),
+        component: () => import('../views/admin/users.vue'),
       },
     ],
   },
   {
     path: '/events/:event_id',
     name: 'event',
-    component: () => import('@/views/event.vue'),
+    component: () => import('../views/event.vue'),
   },
   {
     path: '/tickets/:ticket_id',
     name: 'ticket',
-    component: () => import('@/views/ticket.vue'),
+    component: () => import('../views/ticket.vue'),
   },
 ];
 
