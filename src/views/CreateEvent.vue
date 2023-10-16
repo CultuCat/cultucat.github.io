@@ -1,71 +1,66 @@
 <template>
-  <div>
   <v-col>
     <h1 style="color: #FF6961;">Creació d'un esdeveniment</h1>
-    <br>
+
     <v-form @submit="submitForm">
-      <v-text-field label="Nom" variant="outlined"></v-text-field>
-      <v-text-field label="Descripció" variant="outlined"></v-text-field>
+      <v-text-field label="Nom" v-model="formData.nom" variant="outlined"></v-text-field>
+      <v-text-field label="Descripció" v-model="formData.descripcio" variant="outlined"></v-text-field>
       <v-file-input
-        label="Select Image (jpg or png)"
-        v-model="selectedFile"
+        label="Selecciona imatge (jpg o png)"
         :accept="'image/jpeg, image/png'"
         variant="outlined"
+        v-model="formData.imatge"
       ></v-file-input>
+
       <v-row>
-      <v-col>
-      <div class="d-flex justify-center align-center pa-4">
-        <v-date-picker v-model="selectedDate" small></v-date-picker>
-      </div>
-    </v-col>
-
-    <v-col>
-      <div class="d-flex justify-center align-center pa-4">
-        <v-date-picker v-model="selectedDate" small></v-date-picker>
-      </div>
-    </v-col>
-      </v-row>
-      <v-text-field label="Preu" variant="outlined"></v-text-field>
-      <v-text-field label="Horaris" variant="outlined"></v-text-field>
-      <v-text-field label="Enllaç" variant="outlined"></v-text-field>
-      <v-text-field label="Adreça" variant="outlined"></v-text-field>
-      <v-row class="d-flex justify-center align-center pa-4">
-        <v-col>
-        <div class="d-flex justify-center align-left">
-        <v-text-field label="Latitud" variant="outlined"></v-text-field>
-        </div>
+        <v-col cols="12" md="6" class="d-flex justify-center"> 
+          <v-date-picker v-model="formData.dataIni"></v-date-picker>
         </v-col>
-        <v-col>
-        <div class="d-flex justify-center align-right">
-        <v-text-field label="Longitud" variant="outlined"></v-text-field>
-        </div>
+        <v-col cols="12" md="6" class="d-flex justify-center"> 
+          <v-date-picker v-model="formData.dataFi"></v-date-picker>
         </v-col>
       </v-row>
-      <v-text-field label="Espai" variant="outlined"></v-text-field>
+      <br>
 
-      <v-btn type="submit">Crea</v-btn>
+      <v-text-field label="Preu" v-model="formData.preu" variant="outlined"></v-text-field>
+      <v-text-field label="Horaris" v-model="formData.horaris" variant="outlined"></v-text-field>
+      <v-text-field label="Enllaç" v-model="formData.ellaç" variant="outlined"></v-text-field>
+      <v-text-field label="Adreça" v-model="formData.adreça" variant="outlined"></v-text-field>
+
+      <v-row>
+        <v-col cols="6">
+          <v-text-field label="Latitud" v-model="formData.latitud" variant="outlined"></v-text-field>
+        </v-col>
+        <v-col cols="6">
+          <v-text-field label="Longitud" v-model="formData.longitud" variant="outlined"></v-text-field>
+        </v-col>
+      </v-row>
+
+      <v-text-field label="Espai" v-model="formData.espai" variant="outlined"></v-text-field>
+
+      <v-btn type="submit" color="#FF6961">Crea</v-btn>
     </v-form>
-    </v-col>
-  </div>
+  </v-col>
 </template>
 
 <script>
 export default {
+  name: "CreateEvent",
   data() {
     return {
       formData: {
-        name: '',
-        description: '',
-        image: null, // You can store the selected image file here
-        date1: null, // Use unique variable names for date pickers
-        date2: null,
-        price: '',
-        schedule: '',
-        link: '',
-        address: '',
-        latitude: '',
-        longitude: '',
-        space: '',
+        nom: '',
+        descripcio: '',
+        imatge: null, // You can store the selected image file here
+        dataIni: null, // Use unique variable names for date pickers
+        dataFi: null,
+        preu: '',
+        horaris: '',
+        enllaç: '',
+        adreça: '',
+        latitud: '',
+        longitud: '',
+        espai: '',
       },
     };
   },
