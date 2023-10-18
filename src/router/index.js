@@ -45,6 +45,11 @@ const routes = [
     path: '/users/:user_id',
     name: 'profile',
     component: () => import('@/views/user.vue'),
+  },  
+  {
+    path: '/users/:user_id/edit',
+    name: 'edit user',
+    component: () => import('@/views/edit-user.vue'),
   },
   {
     path: '/settings',
@@ -71,6 +76,7 @@ const routes = [
     name: 'event',
     component: () => import('@/views/event.vue'),
   },
+  
 ];
 
 const router = createRouter({
