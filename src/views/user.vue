@@ -1,7 +1,117 @@
+<!-- ======================================================================= -->
+<!--                        VISTA PERFIL DEL USUARIO                         -->
+<!-- ======================================================================= -->
+
 <template>
-  <HelloWorld />
+  <v-col>
+    <h1>User</h1>
+
+    <v-container class="d-flex justify-center align-center">
+      <v-col cols="12" md="10" sm="8">
+        <!-- ========================== AVATAR Y SETTINGS ========================== -->
+        <v-card :title="profile.name" :subtitle="'Score: ' + profile.score">
+          <template v-slot:prepend>
+            <v-avatar :image="profile.avatar" size="70"></v-avatar>
+          </template>
+
+          <template v-slot:append>
+            <v-btn
+              variant="text"
+              icon="mdi-cog-outline"
+              @click="handleIconClick('/users/' + userId + '/edit')"
+            ></v-btn>
+          </template>
+          <!-- ========================== TABS Y CONTENIDO =========================== -->
+          <v-col>
+            <v-tabs v-model="tab" bg-color="#ff6961" fixed-tabs>
+              <v-tab v-for="i in items.length" :key="i" :value="i">
+                {{ items[i - 1].title }}
+              </v-tab>
+            </v-tabs>
+            <div class="content-container">
+              <v-window v-model="tab">
+                <v-window-item v-for="n in items.length" :key="n" :value="n">
+                  <!-- :value sincroniza con las tabs -->
+                  <SlideGroup :compData="items[n - 1]" />
+                  <!-- Pasa los datos de cada slide a SlideGroup -->
+                </v-window-item>
+              </v-window>
+            </div>
+          </v-col>
+        </v-card>
+      </v-col>
+    </v-container>
+  </v-col>
 </template>
 
+<!-- =============================== SCRIPTS =============================== -->
 <script setup>
-  import HelloWorld from '@/components/HelloWorld.vue'
+import SlideGroup from "@/components/SlideGroup.vue";
 </script>
+
+<script>
+export default {
+  data() {
+    return {
+      editUserView: this.$route.path.includes("edit-user.vue") ? true : false,
+      profile: {
+        //TODO datos y imagen dinamico
+        group: "User",
+        name: "Eric Riera", //username
+        email: "eric.riera@email.com", //email
+        avatar: "https://randomuser.me/api/portraits/men/85.jpg", //profile photo
+        score: 700, //TODO dinamico
+      },
+      items: [
+        {
+          id: 1,
+          title: "Favourite Tags",
+          arr: [], //TODO array de tags favorits
+        },
+        {
+          id: 2,
+          title: "Favourite Places",
+          arr: [
+            "music2",
+            "cine2",
+            "music2",
+            "cine2",
+            "music2",
+            "cine2",
+            "music2",
+            "cine2",
+          ], //TODO array de llocs favorits
+        },
+        {
+          id: 3,
+          title: "Trophies",
+          arr: ["music3", "cine3"], //TODO array de trofeus
+        },
+      ],
+      tab: null,
+    };
+  },
+  components: {
+    SlideGroup,
+  },
+  created() {
+    // Acceder al ID del usuario desde los parámetros de la ruta
+    this.userId = this.$route.params.user_id;
+  },
+  methods: {
+    handleIconClick(route) {
+      // Lógica a ejecutar cuando se hace clic en el icono
+      this.$router.push(route);
+    },
+  },
+};
+</script>
+
+<!-- =============================== ESTILOS =============================== -->
+
+<style scoped>
+.content-container {
+  margin: 30px 0; /* Agrega espacio superior y inferior*/
+  text-align: center;
+}
+</style>
