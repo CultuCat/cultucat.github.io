@@ -9,9 +9,19 @@
     <v-container class="d-flex justify-center align-center">
       <v-col cols="12" md="10" sm="8">
         <!-- ========================== AVATAR Y SETTINGS ========================== -->
-        <v-card :title="profile.name" :subtitle="'Score: ' + profile.score">
+        <v-card>
+          <!-- ============================= SLOTS V-CARD ============================== -->
           <template v-slot:prepend>
             <v-avatar :image="profile.avatar" size="70"></v-avatar>
+          </template>
+
+          <template v-slot:title>
+            {{profile.name}} 
+            <v-icon icon="mdi-check-decagram" size="xs" class="mx-2"></v-icon>
+          </template>
+
+          <template v-slot:subtitle>
+            <pre class="mt-2"><strong>Score: {{profile.score}}         Friends: {{profile.friends}}</strong></pre>
           </template>
 
           <template v-slot:append>
@@ -75,6 +85,7 @@ export default {
         score: 700, //TODO dinamico
         isVisible: "Private",
         language: '',
+        friends: 28,
       },
       items: [
         {
