@@ -4,7 +4,7 @@
 
 <template>
   <v-col>
-    <h1>User</h1>
+    <h1 style="color: #FF6961;" class="my-5 ml-5">Profile</h1>
 
     <v-container class="d-flex justify-center align-center">
       <v-col cols="12" md="10" sm="8">
@@ -23,7 +23,8 @@
           </template>
           <!-- ========================== TABS Y CONTENIDO =========================== -->
           <v-col>
-            <v-tabs v-model="tab" bg-color="#ff6961" fixed-tabs>
+            <v-card>
+              <v-tabs v-model="tab" bg-color="#ff6961" fixed-tabs>
               <v-tab v-for="i in items.length" :key="i" :value="i">
                 {{ items[i - 1].title }}
               </v-tab>
@@ -40,6 +41,8 @@
                 </v-window-item>
               </v-window>
             </div>
+            </v-card>
+            
           </v-col>
         </v-card>
       </v-col>
@@ -63,12 +66,15 @@ export default {
     return {
       editUserView: this.$route.path.includes("edit-user.vue") ? true : false,
       profile: {
-        //TODO datos y imagen dinamico
         group: "User",
+        nickname:'',
         name: "Eric Riera", //username
         email: "eric.riera@email.com", //email
+        password:'●●●●●●●●●●',
         avatar: "https://randomuser.me/api/portraits/men/85.jpg", //profile photo
         score: 700, //TODO dinamico
+        isVisible: "Private",
+        language: '',
       },
       items: [
         {
