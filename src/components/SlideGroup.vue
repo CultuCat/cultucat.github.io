@@ -3,21 +3,27 @@
 <!-- ======================================================================= -->
 
 <template>
-  <v-sheet class="d-inline-block" max-width="700">
+  <v-sheet class="d-inline-block" max-width="650">
     <v-slide-group show-arrows v-if="compData.arr.length !== 0" center-active>
       <v-slide-group-item
-        v-for="tag in compData.arr"
+        v-for="(tag, index) in compData.arr"
         :key="tag"
-        v-slot="{ isSelected, toggle }"
       >
-        <v-btn
-          class="ma-2"
-          rounded
-          :color="isSelected ? 'primary' : undefined"
-          @click="toggle"
-        >
-          {{ tag }}
-        </v-btn>
+          <v-btn
+            class="ma-2"
+            rounded
+            @mouseenter="showDeleteIcon = index"
+            @mouseleave="showDeleteIcon = -1"
+          >
+            {{ tag }}
+            <v-icon
+              class="ml-1"
+              v-if="showDeleteIcon === index && !trophyTab"
+              @click="emitDeleteItem(index)"
+            >
+              mdi-delete
+            </v-icon>
+          </v-btn>
       </v-slide-group-item>
     </v-slide-group>
 
@@ -31,8 +37,21 @@
 
 <script>
 export default {
+  data() {
+    return {
+      showDeleteIcon: -1,
+      trophyTab: this.compData.title === "Trophies"
+    };
+  },
   props: {
     compData: Object, //Recibe datos de la vista padre
+  },
+  methods: {
+    emitDeleteItem(index) {
+      const chipName = this.compData.arr[index];
+      const chipCat = this.compData.title;
+      this.$emit("delete-item",  {index, chipName, chipCat});
+    },
   },
 };
 </script>

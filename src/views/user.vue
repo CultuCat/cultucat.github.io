@@ -30,10 +30,13 @@
             </v-tabs>
             <div class="content-container">
               <v-window v-model="tab">
+                <!-- :value sincroniza con las tabs -->
                 <v-window-item v-for="n in items.length" :key="n" :value="n">
-                  <!-- :value sincroniza con las tabs -->
-                  <SlideGroup :compData="items[n - 1]" />
-                  <!-- Pasa los datos de cada slide a SlideGroup -->
+                <!-- :compData pasa los datos de cada slide a SlideGroup (chips deslizables) -->
+                  <SlideGroup
+                    :compData="items[n - 1]"
+                    @delete-item="deleteItem"
+                  />
                 </v-window-item>
               </v-window>
             </div>
@@ -41,12 +44,17 @@
         </v-card>
       </v-col>
     </v-container>
+    <!--  Dialog para confirmacion de eliminar -->
+    <confirmDelete v-if="dialogDelete" :itemToDelete="itemToDelete" @confirmed-delete="deleteConfirmed" @cancel-delete="deleteCancel"/>
+
   </v-col>
+  
 </template>
 
 <!-- =============================== SCRIPTS =============================== -->
 <script setup>
 import SlideGroup from "@/components/SlideGroup.vue";
+import confirmDelete from "@/components/confirmDelete.vue";
 </script>
 
 <script>
@@ -89,10 +97,14 @@ export default {
         },
       ],
       tab: null,
+      dialogDelete: false,
+      itemToDelete: null,
+      idxToDelete: null,
     };
   },
   components: {
     SlideGroup,
+    confirmDelete,
   },
   created() {
     // Acceder al ID del usuario desde los parámetros de la ruta
@@ -103,6 +115,23 @@ export default {
       // Lógica a ejecutar cuando se hace clic en el icono
       this.$router.push(route);
     },
+    deleteItem({index, chipName, chipCat}) {
+      this.itemToDelete = {chipName, chipCat};
+      this.dialogDelete = true;
+      this.idxToDelete = index;
+    },
+    deleteConfirmed() {
+      this.items[this.tab - 1].arr.splice(this.idxToDelete, 1);
+      this.reset();
+    },
+    deleteCancel() {
+      this.reset();
+    },
+    reset(){
+      this.dialogDelete = false;
+      this.idxToDelete = null;
+      this.itemToDelete = null;
+    }
   },
 };
 </script>
