@@ -23,8 +23,8 @@
 
       <v-text-field label="Preu" v-model="formData.preu" variant="outlined"></v-text-field>
       <v-text-field label="Horaris" v-model="formData.horaris" variant="outlined"></v-text-field>
-      <v-text-field label="Enllaç" v-model="formData.enllaç" variant="outlined"></v-text-field>
-      <v-text-field label="Adreça" v-model="formData.adreça" variant="outlined"></v-text-field>
+      <v-text-field label="Enllaç" v-model="formData.enllac" variant="outlined"></v-text-field>
+      <v-text-field label="Adreça" v-model="formData.adreca" variant="outlined"></v-text-field>
 
       <v-row>
         <v-col cols="6">
@@ -43,34 +43,40 @@
 </template>
 
 <script>
-export default {
-  name: "CreateEvent",
-  data() {
-    return {
-      formData: {
-        nom: '',
-        descripcio: '',
-        //imatge: null, // You can store the selected image file here
-        dataIni: null, // Use unique variable names for date pickers
-        dataFi: null,
-        preu: '',
-        horaris: '',
-        enllaç: '',
-        adreça: '',
-        latitud: '',
-        longitud: '',
-        espai: '',
-      },
-    };
-  },
-  methods: {
-    submitForm() {
-      // Handle form submission here
-      console.log('Form data:');
-      for (const key in this.formData) {
-        console.log(key + ':', this.formData[key]);
-      }
+  import axios from 'axios';
+
+  export default {
+    name: "CreateEvent",
+    data() {
+      return {
+        formData: {
+          nom: '',
+          descripcio: '',
+          //imatge: null, // You can store the selected image file here
+          dataIni: null, // Use unique variable names for date pickers
+          dataFi: null,
+          preu: '',
+          horaris: '',
+          enllac: '',
+          adreca: '',
+          latitud: '',
+          longitud: '',
+          espai: '',
+        },
+      };
     },
-  },
-};
+    methods: { //nattech.fib.upc.edu:40400
+      submitForm() {
+        axios.post('http://127.0.0.1:8000/events/', this.formData)
+          .then(response => {
+            // Procesa la respuesta del servidor, si es necesario
+            console.log('Respuesta del servidor:', response.data);
+          })
+          .catch(error => {
+            // Maneja errores, por ejemplo, si la solicitud falla
+            console.error('Error de solicitud:', error);
+          });
+      },
+    },
+  };
 </script>
