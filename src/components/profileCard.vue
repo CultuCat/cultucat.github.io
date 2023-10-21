@@ -3,28 +3,37 @@
 <!-- ======================================================================= -->
 
 <template>
-    <div class="d-flex justify-center mb-10">
-        <!-- ======================== AVATAR Y ICONO EDITAR ======================== -->
-        <div style="position: relative; width: 150px; height: 150px;">
-            <v-avatar color="grey" size="150" class="m-auto" style="position: relative; ">
+  <div class="d-flex justify-center mb-10">
+    <!-- ======================== AVATAR Y ICONO EDITAR ======================== -->
+    <div style="position: relative; width: 150px; height: 150px">
+      <v-avatar
+        color="grey"
+        size="150"
+        class="m-auto"
+        style="position: relative"
+      >
         <v-img cover :src="img"></v-img>
       </v-avatar>
-  
-      <v-btn @click="openFileInput" icon style="position: absolute; bottom: 0; right: 0; z-index: 2;">
+
+      <v-btn
+        @click="openFileInput"
+        icon
+        style="position: absolute; bottom: 0; right: 0; z-index: 2"
+      >
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
-        </div>
-      
-        <!-- ========================== FORM UPLOAD FOTO =========================== -->
-      <v-file-input
-        ref="fileInput"
-        :accept="'image/jpeg, image/png'"
-        :v-model="img"
-        style="display: none"
-        @change="handleFileChange"
-      ></v-file-input>
     </div>
-  </template>
+
+    <!-- ========================== FORM UPLOAD FOTO =========================== -->
+    <v-file-input
+      ref="fileInput"
+      :accept="'image/jpeg, image/png'"
+      :v-model="img"
+      style="display: none"
+      @change="handleFileChange"
+    ></v-file-input>
+  </div>
+</template>
 
 <script>
 export default {

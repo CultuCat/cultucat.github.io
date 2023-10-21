@@ -37,7 +37,7 @@
             </v-row>
 
             <v-row>
-              <v-col cols="9">
+              <v-col cols="6" sm="12">
                 <v-text-field
                   label="Password"
                   v-model="formData.password"
@@ -54,18 +54,20 @@
                   hint="At least 8 characters"
                 ></v-text-field>
               </v-col>
-              <v-col cols="3">
-                <v-btn
-                  block
-                  rounded="xl"
-                  size="large"
-                  elevation="4"
-                  append-icon="mdi-form-textbox-password"
-                  @click="toggleEditing"
-                >
-                  {{ isEditing ? "Confirm Password" : "Edit Password" }}
-                </v-btn>
-              </v-col>
+              <v-row justify="center" align="center" class="mb-4">
+                <v-col cols="10">
+                  <v-btn
+                    rounded="xl"
+                    block
+                    size="large"
+                    elevation="4"
+                    append-icon="mdi-form-textbox-password"
+                    @click="toggleEditing"
+                  >
+                    {{ isEditing ? "Confirm Password" : "Edit Password" }}
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-row>
             <!-- ===================== PRIVACIDAD(PUBLICO/PRIVADO) ===================== -->
             <v-switch
@@ -80,7 +82,7 @@
             ></v-switch>
             <!-- ============================= SUBMITFORM ============================== -->
             <v-row justify="center">
-              <v-col cols="4">
+              <v-col cols="4" sm="8">
                 <v-btn
                   :loading="loading"
                   type="submit"

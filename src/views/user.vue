@@ -4,10 +4,10 @@
 
 <template>
   <v-col>
-    <h1 style="color: #FF6961;" class="my-5 ml-5">Profile</h1>
+    <h1 style="color: #ff6961" class="my-5 ml-5">Profile</h1>
 
     <v-container class="d-flex justify-center align-center">
-      <v-col cols="12" md="10" sm="8">
+      <v-col cols="12">
         <!-- ========================== AVATAR Y SETTINGS ========================== -->
         <v-card>
           <!-- ============================= SLOTS V-CARD ============================== -->
@@ -16,12 +16,14 @@
           </template>
 
           <template v-slot:title>
-            {{profile.name}} 
+            {{ profile.name }}
             <v-icon icon="mdi-check-decagram" size="xs" class="mx-2"></v-icon>
           </template>
 
           <template v-slot:subtitle>
-            <pre class="mt-2"><strong>Score: {{profile.score}}         Friends: {{profile.friends}}</strong></pre>
+            <pre
+              class="mt-2"
+            ><strong>Score: {{profile.score}}         Friends: {{profile.friends}}</strong></pre>
           </template>
 
           <template v-slot:append>
@@ -35,33 +37,35 @@
           <v-col>
             <v-card>
               <v-tabs v-model="tab" bg-color="#ff6961" fixed-tabs>
-              <v-tab v-for="i in items.length" :key="i" :value="i">
-                {{ items[i - 1].title }}
-              </v-tab>
-            </v-tabs>
-            <div class="content-container">
-              <v-window v-model="tab">
-                <!-- :value sincroniza con las tabs -->
-                <v-window-item v-for="n in items.length" :key="n" :value="n">
-                <!-- :compData pasa los datos de cada slide a SlideGroup (chips deslizables) -->
-                  <SlideGroup
-                    :compData="items[n - 1]"
-                    @delete-item="deleteItem"
-                  />
-                </v-window-item>
-              </v-window>
-            </div>
+                <v-tab v-for="i in items.length" :key="i" :value="i">
+                  {{ items[i - 1].title }}
+                </v-tab>
+              </v-tabs>
+              <div class="content-container">
+                <v-window v-model="tab">
+                  <!-- :value sincroniza con las tabs -->
+                  <v-window-item v-for="n in items.length" :key="n" :value="n">
+                    <!-- :compData pasa los datos de cada slide a SlideGroup (chips deslizables) -->
+                    <SlideGroup
+                      :compData="items[n - 1]"
+                      @delete-item="deleteItem"
+                    />
+                  </v-window-item>
+                </v-window>
+              </div>
             </v-card>
-            
           </v-col>
         </v-card>
       </v-col>
     </v-container>
     <!--  Dialog para confirmacion de eliminar -->
-    <confirmDelete v-if="dialogDelete" :itemToDelete="itemToDelete" @confirmed-delete="deleteConfirmed" @cancel-delete="deleteCancel"/>
-
+    <confirmDelete
+      v-if="dialogDelete"
+      :itemToDelete="itemToDelete"
+      @confirmed-delete="deleteConfirmed"
+      @cancel-delete="deleteCancel"
+    />
   </v-col>
-  
 </template>
 
 <!-- =============================== SCRIPTS =============================== -->
@@ -77,14 +81,14 @@ export default {
       editUserView: this.$route.path.includes("edit-user.vue") ? true : false,
       profile: {
         group: "User",
-        nickname:'',
+        nickname: "",
         name: "Eric Riera", //username
         email: "eric.riera@email.com", //email
-        password:'●●●●●●●●●●',
+        password: "●●●●●●●●●●",
         avatar: "https://randomuser.me/api/portraits/men/85.jpg", //profile photo
         score: 700, //TODO dinamico
         isVisible: "Private",
-        language: '',
+        language: "",
         friends: 28,
       },
       items: [
@@ -97,20 +101,19 @@ export default {
           id: 2,
           title: "Favourite Places",
           arr: [
-            "music2",
-            "cine2",
-            "music2",
-            "cine2",
-            "music2",
-            "cine2",
-            "music2",
-            "cine2",
+            "Barcelona",
+            "Costa Brava",
+            "Costa Dorada",
+            "Tarragona",
+            "Girona",
+            "Sitges",
+            "Montserrat",
           ], //TODO array de llocs favorits
         },
         {
           id: 3,
           title: "Trophies",
-          arr: ["music3", "cine3"], //TODO array de trofeus
+          arr: ["Joan Miró Admirer", "Opera Enthusiast", "Museum Maestro"], //TODO array de trofeus
         },
       ],
       tab: null,
@@ -132,8 +135,8 @@ export default {
       // Lógica a ejecutar cuando se hace clic en el icono
       this.$router.push(route);
     },
-    deleteItem({index, chipName, chipCat}) {
-      this.itemToDelete = {chipName, chipCat};
+    deleteItem({ index, chipName, chipCat }) {
+      this.itemToDelete = { chipName, chipCat };
       this.dialogDelete = true;
       this.idxToDelete = index;
     },
@@ -144,11 +147,11 @@ export default {
     deleteCancel() {
       this.reset();
     },
-    reset(){
+    reset() {
       this.dialogDelete = false;
       this.idxToDelete = null;
       this.itemToDelete = null;
-    }
+    },
   },
 };
 </script>

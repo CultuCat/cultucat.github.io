@@ -8,7 +8,10 @@
       <v-card>
         <v-card-title class="headline">Delete Confirmation</v-card-title>
         <v-card-text>
-          ¿Are you sure you want to delete <strong>{{ itemToDelete.chipName }}</strong> from your <strong>{{itemToDelete.chipCat.toLowerCase()}}</strong>?
+          ¿Are you sure you want to delete
+          <strong>{{ itemToDelete.chipName }}</strong> from your
+          <strong>{{ itemToDelete.chipCat.toLowerCase() }}</strong
+          >?
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -35,9 +38,9 @@ export default {
       // Emitir un evento para confirmar la eliminación
       this.$emit("confirmed-delete");
     },
-    deleteCancel(){
-        this.$emit("cancel-delete");
-    }
-  }
+    deleteCancel() {
+      this.$emit("cancel-delete");
+    },
+  },
 };
 </script>
