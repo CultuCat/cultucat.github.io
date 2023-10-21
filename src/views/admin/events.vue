@@ -1,9 +1,15 @@
+<!-- ======================================================================= -->
+<!--                         VISTA LISTA DE EVENTOS                          -->
+<!-- ======================================================================= -->
+
 <template>
   <v-col>
-    <h1 style="color: #ff6961" class="my-5 ml-5">items</h1>
+    <h1 style="color: #ff6961" class="my-5 ml-5">Events</h1>
     <ListOfItems :items="items" />
   </v-col>
 </template>
+
+<!-- =============================== SCRIPTS =============================== -->
 
 <script setup>
 import ListOfItems from "@/components/listOfItems.vue";
@@ -13,6 +19,7 @@ import ListOfItems from "@/components/listOfItems.vue";
 export default {
   data() {
     return {
+      //array de eventos generado aleatoriamente
       items: [
         {
           id: 1,
@@ -70,55 +77,56 @@ export default {
           tags: ["films"],
         },
         {
-    id: 6,
-    startDate: "15/10/2023",
-    endDate: "18/10/2023",
-    name: "JazzFest",
-    description: "A weekend of jazz performances by international artists.",
-    price: "20 € (general admission)",
-    location: "Barcelona",
-    tags: ["music"],
-  },
-  {
-    id: 7,
-    startDate: "22/11/2023",
-    endDate: "24/11/2023",
-    name: "ArtExpo",
-    description: "Exhibition of contemporary art with renowned artists.",
-    price: "Free",
-    location: "Girona",
-    tags: ["art"],
-  },
-  {
-    id: 8,
-    startDate: "08/12/2023",
-    endDate: "10/12/2023",
-    name: "CinemaWeek",
-    description: "Screenings of classic and cult films.",
-    price: "10 € (general admission), 7 € (students)",
-    location: "Tarragona",
-    tags: ["films"],
-  },
-  {
-    id: 9,
-    startDate: "05/01/2024",
-    endDate: "08/01/2024",
-    name: "Shakespeare Festival",
-    description: "Theater performances of Shakespeare's plays.",
-    price: "15 € (general admission)",
-    location: "Lleida",
-    tags: ["theatre"],
-  },
-  {
-    id: 10,
-    startDate: "25/02/2024",
-    endDate: "28/02/2024",
-    name: "MusicFusion",
-    description: "A fusion of various music genres by local artists.",
-    price: "Free",
-    location: "Terrassa",
-    tags: ["music", "art"],
-  },
+          id: 6,
+          startDate: "15/10/2023",
+          endDate: "18/10/2023",
+          name: "JazzFest",
+          description:
+            "A weekend of jazz performances by international artists.",
+          price: "20 € (general admission)",
+          location: "Barcelona",
+          tags: ["music"],
+        },
+        {
+          id: 7,
+          startDate: "22/11/2023",
+          endDate: "24/11/2023",
+          name: "ArtExpo",
+          description: "Exhibition of contemporary art with renowned artists.",
+          price: "Free",
+          location: "Girona",
+          tags: ["art"],
+        },
+        {
+          id: 8,
+          startDate: "08/12/2023",
+          endDate: "10/12/2023",
+          name: "CinemaWeek",
+          description: "Screenings of classic and cult films.",
+          price: "10 € (general admission), 7 € (students)",
+          location: "Tarragona",
+          tags: ["films"],
+        },
+        {
+          id: 9,
+          startDate: "05/01/2024",
+          endDate: "08/01/2024",
+          name: "Shakespeare Festival",
+          description: "Theater performances of Shakespeare's plays.",
+          price: "15 € (general admission)",
+          location: "Lleida",
+          tags: ["theatre"],
+        },
+        {
+          id: 10,
+          startDate: "25/02/2024",
+          endDate: "28/02/2024",
+          name: "MusicFusion",
+          description: "A fusion of various music genres by local artists.",
+          price: "Free",
+          location: "Terrassa",
+          tags: ["music", "art"],
+        },
       ],
     };
   },

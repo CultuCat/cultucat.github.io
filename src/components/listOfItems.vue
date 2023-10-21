@@ -1,3 +1,7 @@
+<!-- ======================================================================= -->
+<!--                COMPONENTE QUE LISTA EVENTOS DE UN ARRAY                 -->
+<!-- ======================================================================= -->
+
 <template>
   <v-col>
     <v-container class="d-flex justify-center align-center">
@@ -39,6 +43,8 @@
   </v-col>
 </template>
 
+<!-- =============================== SCRIPTS =============================== -->
+
 <script setup>
 import itemPreview from "@/components/itemPreview.vue";
 </script>
@@ -73,6 +79,8 @@ export default {
   },
 };
 </script>
+
+<!-- =============================== ESTILOS =============================== -->
 
 <style scoped>
 .clickable:hover {

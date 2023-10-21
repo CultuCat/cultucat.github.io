@@ -1,3 +1,7 @@
+<!-- ======================================================================= -->
+<!--              COMPONENTE QUE MUESTRA UN PREVIEW DE UN ITEM               -->
+<!-- ======================================================================= -->
+
 <template>
   <v-card class="my-2 mx-3" elevation="6">
     <v-card-title @click="method" class="clickable">
@@ -25,6 +29,8 @@
     </v-card-text>
   </v-card>
 </template>
+
+<!-- =============================== SCRIPTS =============================== -->
 
 <script>
 export default {
@@ -59,6 +65,8 @@ export default {
   },
 };
 </script>
+
+<!-- =============================== ESTILOS =============================== -->
 
 <style scoped>
 .clickable:hover {
