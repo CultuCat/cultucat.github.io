@@ -1,6 +1,6 @@
 <template>
   <v-col>
-    <h1 style="color: #ff6961" class="my-5 ml-5">items</h1>
+    <h1 style="color: #ff6961" class="my-5 ml-5">Events</h1>
     <ListOfItems :items="items" />
   </v-col>
 </template>

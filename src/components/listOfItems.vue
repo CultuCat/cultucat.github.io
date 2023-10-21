@@ -3,7 +3,7 @@
     <v-container class="d-flex justify-center align-center">
       <v-col cols="10" md="10" sm="12">
         <v-card>
-          <v-list>
+          <v-list v-if="items.length > 0 && items[0].startDate">
             <v-list-item v-for="tag in tagCategories" :key="tag">
               <v-card variant="flat" class="my-2">
                 <v-card-item>
@@ -33,6 +33,11 @@
               </v-card>
             </v-list-item>
           </v-list>
+          <v-list v-else>
+            <v-list-item v-for="item in items" :key="item.nickname">
+                <itemPreview :item="item" />
+            </v-list-item>
+          </v-list>
         </v-card>
       </v-col>
     </v-container>
@@ -57,9 +62,6 @@ export default {
     },
   },
   methods: {
-    method() {
-      console.log("clicked");
-    },
     filtereditems(tag) {
       const matchingitems = this.items.filter((item) =>
         item.tags.includes(tag)
