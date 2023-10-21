@@ -17,7 +17,7 @@
             </div>
             <!-- ============================= TEXTFIELDS ============================== -->
             <v-row class="mt-16">
-              <v-col cols="6">
+              <v-col cols="12" md="6" sm="12">
                 <v-text-field
                   cols="6"
                   label="Nickname"
@@ -26,7 +26,7 @@
                   readonly
                 ></v-text-field>
               </v-col>
-              <v-col cols="6">
+                <v-col cols="6" md="6" sm="12">
                 <v-text-field
                   cols="6"
                   label="Name"
@@ -37,7 +37,7 @@
             </v-row>
 
             <v-row>
-              <v-col cols="6" sm="12">
+              <v-col cols="12" lg="8" sm="12">
                 <v-text-field
                   label="Password"
                   v-model="formData.password"
@@ -64,7 +64,7 @@
                     append-icon="mdi-form-textbox-password"
                     @click="toggleEditing"
                   >
-                    {{ isEditing ? "Confirm Password" : "Edit Password" }}
+                    {{ isEditing ? "Confirm" : "Edit Password" }}
                   </v-btn>
                 </v-col>
               </v-row>
