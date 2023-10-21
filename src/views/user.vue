@@ -85,8 +85,8 @@
 
 <!-- =============================== SCRIPTS =============================== -->
 <script setup>
-import SlideGroup from "@/components/SlideGroup.vue";
 import confirmDelete from "@/components/confirmDelete.vue";
+import SlideGroup from "@/components/slideGroup.vue";
 </script>
 
 <script>
