@@ -29,7 +29,7 @@
           <template v-slot:append>
             <v-btn
               variant="text"
-              icon="mdi-cog-outline"
+              icon="mdi-pencil"
               @click="handleIconClick('/users/' + userId + '/edit')"
             ></v-btn>
           </template>
