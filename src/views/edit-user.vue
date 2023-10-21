@@ -10,7 +10,7 @@
     <v-container class="d-flex justify-center align-center">
       <v-col cols="12" md="10" sm="8">
         <v-card class="pa-12" variant="elevated">
-          <v-form @submit="submitForm">
+          <v-form @submit.prevent="submit">
             <!-- ============================ EDITAR AVATAR ============================ -->
             <div>
               <profileCard :img="formData.avatarImg" />
@@ -79,7 +79,20 @@
               class="my-10"
             ></v-switch>
             <!-- ============================= SUBMITFORM ============================== -->
-            <v-btn type="submit" color="#FF6961">Confirm changes</v-btn>
+            <v-row justify="center">
+              <v-col cols="4">
+                <v-btn
+                  :loading="loading"
+                  type="submit"
+                  block
+                  class="mt-2"
+                  :color="loading ? 'success' : '#FF6961'"
+                  append-icon="mdi-check-circle-outline"
+                >
+                  {{ loading ? '<v-icon>mdi-check-circle</v-icon>' : 'Confirm changes' }}
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-form>
         </v-card>
       </v-col>
@@ -93,7 +106,6 @@
 import profileCard from "@/components/profileCard.vue";
 
 export default {
-  name: "CreateEvent",
   data() {
     return {
       formData: {
@@ -107,15 +119,17 @@ export default {
       },
       isEditing: false,
       showPassword: false, // Variable de estado para la edición
+      loading: false,
+      timeout: null,
     };
   },
   methods: {
-    submitForm() {
-      // Handle form submission here
-      console.log("Form data:");
-      for (const key in this.formData) {
-        console.log(key + ":", this.formData[key]);
-      }
+    async submit() {
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+        this.$router.push("/users/" + this.userId);
+      }, 2000);
     },
     toggleEditing() {
       // Borrar el contenido del campo de texto
@@ -139,6 +153,10 @@ export default {
   },
   components: {
     profileCard,
+  },
+  created() {
+    // Acceder al ID del usuario desde los parámetros de la ruta
+    this.userId = this.$route.params.user_id;
   },
 };
 </script>
