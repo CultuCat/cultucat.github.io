@@ -55,6 +55,21 @@
               </div>
             </v-card>
           </v-col>
+          <v-row justify="center">
+            <v-col cols="4" md="4" sm="8">
+              <v-btn
+                block
+                rounded="xl"
+                class="my-12"
+                color="#FF6961"
+                size="large"
+                elevation="4"
+                append-icon="mdi-star-circle-outline"
+              >
+                Ranking
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
     </v-container>

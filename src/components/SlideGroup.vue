@@ -5,11 +5,13 @@
 <template>
   <v-row justify="center">
     <v-col cols="8" md="8" sm="5">
-      <v-sheet>
+      <v-sheet class="d-flex justify-center align-center">
         <v-slide-group
           show-arrows
           v-if="compData.arr.length !== 0"
           center-active
+          
+
         >
           <v-slide-group-item v-for="(tag, index) in compData.arr" :key="tag">
             <v-btn
