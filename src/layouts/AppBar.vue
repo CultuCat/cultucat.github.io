@@ -145,14 +145,14 @@ export default {
         {
           title: "Logout",
           icon: "mdi-logout",
-          to: "/",
+          to: "/login",
 
         },
       )
     },
     handleItemClick(route) {
       if ((this.adminView && route === "/home") || (!this.adminView && route === "/admin/home")){
-        window.location.href = route;
+        window.location.pathname = route;
       }
       else this.$router.push(route);
     }

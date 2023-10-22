@@ -1,5 +1,4 @@
 <template>
-  <v-app>
     <v-app-bar elevation="8" color="#ff6961" :style="{ padding: '0 4vw' }">
       <router-link to="/">
           <v-img src="../assets/logo.png" :width="64" aspect-ratio="1/1" />
@@ -11,10 +10,10 @@
         </v-btn>
       </router-link>
     </v-app-bar>
-  </v-app>
 </template>
 
-
-
-<script setup>
+<script>
+export default {
+  name: "Page",
+}
 </script>
