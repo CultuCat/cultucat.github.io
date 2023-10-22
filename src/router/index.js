@@ -45,6 +45,11 @@ const routes = [
     path: '/users/:user_id',
     name: 'profile',
     component: () => import('@/views/user.vue'),
+  },  
+  {
+    path: '/users/:user_id/edit',
+    name: 'edit_user',
+    component: () => import('@/views/edit_user.vue'),
   },
   {
     path: '/settings',
@@ -55,6 +60,11 @@ const routes = [
     path: '/admin/home',
     name: 'adminHome',
     component: () => import('@/views/admin/home.vue'),
+  }, 
+  {
+    path: '/admin/events/create', 
+    name: 'createEvent', 
+    component: () => import('@/views/admin/createEvent.vue'), 
   },
   {
     path: '/admin/events',
@@ -71,6 +81,7 @@ const routes = [
     name: 'event',
     component: () => import('@/views/event.vue'),
   },
+  
 ];
 
 const router = createRouter({
