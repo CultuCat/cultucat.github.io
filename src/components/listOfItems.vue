@@ -42,6 +42,11 @@
             <v-list-item v-for="item in filteredItems" :key="item.name">
               <itemPreview :item="item" />
             </v-list-item>
+            <div v-if="filteredItems.length === 0" style="text-align: center;" class="my-10">
+              <v-chip>
+                Sorry, no results found for your search.
+              </v-chip>
+            </div>
           </v-list>
         </v-card>
       </v-col>
