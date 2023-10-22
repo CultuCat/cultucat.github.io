@@ -129,8 +129,8 @@
         }
       },
 
-      submitForm() {//nattech.fib.upc.edu:40400
-        axios.post('http://127.0.0.1:8000/events/', this.formData)
+      submitForm() {//nattech.fib.upc.edu:40400 http://127.0.0.1:8000
+        axios.post('http://nattech.fib.upc.edu:40401/events/', this.formData)
           .then(response => {
             // Procesa la respuesta del servidor, si es necesario
             console.log('Respuesta del servidor:', response.data);

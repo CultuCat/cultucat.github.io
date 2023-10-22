@@ -51,9 +51,9 @@ const routes = [
         component: () => import('../views/settings.vue'),
       },
       {
-        path: 'create-event', // Define the path for CreateEvent.vue
-        name: 'CreateEvent', // You can give it a name if needed
-        component: () => import('@/views/CreateEvent.vue'), // Import the CreateEvent.vue component
+        path: 'events/create', // Define the path for CreateEvent.vue
+        name: 'createEvent', // You can give it a name if needed
+        component: () => import('../views/CreateEvent.vue'), // Import the CreateEvent.vue component
       },
     ],
   },
