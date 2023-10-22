@@ -60,6 +60,11 @@ const routes = [
     path: '/admin/home',
     name: 'adminHome',
     component: () => import('@/views/admin/home.vue'),
+  }, 
+  {
+    path: '/admin/events/create', 
+    name: 'createEvent', 
+    component: () => import('@/views/admin/createEvent.vue'), 
   },
   {
     path: '/admin/events',
