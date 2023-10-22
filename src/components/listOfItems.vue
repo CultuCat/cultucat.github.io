@@ -6,40 +6,41 @@
   <v-col>
     <v-container class="d-flex justify-center align-center">
       <v-col cols="10" md="10" sm="12">
-        <v-card>
-          <v-list v-if="items.length > 0 && items[0].startDate">
-            <v-list-item v-for="tag in tagCategories" :key="tag">
-              <v-card variant="flat" class="my-2">
-                <v-card-item>
-                  <div class="text-h6">
-                    <strong>{{
-                      tag.charAt(0).toUpperCase() + tag.slice(1)
-                    }}</strong>
-                  </div>
-                  <template v-slot:append>
-                    <v-btn
-                      append-icon="mdi-chevron-right"
-                      variant="plain"
-                      rounded="xl"
-                      >View all</v-btn
-                    >
-                  </template>
-                </v-card-item>
-                <v-divider class="mb-8"></v-divider>
-                <v-list>
-                  <v-list-item
-                    v-for="item in filtereditems(tag)"
-                    :key="item.id"
-                  >
-                    <itemPreview :item="item" />
-                  </v-list-item>
-                </v-list>
-              </v-card>
-            </v-list-item>
-          </v-list>
-          <v-list v-else>
-            <v-list-item v-for="item in items" :key="item.nickname">
-                <itemPreview :item="item" />
+        <v-card elevation="4">
+          <v-card-item class="my-4">
+            <template v-slot:prepend v-if="items[0].startDate">
+              <v-btn rounded="xl" prepend-icon="mdi-filter-outline"
+                >Filters</v-btn
+              >
+            </template>
+            <v-text-field
+              v-model="searchInput"
+              placeholder="Search"
+              prepend-inner-icon="mdi-magnify custom-cursor"
+              class="expanding-search mx-3 my-1"
+              :style="textFieldStyle"
+              @focus="expandSearch"
+              @blur="expandSearch"
+              clearable
+              rounded="xl"
+              variant="solo"
+              density="compact"
+              hide-details
+            ></v-text-field>
+
+            <template v-slot:append v-if="items[0].startDate">
+              <v-btn
+                rounded="xl"
+                @click="handleBtnClick('/admin/events/create')"
+                >Create Event</v-btn
+              >
+            </template>
+          </v-card-item>
+
+          <v-divider class="my-4"></v-divider>
+          <v-list v-if="items.length > 0">
+            <v-list-item v-for="item in filteredItems" :key="item.name">
+              <itemPreview :item="item" />
             </v-list-item>
           </v-list>
         </v-card>
@@ -59,6 +60,8 @@ export default {
   data() {
     return {
       tagCategories: ["music", "art", "films", "theatre"],
+      expanded: false,
+      searchInput: "",
     };
   },
   props: {
@@ -68,12 +71,45 @@ export default {
     },
   },
   methods: {
-    filtereditems(tag) {
-      const matchingitems = this.items.filter((item) =>
-        item.tags.includes(tag)
-      );
-      // Limita la cantidad de elementos a un máximo de 3
-      return matchingitems.slice(0, 3);
+    expandSearch() {
+      if (this.searchInput) {
+        this.searchInput = "";
+      }
+      this.expanded = !this.expanded;
+    },
+    handleBtnClick(route) {
+      this.$router.push(route);
+    },
+  },
+  computed: {
+    textFieldStyle() {
+      return {
+        maxWidth: this.expanded ? "300px" : "45px",
+      };
+    },
+    filteredItems() {
+      return this.items
+        .filter((item) => {
+          if (!this.searchInput) return true;
+          const searchInput = this.searchInput.toLowerCase();
+
+          for (const key in item) {
+            if (
+              item[key] &&
+              item[key].toString().toLowerCase().includes(searchInput)
+            ) {
+              return true;
+            }
+          }
+
+          return false;
+        })
+        .sort((a, b) => {
+          if (a.name && b.name) {
+            return a.name.localeCompare(b.name);
+          }
+          return 0;
+        });
     },
   },
   components: {
@@ -85,7 +121,13 @@ export default {
 <!-- =============================== ESTILOS =============================== -->
 
 <style scoped>
-.clickable:hover {
-  cursor: pointer;
+.expanding-search {
+  transition: max-width 0.3s;
 }
+</style>
+
+<style lang="sass">
+.v-input.expanding-search
+  .v-field
+      cursor: pointer !important
 </style>
