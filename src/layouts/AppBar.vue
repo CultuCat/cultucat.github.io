@@ -62,6 +62,12 @@ export default {
           to: "/search",
         },
         {
+          title: "Map",
+          icon: "mdi-map-outline",
+          fillIcon: "mdi-map",
+          to: "/map",
+        },
+        {
           title: "Tickets",
           icon: "mdi-ticket-outline",
           fillIcon: "mdi-ticket",
