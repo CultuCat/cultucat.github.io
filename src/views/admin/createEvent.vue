@@ -129,14 +129,25 @@
         }
       },
 
-      submitForm() {//nattech.fib.upc.edu:40400 http://127.0.0.1:8000
-        axios.post('http://nattech.fib.upc.edu:40401/events/', this.formData)
-          .then(response => {
-            console.log('Respuesta del servidor:', response.data);
-          })
-          .catch(error => {
-            console.error('Error de solicitud:', error);
+      async submitForm() {
+        try {
+          const response = await fetch('http://nattech.fib.upc.edu:40401/events/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.formData),
           });
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+          } else {
+            console.error('Error de solicitud:', response.status, response.statusText);
+          }
+        } catch (error) {
+          console.error('Error de solicitud:', error);
+        }
       },
     },
     watch: {
