@@ -5,7 +5,7 @@
 <template>
   <v-col>
     <h1 style="color: #ff6961" class="my-5 ml-5">Events</h1>
-    <ListOfItems :items="items" />
+    <ListOfItems :items="itemsJSON.results" />
   </v-col>
 </template>
 
@@ -19,8 +19,11 @@ import ListOfItems from "@/components/listOfItems.vue";
 export default {
   data() {
     return {
+      itemsJSON: [],
+
+
       //array de eventos generado aleatoriamente
-      items: [
+      /*items: [
         {
           id: 1,
           startDate: "15/02/2023",
@@ -127,8 +130,29 @@ export default {
           location: "Terrassa",
           tags: ["music", "art"],
         },
-      ],
+      ],*/
     };
+  },
+  created() {
+    this.obtenerDatosJSON(); // Llama al método al cargar la página
+  },
+  methods: {
+    obtenerDatosJSON() {
+      fetch("http://127.0.0.1:8000/events/?ordering=-dataIni")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('No se pudo obtener el archivo JSON');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data);
+          this.itemsJSON = data; // Trabaja con los datos JSON aquí
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    },
   },
   components: {
     ListOfItems,
