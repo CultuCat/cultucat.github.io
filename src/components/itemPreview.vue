@@ -4,11 +4,11 @@
 
 <template>
   <v-card v-if="item.startDate" class="my-3 mx-3" elevation="6">
-    <v-row>
-      <v-col cols="1" xl="1" md="2" sm="1">
+    <v-row justify="space-around">
+      <v-col cols="1" xl="1" lg="2" md="2" sm="2">
         <v-avatar :image="urlImg" class="my-2 mx-5" size="120"> </v-avatar>
       </v-col>
-      <v-col cols="11" xl="11" md="10" sm="11">
+      <v-col cols="11" lg="10" md="9" sm="9">
         <v-card-title @click="method" class="clickable">
           <v-btn
             icon="mdi-chevron-right"
