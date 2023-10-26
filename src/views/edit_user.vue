@@ -35,40 +35,6 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-
-            <v-row>
-              <v-col cols="12" lg="8" sm="12">
-                <v-text-field
-                  label="Password"
-                  v-model="formData.password"
-                  :append-inner-icon="
-                    showPassword && isEditing ? 'mdi-eye' : 'mdi-eye-off'
-                  "
-                  :type="showPassword ? 'text' : 'password'"
-                  :prepend-inner-icon="
-                    !isEditing ? 'mdi-lock-outline' : 'mdi-lock-open-outline'
-                  "
-                  :variant="!isEditing ? 'filled' : 'outlined'"
-                  :readonly="!isEditing"
-                  @click:append-inner="toggleShowPassword"
-                  hint="At least 8 characters"
-                ></v-text-field>
-              </v-col>
-              <v-row justify="center" align="center" class="mb-4">
-                <v-col cols="10">
-                  <v-btn
-                    rounded="xl"
-                    block
-                    size="large"
-                    elevation="4"
-                    append-icon="mdi-form-textbox-password"
-                    @click="toggleEditing"
-                  >
-                    {{ isEditing ? "Confirm" : "Edit Password" }}
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-row>
             <!-- ===================== PRIVACIDAD(PUBLICO/PRIVADO) ===================== -->
             <v-switch
               :label="`Profile privacy: ${formData.isVisible}`"
@@ -114,13 +80,11 @@ export default {
         avatarImg: "https://randomuser.me/api/portraits/men/85.jpg", //avatar
         nickname: "eric123",
         email: "eric.riera@email.com",
-        password: "●●●●●●●●●●",
         name: "Eric Riera",
         isVisible: "Private",
         language: "",
       },
       isEditing: false,
-      showPassword: false, // Variable de estado para la edición
       loading: false,
       timeout: null,
     };
@@ -132,25 +96,6 @@ export default {
         this.loading = false;
         this.$router.push("/users/" + this.userId);
       }, 2000);
-    },
-    toggleEditing() {
-      // Borrar el contenido del campo de texto
-      if (this.isEditing) {
-        this.formData.password = "●●●●●●●●●●"; // Borrar el contenido del campo de texto
-      } else this.formData.password = "";
-      this.isEditing = !this.isEditing;
-    },
-    toggleShowPassword() {
-      if (this.isEditing) {
-        this.showPassword = !this.showPassword;
-      }
-    },
-  },
-  watch: {
-    isEditing(newIsEditing) {
-      if (!newIsEditing) {
-        this.showPassword = false;
-      }
     },
   },
   components: {
