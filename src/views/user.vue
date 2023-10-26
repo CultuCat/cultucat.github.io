@@ -26,6 +26,10 @@
             ><strong>Score: {{profile.score}}       <v-btn prepend-icon="mdi-account-multiple" elevation="4" rounded="xl" class="mb-1 text-none text-subtitle-1" size="small" @click="dialogFriends = true">Friends: {{profile.friends.length}}</v-btn></strong></pre>
           </template>
 
+          <template v-slot:text>
+            <v-card-text class="mx-16">Lorem ipsum dolor sit amet, consectetur :-)</v-card-text>
+          </template>
+
           <template v-slot:append>
             <v-btn
               variant="text"
