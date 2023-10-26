@@ -3,13 +3,22 @@
 <!-- ======================================================================= -->
 
 <template>
-  <v-card v-if="item.dataIni" class="my-3 mx-3" elevation="6">
+  <v-card v-if="item.dataIni" class="my-3 mx-3" elevation="6" @click.prevent="handleClick('/events/' + item.id)">
     <v-row>
       <v-col cols="1" xl="1" md="2" sm="1">
-        <v-avatar :image="urlImg" class="my-2 mx-5" size="120"> </v-avatar>
+        <v-avatar
+          :image="
+            this.item.imatges_list.length > 0 ? this.item.imatges_list[0] : null
+          "
+          class="my-2 mx-5"
+          size="120"
+        >
+        </v-avatar>
       </v-col>
       <v-col cols="11" lg="10" md="9" sm="9">
-        <v-card-title @click="method" class="clickable">
+        <v-card-title
+          
+        >
           <v-btn
             icon="mdi-chevron-right"
             variant="plain"
@@ -18,15 +27,12 @@
           ></v-btn>
           <strong>{{ item.nom }}</strong>
           <p v-if="item.dataIni" class="dates">
-            <!-- <template> -->
             {{ transformDate(item.dataIni) }}
-            <!-- {{ transformDate(item.endDate) }} -->
-            <!-- </template> -->
-            <!-- <template v-else> {{ transformDate(item.dataIni) }} </template> -->
           </p>
 
           <v-divider></v-divider>
         </v-card-title>
+
         <v-card-text class="ml-8">
           {{ acortarTexto(item.descripcio) }}
           <br /><br /><strong>{{
@@ -39,7 +45,7 @@
 
   <v-card v-else class="my-2 mx-3" elevation="4" rounded="xl">
     <v-card-item
-      @click="method"
+      @click="handleClick('/users/' + this.item.id)"
       class="clickable"
       append-icon="mdi-chevron-right"
     >
@@ -58,19 +64,16 @@
 <script>
 export default {
   data() {
-    return {
-      urlImg: this.item.imatges_list[0],
-    };
+    return {};
   },
   props: {
     item: {
       type: Object,
-      required: true,
     },
   },
   methods: {
-    method() {
-      console.log("clicked");
+    handleClick(route) {
+      this.$router.push(route);
     },
     transformDate(date) {
       const dateObj = new Date(date);

@@ -6,9 +6,12 @@
   <v-col>
     <v-container class="d-flex justify-center align-center">
       <v-col cols="10" md="10" sm="12">
-        <v-card elevation="4">
+        <template v-if="items.length>0">
+<v-card elevation="4">
           <v-card-item class="my-4">
-            <template v-slot:prepend v-if="items[0].startDate">
+            
+                
+            <template v-slot:prepend v-if="items[0].dataIni">
               <v-btn rounded="xl" prepend-icon="mdi-filter-outline"
                 >Filters</v-btn
               >
@@ -28,7 +31,7 @@
               hide-details
             ></v-text-field>
 
-            <template v-slot:append v-if="items[0].startDate">
+            <template v-slot:append v-if="items[0].dataIni">
               <v-btn
                 rounded="xl"
                 @click="handleBtnClick('/admin/events/create')"
@@ -39,7 +42,7 @@
 
           <v-divider class="my-4"></v-divider>
           <v-list v-if="items.length > 0">
-            <v-list-item v-for="item in filteredItems" :key="item.name">
+            <v-list-item v-for="item in filteredItems" :key="item">
               <itemPreview :item="item" />
             </v-list-item>
             <div v-if="filteredItems.length === 0" style="text-align: center;" class="my-10">
@@ -49,6 +52,8 @@
             </div>
           </v-list>
         </v-card>
+        </template>
+        
       </v-col>
     </v-container>
   </v-col>
@@ -72,7 +77,6 @@ export default {
   props: {
     items: {
       type: Array,
-      required: true,
     },
   },
   methods: {

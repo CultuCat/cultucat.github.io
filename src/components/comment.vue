@@ -2,10 +2,10 @@
     <div class="comment">
       <div class="comment-content">
         <div class="comment-header">
-          <span class="comment-username">{{ username }}</span>
-          <span class="comment-timestamp">{{ time }}</span>
+          <span class="comment-username">{{ comment.username }}</span>
+          <span class="comment-timestamp">{{ comment.time }}</span>
         </div>
-        <div class="comment-text">{{ text }}</div>
+        <div class="comment-text">{{ comment.text }}</div>
       </div>
     </div>
   </template>
@@ -13,9 +13,7 @@
   <script>
   export default {
     props: {
-      username: String,
-      time: String,
-      text: String,
+      comment: Object,
     },
   };
   </script>

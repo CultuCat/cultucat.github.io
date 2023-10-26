@@ -3,10 +3,13 @@
 <!-- ======================================================================= -->
 
 <template>
+  <template v-if="itemsJSON.length > 0">
   <v-col>
     <h1 style="color: #ff6961" class="my-5 ml-5">Events</h1>
-    <ListOfItems :items="itemsJSON.results" />
+    
+      <ListOfItems :items="itemsJSON" />
   </v-col>
+  </template>
 </template>
 
 <!-- =============================== SCRIPTS =============================== -->
@@ -20,8 +23,8 @@ export default {
   data() {
     return {
       itemsJSON: [],
-
-
+      loading: false,
+      urlToFetch: "http://127.0.0.1:8000/events/?ordering=-dataIni",
       //array de eventos generado aleatoriamente
       /*items: [
         {
@@ -134,25 +137,46 @@ export default {
     };
   },
   created() {
-    this.obtenerDatosJSON(); // Llama al método al cargar la página
+    this.fetchData();
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  unmounted() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
-    obtenerDatosJSON() {
-      fetch("http://127.0.0.1:8000/events/?ordering=-dataIni")
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('No se pudo obtener el archivo JSON');
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log(data);
-          this.itemsJSON = data; // Trabaja con los datos JSON aquí
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+    fetchData() {
+      this.isLoading = true;
+      fetch(this.urlToFetch)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("No se pudo obtener el archivo JSON");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        this.itemsJSON = this.itemsJSON.concat(data.results);
+        this.urlToFetch = data.next;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      })
+      .finally(() => {
+        this.isLoading = false; // Restablecer isLoading después de la solicitud, ya sea exitosa o con error
+      });
     },
+    handleScroll() {
+      if (!this.isLoading) {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+
+        if (scrollY + windowHeight >= documentHeight - 100) {
+          this.fetchData();
+        }
+      }
+    },
+
+
   },
   components: {
     ListOfItems,
