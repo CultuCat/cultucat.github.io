@@ -176,7 +176,7 @@ export default {
     },
     extraerTextoPreu(texto) {
       // Utilizamos una expresión regular para buscar la parte deseada del texto
-      const match = texto.match(/[0-9][^€]*€/);
+      const match = texto.match(/(\d[^€]*)€/);
       return match ? match[0] : texto;
     },
   },
