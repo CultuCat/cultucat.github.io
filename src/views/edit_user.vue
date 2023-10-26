@@ -26,13 +26,22 @@
                   readonly
                 ></v-text-field>
               </v-col>
-                <v-col cols="6" md="6" sm="12">
+              <v-col cols="6" md="6" sm="12">
                 <v-text-field
                   cols="6"
                   label="Name"
                   v-model="formData.name"
                   variant="outlined"
                 ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row justify="center">
+              <v-col class="ma-1">
+                <v-textarea
+                  label="Biography"
+                  v-model="formData.biography"
+                  variant="outlined"
+                ></v-textarea>
               </v-col>
             </v-row>
             <!-- ===================== PRIVACIDAD(PUBLICO/PRIVADO) ===================== -->
@@ -81,6 +90,7 @@ export default {
         nickname: "eric123",
         email: "eric.riera@email.com",
         name: "Eric Riera",
+        biography: "",
         isVisible: "Private",
         language: "",
       },
