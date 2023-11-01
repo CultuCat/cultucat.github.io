@@ -79,11 +79,13 @@
                 <v-divider class="my-2" />
                 <h2>Comment</h2>
                 <commentForm></commentForm>
-                <comment
-                  v-for="comment in comments"
-                  :comment="comment"
-                  :key="comment.id"
-                ></comment>
+                <template v-if="eventComments  && eventComments.results.length > 0">
+                  <comment
+                    v-for="comment in eventComments.results"
+                    :comment="comment"
+                    :key="comment.id"
+                  ></comment>
+                </template>
               </v-col>
             </v-row>
           </v-card>
@@ -113,12 +115,12 @@ export default {
       comments: [
         {
           username: "Ericriiera",
-          time: "today",
+          created_at: "today",
           text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac sapien quis libero ullamcorper varius. In ut turpis id quam auctor porta. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam auctor bibendum justo, a rhoncus turpis hendrerit ac. Maecenas id tellus sed dolor tempus congue. Nunc at diam vel massa mattis elementum ac a dolor. Nulla facilisi. Sed in lacinia nunc. Quisque vel justo euismod, feugiat arcu ac, efficitur ipsum. Sed vulputate mi id odio consequat, sit amet varius neque rhoncus. Integer eu sollicitudin libero.",
         },
         {
           username: "Ericriiera",
-          time: "today",
+          created_at: "today",
           text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac sapien quis libero ullamcorper varius. In ut turpis id quam auctor porta. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam auctor bibendum justo, a rhoncus turpis hendrerit ac. Maecenas id tellus sed dolor tempus congue. Nunc at diam vel massa mattis elementum ac a dolor. Nulla facilisi. Sed in lacinia nunc. Quisque vel justo euismod, feugiat arcu ac, efficitur ipsum. Sed vulputate mi id odio consequat, sit amet varius neque rhoncus. Integer eu sollicitudin libero.",
         },
       ],
@@ -152,6 +154,19 @@ export default {
         })
         .then((data) => {
           this.eventJSON = data; // Trabaja con los datos JSON aquí
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    fetch("http://127.0.0.1:8000/comments/?event=" + this.$route.params.event_id)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("No se pudo obtener el archivo JSON");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          this.eventComments = data; // Trabaja con los datos JSON aquí
         })
         .catch((error) => {
           console.error("Error:", error);
