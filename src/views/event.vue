@@ -1,6 +1,6 @@
 <template>
   <v-col>
-    <template v-if="eventJSON">
+    <template v-if="nom">
     <!-- =============================== TITULO ================================ -->
     <h1 style="color: #ff6961" class="my-5 ml-5 mb-0">Event</h1>
     <!-- ============================== CONTENIDO ============================== -->
@@ -19,7 +19,7 @@
             <v-row class="d-flex ma-2 fill-height">
               <v-img
                 class="ma-5"
-                :src="eventJSON.imatges_list[0]"
+                :src="imatges_list[0]"
                 :max-height="250"
                 :max-width="250"
                 aspect-ratio="1/1"
@@ -28,11 +28,11 @@
               />
               <v-col class="d-flex fill-height">
                 <v-col>
-                  <v-card-title>{{ eventJSON.nom }}</v-card-title>
+                  <v-card-title>{{ nom }}</v-card-title>
                   <v-card-subtitle>{{
-                    transformDate(eventJSON.dataIni)
+                    transformDate(dataIni)
                   }}</v-card-subtitle>
-                  <v-card-subtitle>{{ eventJSON.espai }}</v-card-subtitle>
+                  <v-card-subtitle>{{ espai }}</v-card-subtitle>
 
                   <!-- No nos pasan tags -->
                   <!-- <v-chip-group class="mx-2">
@@ -45,9 +45,9 @@
                     color="#ff6961"
                     style="max-width: 220px"
                   >
-                    <div class="d-flex justify-center align-center" v-if="eventJSON.preu">
+                    <div class="d-flex justify-center align-center" v-if="preu">
                       <div class="mr-2">
-                        {{ extraerTextoPreu(eventJSON.preu)}}
+                        {{ extraerTextoPreu(preu)}}
                       </div>
                       <v-btn class="ma-2">Buy</v-btn>
                     </div>
@@ -69,7 +69,7 @@
               <v-col class="ma-5" style="width: 80%">
                 <h2>Description</h2>
                 <div style="text-align: justify">
-                  {{ eventJSON.descripcio }}
+                  {{ descripcio }}
                 </div>
                 <v-divider class="my-2" />
                 <h2>Do you know?</h2>
@@ -78,7 +78,7 @@
                 </div>
                 <v-divider class="my-2" />
                 <h2>Comment</h2>
-                <commentForm></commentForm>
+                <commentForm @comment-posted="fetchComments"></commentForm>
                 <template v-if="eventComments  && eventComments.results.length > 0">
                   <comment
                     v-for="comment in eventComments.results"
@@ -109,7 +109,15 @@ export default {
   },
   data() {
     return {
-      eventJSON: null,
+      nom: null,
+      descripcio: null,
+      dataIni: null,
+      espai: null,
+      preu: null,
+      imatges_list: null,
+      latitud: null,
+      longitud: null,
+      eventComments: null,
       curiosity:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac sapien quis libero ullamcorper varius. In ut turpis id quam auctor porta. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam auctor bibendum justo, a rhoncus turpis hendrerit ac. Maecenas id tellus sed dolor tempus congue. Nunc at diam vel massa mattis elementum ac a dolor. Nulla facilisi. Sed in lacinia nunc. Quisque vel justo euismod, feugiat arcu ac, efficitur ipsum. Sed vulputate mi id odio consequat, sit amet varius neque rhoncus. Integer eu sollicitudin libero.",
       comments: [
@@ -138,9 +146,9 @@ export default {
     mapsURL() {
       return (
         "https://maps.google.com/?q=" +
-        this.eventJSON.latitud +
+        this.latitud +
         "," +
-        this.eventJSON.longitud
+        this.longitud
       );
     },
   },
@@ -153,7 +161,14 @@ export default {
           return response.json();
         })
         .then((data) => {
-          this.eventJSON = data; // Trabaja con los datos JSON aquí
+          this.nom = data.nom;
+          this.descripcio = data.descripcio;
+          this.dataIni = data.dataIni;
+          this.espai = data.espai;
+          this.preu = data.preu;
+          this.imatges_list = data.imatges_list;
+          this.latitud = data.latitud;
+          this.longitud = data.longitud;
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -166,7 +181,7 @@ export default {
           return response.json();
         })
         .then((data) => {
-          this.eventComments = data; // Trabaja con los datos JSON aquí
+          this.eventComments = data;
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -194,6 +209,20 @@ export default {
       const match = texto.match(/(\d[^€]*)€/);
       return match ? match[0] : texto;
     },
+    async fetchComments() {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/comments/?event=' + this.$route.params.event_id);
+
+      if (response.ok) {
+        const data = await response.json();
+        this.eventComments = data;
+      } else {
+        console.error('Error fetching comments');
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    }
+  },
   },
 };
 </script>
