@@ -24,7 +24,7 @@ export default {
     return {
       itemsJSON: [],
       loading: false,
-      urlToFetch: "http://127.0.0.1:8000/events/?ordering=-dataIni",
+      urlToFetch: "http://3.84.153.95:8000/events/?ordering=-dataIni",
       //array de eventos generado aleatoriamente
       /*items: [
         {
