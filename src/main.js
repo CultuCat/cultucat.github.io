@@ -21,6 +21,7 @@ const app = createApp(App)
 app.use(VueGoogleMaps, {
     load: {
     key: 'AIzaSyBcncMehtx6yWI0OD0oWqEbc3HTGmBYNrQ',
+    libraries: 'places',
   },
     installComponents: true,
     //autobindAllEvents: true,
