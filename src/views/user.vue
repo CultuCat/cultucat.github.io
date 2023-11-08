@@ -22,8 +22,12 @@
 
           <template v-slot:subtitle>
             <pre
-              class="mt-2"
-            ><strong>Score: {{profile.score}}         Friends: {{profile.friends}}</strong></pre>
+              class="text-none text-subtitle-1"
+            ><strong>Score: {{profile.score}}       <v-btn prepend-icon="mdi-account-multiple" elevation="4" rounded="xl" class="mb-1 text-none text-subtitle-1" size="small" @click="dialogFriends = true">Friends: {{profile.friends.length}}</v-btn></strong></pre>
+          </template>
+
+          <template v-slot:text>
+            <v-card-text class="mx-16">Lorem ipsum dolor sit amet, consectetur :-)</v-card-text>
           </template>
 
           <template v-slot:append>
@@ -80,6 +84,22 @@
       @confirmed-delete="deleteConfirmed"
       @cancel-delete="deleteCancel"
     />
+      <v-dialog v-model="dialogFriends" scrollable max-width="800px">
+        <v-card>
+          <v-toolbar dark>
+            <v-toolbar-title class="ml-15">Friends</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn icon dark variant="plain" @click="dialogFriends = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-card-text style="height: 600px">
+            <ListOfItems :items="profile.friends" />
+          </v-card-text>
+        </v-card>
+      </v-dialog>
   </v-col>
 </template>
 
@@ -87,6 +107,8 @@
 <script setup>
 import confirmDelete from "@/components/confirmDelete.vue";
 import SlideGroup from "@/components/slideGroup.vue";
+import ListOfItems from "@/components/listOfItems.vue";
+import { obtenerUsuarios } from "@/assets/datos.js";
 </script>
 
 <script>
@@ -104,7 +126,7 @@ export default {
         score: 700, //TODO dinamico
         isVisible: "Private",
         language: "",
-        friends: 28,
+        friends: obtenerUsuarios(),
       },
       items: [
         {
@@ -132,6 +154,7 @@ export default {
         },
       ],
       tab: null,
+      dialogFriends: false,
       dialogDelete: false,
       itemToDelete: null,
       idxToDelete: null,
@@ -140,6 +163,7 @@ export default {
   components: {
     SlideGroup,
     confirmDelete,
+    ListOfItems,
   },
   created() {
     // Acceder al ID del usuario desde los parámetros de la ruta
