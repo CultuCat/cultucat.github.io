@@ -131,7 +131,7 @@
 
       async submitForm() {
         try {
-          const response = await fetch('http://nattech.fib.upc.edu:40401/events/', {
+          const response = await fetch('http://nattech.fib.upc.edu:40400/events/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -141,7 +141,10 @@
 
           if (response.ok) {
             const data = await response.json();
-            console.log('Respuesta del servidor:', data);
+            const eventId = data.id; // Asumiendo que el servidor devuelve el ID del evento
+
+            // Redirigir al usuario a la página del evento creado
+            this.$router.push(`/events/${eventId}`);
           } else {
             console.error('Error de solicitud:', response.status, response.statusText);
           }
