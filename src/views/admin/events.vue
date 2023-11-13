@@ -24,7 +24,7 @@ export default {
     return {
       itemsJSON: [],
       loading: false,
-      urlToFetch: "http://127.0.0.1:8000/events/?ordering=-dataIni",
+      urlToFetch: "https://cultucat.hemanuelpc.es/events/?ordering=-dataIni",
       //array de eventos generado aleatoriamente
       /*items: [
         {
