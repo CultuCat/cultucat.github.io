@@ -139,9 +139,7 @@
             body: JSON.stringify(this.formData),
           });
 
-          if (response.ok) {
-            const data = await response.json();
-          } else {
+          if (!response.ok) {
             console.error('Error de solicitud:', response.status, response.statusText);
           }
         } catch (error) {
