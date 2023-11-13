@@ -141,10 +141,6 @@
 
           if (response.ok) {
             const data = await response.json();
-            const eventId = data.id; // Asumiendo que el servidor devuelve el ID del evento
-
-            // Redirigir al usuario a la página del evento creado
-            //this.$router.push(`/admin/events/`); ///events/${eventId}
           } else {
             console.error('Error de solicitud:', response.status, response.statusText);
           }
