@@ -131,7 +131,7 @@
 
       async submitForm() {
         try {
-          const response = await fetch('http://nattech.fib.upc.edu:40400/events/', {
+          const response = await fetch('https://cultucat.hemanuelpc.es/events/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -144,7 +144,7 @@
             const eventId = data.id; // Asumiendo que el servidor devuelve el ID del evento
 
             // Redirigir al usuario a la página del evento creado
-            this.$router.push(`/events/${eventId}`);
+            //this.$router.push(`/admin/events/`); ///events/${eventId}
           } else {
             console.error('Error de solicitud:', response.status, response.statusText);
           }
