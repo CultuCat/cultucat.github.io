@@ -54,7 +54,7 @@ export default {
             client_id:
             "948818461396-91c1v4hbv49tmdn69c0uk6298806l0aj.apps.googleusercontent.com",
             client_secret: "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",
-            redirect_uri: "https://www.google.es",
+            redirect_uri: "https://cultucat.netlify.app/home",
             grant_type: "authorization_code",
           }
         );
