@@ -131,7 +131,7 @@
 
       async submitForm() {
         try {
-          const response = await fetch('http://nattech.fib.upc.edu:40401/events/', {
+          const response = await fetch('https://cultucat.hemanuelpc.es/events/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -139,10 +139,7 @@
             body: JSON.stringify(this.formData),
           });
 
-          if (response.ok) {
-            const data = await response.json();
-            console.log('Respuesta del servidor:', data);
-          } else {
+          if (!response.ok) {
             console.error('Error de solicitud:', response.status, response.statusText);
           }
         } catch (error) {
