@@ -34,7 +34,7 @@ export default {
             client_id:
               "948818461396-91c1v4hbv49tmdn69c0uk6298806l0aj.apps.googleusercontent.com",
             scope: "email profile openid",
-            redirect_uri: "http://localhost:3000/home",
+            redirect_uri: "https://cultucat.netlify.app/home",
             callback: response => {
               if (response.code) {
                 console.log(response.code);
