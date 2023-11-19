@@ -78,8 +78,8 @@ export default {
   },
   created() {
       this.url = "http://127.0.0.1:8000";
-      this.fetchEventsUrl= `${this.url}/events/?ordering=-dataIni`,
-      this.fetchMarkersUrl= `${this.url}/spaces/?latitud=41.3861689&longitud=2.0503379&num_objs=1000`,
+      this.fetchEventsUrl = `${this.url}/events/?ordering=-dataIni`;
+      this.fetchMarkersUrl = `${this.url}/spaces/?latitud=41.3861689&longitud=2.0503379&num_objs=1000`;
       this.getCurrentLocation();
       this.fetchMarkers();
       window.addEventListener('scroll', this.handleScroll);
