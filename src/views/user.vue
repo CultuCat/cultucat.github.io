@@ -27,7 +27,7 @@
           </template>
 
           <template v-slot:text>
-            <v-card-text class="mx-16">Lorem ipsum dolor sit amet, consectetur :-)</v-card-text>
+            <v-card-text class="mx-16">{{profile.bio}}</v-card-text>
           </template>
 
           <template v-slot:append>
@@ -41,17 +41,17 @@
           <v-col>
             <v-card>
               <v-tabs v-model="tab" bg-color="#ff6961" fixed-tabs>
-                <v-tab v-for="i in items.length" :key="i" :value="i">
-                  {{ items[i - 1].title }}
+                <v-tab v-for="i in profile.favs.length" :key="i" :value="i">
+                  {{ profile.favs[i - 1].title }}
                 </v-tab>
               </v-tabs>
               <div class="content-container">
                 <v-window v-model="tab">
                   <!-- :value sincroniza con las tabs -->
-                  <v-window-item v-for="n in items.length" :key="n" :value="n">
+                  <v-window-item v-for="n in profile.favs.length" :key="n" :value="n">
                     <!-- :compData pasa los datos de cada slide a SlideGroup (chips deslizables) -->
                     <SlideGroup
-                      :compData="items[n - 1]"
+                      :compData="profile.favs[n - 1]"
                       @delete-item="deleteItem"
                     />
                   </v-window-item>
@@ -89,14 +89,14 @@
           <v-toolbar dark>
             <v-toolbar-title class="ml-15">Friends</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-toolbar-items>
+            <v-toolbar-favs>
               <v-btn icon dark variant="plain" @click="dialogFriends = false">
                 <v-icon>mdi-close</v-icon>
               </v-btn>
-            </v-toolbar-items>
+            </v-toolbar-favs>
           </v-toolbar>
           <v-card-text style="height: 600px">
-            <ListOfItems :items="profile.friends" />
+            <ListOfFavs :items="profile.friends" />
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -107,8 +107,8 @@
 <script setup>
 import confirmDelete from "@/components/confirmDelete.vue";
 import SlideGroup from "@/components/slideGroup.vue";
-import ListOfItems from "@/components/listOfItems.vue";
-import { obtenerUsuarios } from "@/assets/datos.js";
+import ListOfFavs from "@/components/listOfItems.vue";
+import { mapGetters } from 'vuex';
 </script>
 
 <script>
@@ -118,41 +118,34 @@ export default {
       editUserView: this.$route.path.includes("edit-user.vue") ? true : false,
       profile: {
         group: "User",
-        nickname: "",
-        name: "Eric Riera", //username
-        email: "eric.riera@email.com", //email
-        password: "●●●●●●●●●●",
-        avatar: "https://randomuser.me/api/portraits/men/85.jpg", //profile photo
-        score: 700, //TODO dinamico
-        isVisible: "Private",
+        username: null, //username
+        name: null, //nombre
+        email: null,//this.user.user.email, //email
+        avatar: null,//this.user.user.imatge, //profile photo
+        bio: null,
+        score: null, //TODO dinamico
+        isVisible: null,
+        wantsToTalk: null,
         language: "",
-        friends: obtenerUsuarios(),
-      },
-      items: [
+        friends: [],
+        favs: [
         {
           id: 1,
           title: "Favourite Tags",
-          arr: [], //TODO array de tags favorits
+          arr: [],
         },
         {
           id: 2,
           title: "Favourite Places",
-          arr: [
-            "Barcelona",
-            "Costa Brava",
-            "Costa Dorada",
-            "Tarragona",
-            "Girona",
-            "Sitges",
-            "Montserrat",
-          ], //TODO array de llocs favorits
+          arr: [],
         },
         {
           id: 3,
           title: "Trophies",
-          arr: ["Joan Miró Admirer", "Opera Enthusiast", "Museum Maestro"], //TODO array de trofeus
+          arr: [], //TODO array de trofeus
         },
       ],
+      },
       tab: null,
       dialogFriends: false,
       dialogDelete: false,
@@ -163,11 +156,30 @@ export default {
   components: {
     SlideGroup,
     confirmDelete,
-    ListOfItems,
+    ListOfFavs,
+  },
+  computed: {
+    ...mapGetters(['user']),
   },
   created() {
     // Acceder al ID del usuario desde los parámetros de la ruta
     this.userId = this.$route.params.user_id;
+  },
+  mounted() {
+    this.profile.username = this.user.user.username;
+    this.profile.name = this.user.user.first_name;
+    this.profile.email = this.user.user.email;
+    this.profile.avatar = this.user.user.imatge;
+    this.profile.score = this.user.user.puntuacio;
+    this.profile.bio = this.user.user.bio;
+    //this.profile.language = "";
+    //this.profile.friends = obtenerUsuarios();
+    this.profile.isVisible = this.user.user.isVisible;
+    this.profile.wantsToTalk = this.user.user.wantsToTalk;
+    this.profile.favs[0].arr = this.user.user.tags_preferits;
+    this.profile.favs[1].arr = this.user.user.espais_preferits; 
+    //this.profile.favs[2].arr = obtenerTrofeus();
+    this.isAdmin = this.user.user.is_staff;
   },
   methods: {
     handleIconClick(route) {
@@ -180,7 +192,7 @@ export default {
       this.idxToDelete = index;
     },
     deleteConfirmed() {
-      this.items[this.tab - 1].arr.splice(this.idxToDelete, 1);
+      this.profile.favs[this.tab - 1].arr.splice(this.idxToDelete, 1);
       this.reset();
     },
     deleteCancel() {

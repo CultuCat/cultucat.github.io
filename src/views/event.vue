@@ -151,7 +151,7 @@ export default {
     },
   },
   created() {
-    fetch("http://127.0.0.1:8000/events/" + this.$route.params.event_id + "/")
+    fetch("https://cultucat.hemanuelpc.es/events/" + this.$route.params.event_id + "/")
         .then((response) => {
           if (!response.ok) {
             throw new Error("No se pudo obtener el archivo JSON");
@@ -171,7 +171,7 @@ export default {
         .catch((error) => {
           console.error("Error:", error);
         });
-    fetch("http://127.0.0.1:8000/comments/?event=" + this.$route.params.event_id)
+    fetch("https://cultucat.hemanuelpc.es/comments/?event=" + this.$route.params.event_id)
         .then((response) => {
           if (!response.ok) {
             throw new Error("No se pudo obtener el archivo JSON");
@@ -209,7 +209,7 @@ export default {
     },
     async fetchComments() {
     try {
-      const response = await fetch('http://127.0.0.1:8000/comments/?event=' + this.$route.params.event_id);
+      const response = await fetch('https://cultucat.hemanuelpc.es/comments/?event=' + this.$route.params.event_id);
 
       if (response.ok) {
         const data = await response.json();

@@ -22,7 +22,7 @@ export default {
             this.formData.event = this.$route.params.event_id;
 
             try {
-                const response = await fetch('http://127.0.0.1:8000/comments/', {
+                const response = await fetch('http://cultucat.hemanuelpc.es/comments/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

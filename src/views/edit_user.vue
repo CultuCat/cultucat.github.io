@@ -20,8 +20,8 @@
               <v-col cols="12" md="6" sm="12">
                 <v-text-field
                   cols="6"
-                  label="Nickname"
-                  v-model="formData.nickname"
+                  label="Username"
+                  v-model="formData.username"
                   variant="filled"
                   readonly
                 ></v-text-field>
@@ -81,17 +81,19 @@
 
 <script>
 import profileCard from "@/components/profileCard.vue";
+import { mapGetters } from 'vuex';
 
 export default {
   data() {
     return {
       formData: {
-        avatarImg: "https://randomuser.me/api/portraits/men/85.jpg", //avatar
-        nickname: "eric123",
-        email: "eric.riera@email.com",
-        name: "Eric Riera",
+        avatarImg: null, //avatar
+        username: null,
+        email: null,
+        name: null,
         biography: "",
-        isVisible: "Private",
+        isVisible: null,
+        wantsToTalk: null,
         language: "",
       },
       isEditing: false,
@@ -107,6 +109,19 @@ export default {
         this.$router.push("/users/" + this.userId);
       }, 2000);
     },
+  },
+  computed: {
+    ...mapGetters(['user']),
+  },
+  mounted() {
+    this.formData.username = this.user.user.username;
+    this.formData.name = this.user.user.first_name;
+    this.formData.email = this.user.user.email;
+    this.formData.avatarImg = this.user.user.imatge;
+    this.formData.biography = this.user.user.bio;
+    this.formData.isVisible = this.user.user.isVisible;
+    this.formData.wantsToTalk = this.user.user.wantsToTalk;
+    this.isAdmin = this.user.user.is_staff;
   },
   components: {
     profileCard,
