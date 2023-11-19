@@ -64,10 +64,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        top: 0;
-        right: 2;
         font-size: 3rem;
-        color:#d6d6d6;
+        color:#fff;
         cursor: pointer;
     }
     &-inner{
