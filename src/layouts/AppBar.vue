@@ -10,14 +10,14 @@
     <v-divider></v-divider>
 
     <v-list v-if="adminView" dense nav>
-      <v-list-item v-for=" item  in  adminItems" :key="item.title" :prepend-icon="item.icon" :title="item.title" :to="item.to"
-        @click="handleItemClick(item.to)">
+      <v-list-item v-for=" item  in  adminItems" :key="item.title" :prepend-icon="item.icon" :title="item.title"
+        :to="item.to" @click="handleItemClick(item.to)">
       </v-list-item>
     </v-list>
 
     <v-list v-else dense nav>
       <v-list-item v-for=" item  in  items" :key="item.title" :prepend-icon="item.icon" :title="item.title" :to="item.to"
-      @click="handleItemClick(item.to)">
+        @click="handleItemClick(item.to)">
       </v-list-item>
     </v-list>
 
@@ -35,19 +35,20 @@
             :title="item.title" :to="item.to" @click="handleItemClick(item.to)">
           </v-list-item>
         </v-list>
-
       </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>
     
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   name: "AppBar",
   data() {
     return {
       adminView: this.$route.path.includes("admin") ? true : false,
-      isAdmin: true,
+      isAdmin: null,
       items: [
         {
           title: "Home",
@@ -96,24 +97,32 @@ export default {
       ],
       profile: {
         group: "User",
-        name: "Eric Riera", //username
-        email: "eric.riera@email.com", //email
-        avatar: "https://randomuser.me/api/portraits/men/85.jpg", //profile photo
+        name: null, //username
+        email: null,//this.user.user.email, //email
+        avatar: null,//this.user.user.imatge, //profile photo
         children: [],
       },
     };
   },
+  computed: {
+    ...mapGetters(['user']),
+  },
   mounted() {
     this.setChildren();
+    this.profile.name = this.user.user.username;
+    this.profile.email = this.user.user.email;
+    this.profile.avatar = this.user.user.imatge;
+    this.isAdmin = this.user.user.is_staff;
   },
   methods: {
+    ...mapActions(['logoutUser']),
     setChildren() {
       this.profile.children = [
         {
           title: "Profile",
           icon: "mdi-account-outline",
           fillIcon: "mdi-account",
-          to: "/users/1",
+          to: `/users/${this.user.user.id}`,
         },
       ]
       if (this.isAdmin) {
@@ -151,9 +160,10 @@ export default {
       )
     },
     handleItemClick(route) {
-      if ((this.adminView && route === "/home") || (!this.adminView && route === "/admin/home")){
+      if ((this.adminView && route === "/home") || (!this.adminView && route === "/admin/home")) {
         window.location.pathname = route;
       }
+      else if(route === "/login") this.logoutUser();
       else this.$router.push(route);
     }
   },

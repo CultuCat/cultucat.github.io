@@ -19,7 +19,7 @@ export default {
     }),
     computed: {
         layout() {
-            return !(this.$route.path.includes("login") || this.$route.path === '/');
+            return !(this.$route.path.includes("login") || this.$route.path.includes("signup") || this.$route.path === '/');
         }
     },
 }
