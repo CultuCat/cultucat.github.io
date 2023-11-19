@@ -13,7 +13,7 @@
           <v-form @submit.prevent="submit">
             <!-- ============================ EDITAR AVATAR ============================ -->
             <div>
-              <profileCard :img="formData.avatarImg" />
+              <profileCard :img="formData.imatge" />
             </div>
             <!-- ============================= TEXTFIELDS ============================== -->
             <v-row class="mt-16">
@@ -30,7 +30,7 @@
                 <v-text-field
                   cols="6"
                   label="Name"
-                  v-model="formData.name"
+                  v-model="formData.first_name"
                   variant="outlined"
                 ></v-text-field>
               </v-col>
@@ -39,22 +39,35 @@
               <v-col class="ma-1">
                 <v-textarea
                   label="Biography"
-                  v-model="formData.biography"
+                  v-model="formData.bio"
                   variant="outlined"
                 ></v-textarea>
               </v-col>
             </v-row>
             <!-- ===================== PRIVACIDAD(PUBLICO/PRIVADO) ===================== -->
-            <v-switch
-              :label="`Profile privacy: ${formData.isVisible}`"
-              v-model="formData.isVisible"
-              true-value="Public"
-              false-value="Private"
-              color="success"
-              hide-details
-              inset
-              class="my-10"
-            ></v-switch>
+            <v-row class="mt-16">
+              <v-col cols="12" md="6" sm="12">
+                <v-switch
+                  :label="`Profile privacy: ${formData.isVisible ? 'Public' : 'Private'}`"
+                  v-model="formData.isVisible"
+                  color="success"
+                  hide-details
+                  inset
+                  class="my-10"
+                ></v-switch>
+              </v-col>
+              <v-col cols="12" md="6" sm="12">
+                <v-switch
+                  :label="`Wants to talk: ${formData.wantsToTalk ? 'Yes' : 'No'}`"
+                  v-model="formData.wantsToTalk"
+                  color="success"
+                  hide-details
+                  inset
+                  class="my-10"
+                ></v-switch>
+              </v-col>
+            </v-row>
+
             <!-- ============================= SUBMITFORM ============================== -->
             <v-row justify="center">
               <v-col cols="4" sm="8">
@@ -81,17 +94,17 @@
 
 <script>
 import profileCard from "@/components/profileCard.vue";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
       formData: {
-        avatarImg: null, //avatar
+        imatge: null, //avatar
         username: null,
         email: null,
-        name: null,
-        biography: "",
+        first_name: null,
+        bio: "",
         isVisible: null,
         wantsToTalk: null,
         language: "",
@@ -99,26 +112,41 @@ export default {
       isEditing: false,
       loading: false,
       timeout: null,
+      userId: null,
     };
   },
   methods: {
     async submit() {
       this.loading = true;
-      setTimeout(() => {
+      try{
+        const ruta = "/users/" + this.userId + "/";
+        await this.$axios.put(ruta, this.formData);
+        this.$store.commit('updateUserInState', this.formData);
+        /*setTimeout(() => {
         this.loading = false;
         this.$router.push("/users/" + this.userId);
-      }, 2000);
+      }, 2000);*/
+        this.$router.push("/users/" + this.userId);
+      }
+      catch (error){
+        console.error('Error al enviar datos:', error);
+      }
+      finally {
+      this.loading = false;
+    }
+      
     },
   },
   computed: {
-    ...mapGetters(['user']),
+    ...mapGetters(["user"]),
   },
   mounted() {
+    this.userId = this.user.user.id;
     this.formData.username = this.user.user.username;
-    this.formData.name = this.user.user.first_name;
+    this.formData.first_name = this.user.user.first_name;
     this.formData.email = this.user.user.email;
-    this.formData.avatarImg = this.user.user.imatge;
-    this.formData.biography = this.user.user.bio;
+    this.formData.imatge = this.user.user.imatge;
+    this.formData.bio = this.user.user.bio;
     this.formData.isVisible = this.user.user.isVisible;
     this.formData.wantsToTalk = this.user.user.wantsToTalk;
     this.isAdmin = this.user.user.is_staff;

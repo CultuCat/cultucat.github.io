@@ -89,11 +89,11 @@
           <v-toolbar dark>
             <v-toolbar-title class="ml-15">Friends</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-toolbar-favs>
+            <v-toolbar-items>
               <v-btn icon dark variant="plain" @click="dialogFriends = false">
                 <v-icon>mdi-close</v-icon>
               </v-btn>
-            </v-toolbar-favs>
+            </v-toolbar-items>
           </v-toolbar>
           <v-card-text style="height: 600px">
             <ListOfFavs :items="profile.friends" />
