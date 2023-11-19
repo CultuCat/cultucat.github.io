@@ -63,7 +63,7 @@
 
 <script>
   import { useVuelidate } from '@vuelidate/core'
-  import { required, url, decimal, minLength, maxLength } from '@vuelidate/validators'
+  import { required, url, decimal, maxLength } from '@vuelidate/validators'
 
   export default {
     name: "CreateEvent",
@@ -124,7 +124,7 @@
 
       async submitForm() {
         try {
-          const response = await fetch('http://nattech.fib.upc.edu:40401/events/', {
+          const response = await fetch('https://cultucat.hemanuelpc.es/events/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

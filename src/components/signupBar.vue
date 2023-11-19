@@ -70,7 +70,7 @@ export default {
       password2: null,
       emailRules: [
         v => !!v || 'El correo electrónico es obligatorio',
-        v => /.+@.+\..+/.test(v) || 'El formato del correo electrónico no es válido',
+        v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'El formato del correo electrónico no es válido',
       ],
       nameRules: [v => !!v || 'El nombre es obligatorio'],
       userRules: [v => !!v || 'El username es obligatorio'],

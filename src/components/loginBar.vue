@@ -29,9 +29,6 @@
         Sign up
       </router-link>
     </v-card-text>
-    <!-- <router-link to="home">
-      <v-btn rounded="lg" color="white" :style="{ backgroundColor: '#68ceec' }">Log in</v-btn>
-    </router-link> -->
   </v-container>
 </template>
   
