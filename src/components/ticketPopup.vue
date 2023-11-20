@@ -8,7 +8,7 @@
             <h1>{{title}}</h1>
             <p>This is your ticket for the event.</p>
         </div>
-        <img :src="imageSrc" alt="Popup Image" />
+        <img :src="image" alt="Popup Image" />
         
         <v-btn block color="#ff6961" type="submit" variant="elevated" @click="closePopup">
             Close
@@ -26,12 +26,18 @@
     },
     title: {
       type: String,
-      default: 'Event Tickets'
+      default: 'Event Ticket'
+    },
+    id: {
+      type: String,
+      default: '1'
     }
   },
     data() {
       return {
-        show: false
+        show: false,
+        url: 'http://127.0.0.1:8000/tickets/',
+        image: this.imageSrc,
       }
     },
     methods: {
@@ -39,7 +45,29 @@
         this.show = false;
       },
       openPopup() {
+        this.fetchImg();
         this.show = true;
+      },
+      fetchImg(){
+        fetch(this.url+this.id+'/')
+        .then((response) => {
+            if (!response.ok) {
+            throw new Error("No se pudo obtener el archivo JSON");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.image == 'http://127.0.0.1:8000/images/qr.jpg'){
+                data.image = this.imageSrc;
+            }else this.image= data.image;
+            this.url = data.next;
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        })
+        .finally(() => {
+            //this.isLoading = false; // Restablecer isLoading después de la solicitud, ya sea exitosa o con error
+        });
       }
     }
   }
