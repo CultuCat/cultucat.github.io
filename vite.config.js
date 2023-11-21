@@ -29,6 +29,13 @@ export default defineConfig({
       },
     }),
   ],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "@/styles/colors.scss";`,
+      },
+    },
+  },
   define: { 'process.env': {} },
   base: '/',
   resolve: {

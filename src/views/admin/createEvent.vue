@@ -24,14 +24,10 @@
             </v-row>
             <v-row>
               <v-col cols="10" md="6" class="d-flex justify-center"> 
-                <v-locale-provider locale="es">
                   <v-date-picker v-model="formData.dataIni" color="#FF6961" class="ma-4" :locale="es" header="Data inicial" title="Selecciona una data"></v-date-picker>
-                </v-locale-provider>
               </v-col>
               <v-col cols="10" md="6" class="d-flex justify-center"> 
-                <v-locale-provider locale="es">
                   <v-date-picker v-model="formData.dataFi" color="#FF6961" class="ma-4" :locale="es-ES" landscape="true" header="Data final" title="Selecciona una data"></v-date-picker>
-                </v-locale-provider>
               </v-col>
             </v-row>
             
@@ -66,11 +62,8 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import { useVuelidate } from '@vuelidate/core'
-  import { required, url, decimal, minLength, maxLength } from '@vuelidate/validators'
-  import es from 'vuetify/lib/locale/es';
-  import { VDatePicker } from 'vuetify/labs/VDatePicker'
+  import { required, url, decimal, maxLength } from '@vuelidate/validators'
 
   export default {
     name: "CreateEvent",
@@ -150,9 +143,6 @@
     watch: {
       'formData.dataIni': 'checkDates',
       'formData.dataFi': 'checkDates',
-    },
-    components: {
-      VDatePicker,
     },
   };
   
