@@ -77,7 +77,7 @@ export default {
     }
   },
   created() {
-      this.url = "http://127.0.0.1:8000";
+      this.url = "https://cultucat.hemanuelpc.es";
       this.fetchEventsUrl = `${this.url}/events/?ordering=-dataIni`;
       this.fetchMarkersUrl = `${this.url}/spaces/?latitud=41.3861689&longitud=2.0503379&num_objs=1000`;
       this.getCurrentLocation();
@@ -165,7 +165,7 @@ export default {
       
     },
     handleMarkerClick(marker) {
-      this.fetchEventsUrl = `${this.url}/events/?espai=${marker.nom}`;
+      this.fetchEventsUrl = `${this.url}/events/?espai=${marker.id}`;
       this.fetchEvents();
     },
     handleScroll() {
