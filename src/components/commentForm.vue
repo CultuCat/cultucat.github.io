@@ -38,15 +38,25 @@ export default {
           }
         );
 
-        if (response.ok) {
-          this.$emit("comment-posted");
-          this.comment = "";
-        } else {
-          console.error("Error al enviar comentario");
-        }
-      } catch (error) {
-        console.error("Error en la solicitud POST:", error);
-      }
+            try {
+                const response = await fetch('https://cultucat.hemanuelpc.es/comments/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.formData),
+                });
+
+                if (response.ok) {
+                    this.$emit('comment-posted');
+                    this.comment = '';
+                } else {
+                    console.error('Error al enviar comentario');
+                }
+            } catch (error) {
+                console.error('Error en la solicitud POST:', error);
+            }
+        },
     },
   },
 };
