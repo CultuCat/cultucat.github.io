@@ -20,7 +20,7 @@
               @mouseenter="showDeleteIcon = index"
               @mouseleave="showDeleteIcon = -1"
             >
-              {{ tag }}
+              {{ tag.nom }}
               <v-icon
                 class="ml-1"
                 v-if="showDeleteIcon === index && !trophyTab"
