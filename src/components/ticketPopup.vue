@@ -36,7 +36,7 @@
     data() {
       return {
         show: false,
-        url: 'http://127.0.0.1:8000/tickets/',
+        url: 'https://cultucat.hemanuelpc.es/tickets/',
         image: this.imageSrc,
       }
     },
