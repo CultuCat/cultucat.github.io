@@ -4,10 +4,19 @@
     <v-container class="d-flex justify-center align-center">
       <v-col cols="12" md="11" sm="8">
         <v-card rounded="lg" :loading="loading">
-          <v-switch class="switch" v-model="showAllTickets" label="See all events" color="primary"></v-switch>
-          <div class="d-flex tickets">
-            <ticket-card class="ma-5" v-for="ticket in filteredTickets" :key="ticket.id" :ticket="ticket"></ticket-card>
-          </div>
+          <template v-if="loading == true">
+            <v-card-text>Carregant...</v-card-text>
+          </template>
+          <template v-else>
+            <template v-if="tickets.length > 0">
+              <v-switch class="switch" v-model="showAllTickets" label="See all events" color="primary"></v-switch>
+              <template class="d-flex tickets">
+                <ticket-card class="ma-5" v-for="ticket in filteredTickets" :key="ticket.id"
+                  :ticket="ticket"></ticket-card>
+              </template>
+            </template>
+            <v-card-text v-else>No tens entrades a esdeveniments</v-card-text>
+          </template>
         </v-card>
       </v-col>
     </v-container>
@@ -43,7 +52,7 @@ export default {
   },
   created() {
     this.loading = true;
-    fetch(`https://cultucat.hemanuelpc.es/tickets/?user=1`)
+    fetch(`https://cultucat.hemanuelpc.es/tickets/?user=${this.user.user.id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("No se pudo obtener el archivo JSON");
@@ -57,7 +66,7 @@ export default {
       .catch((error) => {
         console.error("Error:", error);
       });
-      
+
   }
 }
 </script>
