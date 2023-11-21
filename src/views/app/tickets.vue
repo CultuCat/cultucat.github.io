@@ -11,8 +11,11 @@
             <template v-if="tickets.length > 0">
               <v-switch class="switch" v-model="showAllTickets" label="See all events" color="primary"></v-switch>
               <template class="d-flex tickets">
-                <ticket-card class="ma-5" v-for="ticket in filteredTickets" :key="ticket.id"
-                  :ticket="ticket"></ticket-card>
+                <template v-if="filteredTickets.length > 0">
+                  <ticket-card class="ma-5" v-for="ticket in filteredTickets" :key="ticket.id"
+                    :ticket="ticket"></ticket-card>
+                </template>
+                <v-card-text v-else>No tens entrades per propers esdeveniments</v-card-text>
               </template>
             </template>
             <v-card-text v-else>No tens entrades a esdeveniments</v-card-text>
