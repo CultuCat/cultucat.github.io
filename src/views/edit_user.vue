@@ -98,6 +98,7 @@
 
 <script>
 import profileCard from "@/components/profileCard.vue";
+import axios from "axios";
 
 export default {
   data() {
@@ -113,8 +114,8 @@ export default {
     async submit() {
       this.loading = true;
       try {
-        const ruta = "/users/" + this.userId + "/";
-        await this.$axios.put(ruta, this.formData);
+        const ruta = "https://cultucat.hemanuelpc.es/users/" + this.userId + "/";
+        await axios.put(ruta, this.formData);
         this.$store.commit('setProfileData', this.formData);
         this.$router.push("/users/" + this.userId);
       } catch (error) {

@@ -115,6 +115,7 @@ import confirmDelete from "@/components/confirmDelete.vue";
 import SlideGroup from "@/components/slideGroup.vue";
 import ListOfFavs from "@/components/listOfItems.vue";
 import { mapGetters } from "vuex";
+import axios from "axios";
 </script>
 
 <script>
@@ -144,7 +145,7 @@ export default {
     this.userId = this.$route.params.user_id;
   },
   mounted() {
-    this.$axios.get("/users/" + this.userId + "/")
+    axios.get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
     .then(response => {
       // Almacena la respuesta en la propiedad profile cuando la solicitud se completa
       this.profile = response.data;
