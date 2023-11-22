@@ -74,6 +74,7 @@
                   size="large"
                   elevation="4"
                   append-icon="mdi-star-circle-outline"
+                  @click="dialogRanking = true"
                 >
                   Ranking
                 </v-btn>
@@ -86,6 +87,7 @@
       <confirmDelete
         v-if="dialogDelete"
         :itemToDelete="itemToDelete"
+        :deleteLoading="deleteLoading"
         @confirmed-delete="deleteConfirmed"
         @cancel-delete="deleteCancel"
       />
@@ -101,7 +103,23 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text style="height: 600px">
-            <ListOfFavs :items="profile.friends" />
+            <ListOfItems :type="'list_friends'" :userId="userId"/>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="dialogRanking" scrollable max-width="800px">
+        <v-card>
+          <v-toolbar dark>
+            <v-toolbar-title class="ml-15">Ranking</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn icon dark variant="plain" @click="dialogRanking = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-card-text style="height: 600px">
+            <ListOfItems :type="'ranking'"/>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -113,7 +131,7 @@
 <script setup>
 import confirmDelete from "@/components/confirmDelete.vue";
 import SlideGroup from "@/components/slideGroup.vue";
-import ListOfFavs from "@/components/listOfItems.vue";
+import ListOfItems from "@/components/listOfItems.vue";
 import { mapGetters } from "vuex";
 import axios from "axios";
 </script>
@@ -126,16 +144,19 @@ export default {
       profile_favs: [],
       tab: null,
       dialogFriends: false,
+      dialogRanking: false,
       dialogDelete: false,
       itemToDelete: null,
       idxToDelete: null,
+      idToDelete: null,
+      deleteLoading: false,
       userId: null,
     };
   },
   components: {
     SlideGroup,
     confirmDelete,
-    ListOfFavs,
+    ListOfItems,
   },
   computed: {
     ...mapGetters(["user"]),
@@ -145,40 +166,95 @@ export default {
     this.userId = this.$route.params.user_id;
   },
   mounted() {
-    axios.get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
-    .then(response => {
-      // Almacena la respuesta en la propiedad profile cuando la solicitud se completa
-      this.profile = response.data;
+    axios
+      .get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
+      .then((response) => {
+        // Almacena la respuesta en la propiedad profile cuando la solicitud se completa
+        this.profile = response.data;
 
-      // Ahora, puedes realizar las operaciones necesarias con la respuesta de manera asincrónica
-      this.agregarSlideGroup(this.profile_favs, 1, "Favourite Tags", this.profile.tags_preferits);
-      this.agregarSlideGroup(this.profile_favs, 2, "Favourite Places", this.profile.espais_preferits);
-      this.agregarSlideGroup(this.profile_favs, 3, "Trophies", this.profile.trofeus);
-      this.$store.commit('setProfileData', this.profile);
+        // Ahora, puedes realizar las operaciones necesarias con la respuesta de manera asincrónica
+        this.agregarSlideGroup(
+          this.profile_favs,
+          1,
+          "Favourite Tags",
+          this.profile.tags_preferits
+        );
+        this.agregarSlideGroup(
+          this.profile_favs,
+          2,
+          "Favourite Places",
+          this.profile.espais_preferits
+        );
+        this.agregarSlideGroup(
+          this.profile_favs,
+          3,
+          "Trophies",
+          this.profile.trofeus
+        );
+        this.$store.commit("setProfileData", this.profile);
 
-      this.isAdmin = this.profile.is_staff;
-    })
-    .catch(error => {
-      // Maneja errores aquí
-      console.error("Error al obtener el perfil del usuario:", error);
-    });
+        this.isAdmin = this.profile.is_staff;
+      })
+      .catch((error) => {
+        // Maneja errores aquí
+        console.error("Error al obtener el perfil del usuario:", error);
+      });
     this.isAdmin = this.user.user.is_staff;
   },
   methods: {
     handleIconClick(route) {
       this.$router.push(route);
     },
-    deleteItem({ index, chipName, chipCat }) {
+    deleteItem({ index, chipName, chipCat, id }) {
       this.itemToDelete = { chipName, chipCat };
       this.dialogDelete = true;
       this.idxToDelete = index;
+      this.idToDelete = id;
     },
-    deleteConfirmed() {
-      this.profile.favs[this.tab - 1].arr.splice(this.idxToDelete, 1);
-      this.reset();
+    deleteConfirmed(isLoading) {
+      this.deleteLoading = isLoading;
+      let tabTitle = "tags_preferits";
+      if (this.tab - 1 === 1) tabTitle = "espais_preferits";
+      axios
+        .delete(
+          "https://cultucat.hemanuelpc.es/users/" +
+            this.userId +
+            "/" +
+            tabTitle +
+            "/" +
+            this.idToDelete +
+            "/"
+        )
+        .then((response) => {
+          if (response.status === 204) {
+            this.profile_favs[this.tab - 1].arr.splice(this.idxToDelete, 1);
+            this.$store.commit("setProfileData", this.profile);
+          }
+        })
+        .catch((error) => {
+          // Maneja errores aquí
+          console.error("Error al obtener borrar elemento.", error);
+        })
+        .finally(() => {
+          this.reset(); // Mueve esto aquí para que se ejecute después de la eliminación exitosa o con error
+          this.deleteLoading = false; // Establecer el estado de carga a false independientemente de si la solicitud fue exitosa o no
+        });
     },
     deleteCancel() {
       this.reset();
+    },
+    getUsers() {
+      axios
+      .get("https://cultucat.hemanuelpc.es/users/")
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data;
+        }
+      })
+      .catch((error) => {
+        // Maneja errores aquí
+        console.error("Error al obtener el perfil del usuario:", error);
+      });
     },
     reset() {
       this.dialogDelete = false;

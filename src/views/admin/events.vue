@@ -7,7 +7,7 @@
   <v-col>
     <h1 style="color: #ff6961" class="my-5 ml-5">Events</h1>
     
-      <ListOfItems :items="itemsJSON" />
+      <ListOfItems :type="'list_events'" />
   </v-col>
   </template>
 </template>

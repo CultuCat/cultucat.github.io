@@ -24,7 +24,7 @@
               <v-icon
                 class="ml-1"
                 v-if="showDeleteIcon === index && !trophyTab"
-                @click="emitDeleteItem(index)"
+                @click="emitDeleteItem(index, tag.id)"
               >
                 mdi-delete
               </v-icon>
@@ -60,10 +60,10 @@ export default {
     compData: Object, //Recibe datos de la vista padre
   },
   methods: {
-    emitDeleteItem(index) {
+    emitDeleteItem(index, id) {
       const chipName = this.compData.arr[index];
       const chipCat = this.compData.title;
-      this.$emit("delete-item", { index, chipName, chipCat });
+      this.$emit("delete-item", { index, chipName, chipCat, id });
     },
   },
 };
