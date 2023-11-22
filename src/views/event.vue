@@ -55,7 +55,8 @@
                     </v-toolbar>
                     <v-card-text style="height: 600px">
                       <ListOfItems v-if="assistants.length > 0" :items="assistants" />
-                        <span v-else style="display: flex; justify-content: center;">No hi ha usuaris amb entrada per aquest esdeveniment</span>
+                      <span v-else style="display: flex; justify-content: center;">No hi ha usuaris amb entrada per aquest
+                        esdeveniment</span>
                     </v-card-text>
                   </v-card>
                 </v-dialog>
@@ -165,7 +166,7 @@ export default {
       .catch((error) => {
         console.error("Error:", error);
       });
-      fetch("https://cultucat.hemanuelpc.es/tickets/?event=" + this.$route.params.event_id)
+    fetch("https://cultucat.hemanuelpc.es/tickets/?event=" + this.$route.params.event_id)
       .then((response) => {
         if (!response.ok) {
           throw new Error("No se pudo obtener el archivo JSON");
