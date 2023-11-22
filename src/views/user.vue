@@ -87,6 +87,7 @@
         v-if="dialogDelete"
         :itemToDelete="itemToDelete"
         :deleteLoading="deleteLoading"
+        :delUser="false"
         @confirmed-delete="deleteConfirmed"
         @cancel-delete="deleteCancel"
       />
