@@ -47,14 +47,20 @@
     <v-card-item
       @click="handleClick('/users/' + this.item.id)"
       class="clickable"
-      append-icon="mdi-chevron-right"
     >
+    <template v-slot:prepend>
       <v-avatar
         :image="item.imatge"
         size="50"
         class="ml-2 mr-5 my-2"
       ></v-avatar>
       <strong>{{ item.first_name }}</strong>
+    </template>
+    <template v-slot:append>
+        Score: {{ item.puntuacio }}
+        <v-icon>mdi-chevron-right</v-icon>
+    </template>
+      
     </v-card-item>
   </v-card>
 </template>
