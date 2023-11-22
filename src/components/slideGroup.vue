@@ -17,7 +17,7 @@
             <v-btn
               class="ma-2"
               rounded
-              @mouseenter="showDeleteIcon = index"
+              @mouseenter="this.userId == this.user.user.id ? showDeleteIcon = index : showDeleteIcon = false"
               @mouseleave="showDeleteIcon = -1"
             >
               {{ tag.nom }}
@@ -49,6 +49,7 @@
 <!-- =============================== SCRIPTS =============================== -->
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -58,6 +59,10 @@ export default {
   },
   props: {
     compData: Object, //Recibe datos de la vista padre
+    userId: Number,
+  },
+  computed: {
+    ...mapGetters(["user"]),
   },
   methods: {
     emitDeleteItem(index, id) {
