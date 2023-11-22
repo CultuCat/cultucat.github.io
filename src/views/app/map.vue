@@ -14,7 +14,7 @@
         </v-col>
       </v-row>
       <v-row align="start">
-        <ListOfItems :items="currentEvents" />
+        <ListOfItems :items="currentEvents" :view="view"/>
       </v-row>
         
        
@@ -63,6 +63,7 @@
 export default {
   data() {
     return {
+      view: 'map',
       mapWidth: '100vw',
       loading: false,
       currentEvents: [],
