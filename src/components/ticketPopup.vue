@@ -105,6 +105,6 @@
         border-radius: 14px;
         box-shadow: 0 10px 10px rgba($color: #000,$alpha: 0.2);
     }
-    
+
   }
   </style>
