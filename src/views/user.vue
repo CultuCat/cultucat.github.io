@@ -74,6 +74,7 @@
                   size="large"
                   elevation="4"
                   append-icon="mdi-star-circle-outline"
+                  @click="dialogRanking = true"
                 >
                   Ranking
                 </v-btn>
@@ -102,7 +103,23 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text style="height: 600px">
-            <ListOfFavs :items="profile.friends" />
+            <ListOfItems :type="'list_users'"/>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="dialogRanking" scrollable max-width="800px">
+        <v-card>
+          <v-toolbar dark>
+            <v-toolbar-title class="ml-15">Ranking</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn icon dark variant="plain" @click="dialogRanking = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-card-text style="height: 600px">
+            <ListOfItems :type="'ranking'"/>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -114,7 +131,7 @@
 <script setup>
 import confirmDelete from "@/components/confirmDelete.vue";
 import SlideGroup from "@/components/slideGroup.vue";
-import ListOfFavs from "@/components/listOfItems.vue";
+import ListOfItems from "@/components/listOfItems.vue";
 import { mapGetters } from "vuex";
 import axios from "axios";
 </script>
@@ -127,6 +144,7 @@ export default {
       profile_favs: [],
       tab: null,
       dialogFriends: false,
+      dialogRanking: false,
       dialogDelete: false,
       itemToDelete: null,
       idxToDelete: null,
@@ -138,7 +156,7 @@ export default {
   components: {
     SlideGroup,
     confirmDelete,
-    ListOfFavs,
+    ListOfItems,
   },
   computed: {
     ...mapGetters(["user"]),
@@ -224,6 +242,19 @@ export default {
     },
     deleteCancel() {
       this.reset();
+    },
+    getUsers() {
+      axios
+      .get("https://cultucat.hemanuelpc.es/users/")
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data;
+        }
+      })
+      .catch((error) => {
+        // Maneja errores aquí
+        console.error("Error al obtener el perfil del usuario:", error);
+      });
     },
     reset() {
       this.dialogDelete = false;
