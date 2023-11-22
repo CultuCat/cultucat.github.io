@@ -1,10 +1,11 @@
 // En store.js
-import { createStore } from 'vuex';
-import createPersistedState from 'vuex-persistedstate';
+import { createStore } from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
   state: {
     user: null,
+    profileData: {},
   },
   mutations: {
     setUser(state, user) {
@@ -13,17 +14,20 @@ export default createStore({
     clearUser(state) {
       state.user = null;
     },
+    setProfileData(state, data) {
+      state.profileData = data;
+    },
   },
   actions: {
     loginUser({ commit }, user) {
-      commit('setUser', user);
+      commit("setUser", user);
     },
     logoutUser({ commit }) {
-      commit('clearUser');
+      commit("clearUser");
     },
   },
   getters: {
-    user: state => state.user,
+    user: (state) => state.user,
   },
   plugins: [createPersistedState()],
 });
