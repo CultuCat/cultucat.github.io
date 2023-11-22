@@ -103,7 +103,7 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text style="height: 600px">
-            <ListOfItems :type="'list_users'"/>
+            <ListOfItems :type="'list_friends'" :userId="userId"/>
           </v-card-text>
         </v-card>
       </v-dialog>

@@ -6,7 +6,12 @@
   <v-col>
     <v-container class="d-flex justify-center align-center">
       <v-col cols="10" md="10" sm="12">
-        <template v-if="items.length > 0">
+        <template v-if="items.length === 0">
+          <div style="text-align: center;">
+            <v-chip class="mr-2"> Sorry, no results found. </v-chip>
+          </div>
+        </template>
+        <template v-else>
           <v-card elevation="4">
             <v-card-item class="my-4">
               <template v-slot:prepend v-if="items[0].dataIni">
@@ -76,6 +81,7 @@ export default {
   },
   props: {
     type: String,
+    userId: Number,
   },
   methods: {
     expandSearch() {
@@ -100,6 +106,19 @@ export default {
           console.error("Error al obtener los usuarios:", error);
         });
     },
+    getFriends() {
+      axios
+        .get("https://cultucat.hemanuelpc.es/users/"+ this.userId +"/")
+        .then((response) => {
+          if (response.status === 200) {
+            this.items = response.data.friends;
+          }
+        })
+        .catch((error) => {
+          // Maneja errores aquí
+          console.error("Error al obtener los usuarios:", error);
+        });
+    },
     getEvents() {
       axios
         .get("https://cultucat.hemanuelpc.es/users/")
@@ -117,6 +136,8 @@ export default {
   created() {
     if (this.type === "ranking" || this.type === "list_users") {
       this.getUsers();
+    } else if (this.type === "list_friends") {
+      this.getFriends();
     } else if (this.type === "list_events") {
       this.getEvents();
     } else {
