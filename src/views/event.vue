@@ -1,6 +1,6 @@
 <template>
   <v-col>
-    <template v-if="nom">
+    <template v-if="eventInfo.nom">
       <!-- =============================== TITULO ================================ -->
       <h1 style="color: #ff6961" class="my-5 ml-5 mb-0">Event</h1>
       <!-- ============================== CONTENIDO ============================== -->
@@ -12,15 +12,13 @@
               <v-icon>mdi-link</v-icon>
             </v-btn>
             <v-row class="d-flex ma-2 fill-height">
-              <v-img class="ma-5" :src="imatges_list[0]" :max-height="250" :max-width="250" aspect-ratio="1/1" cover
-                style="border-radius: 15px" />
+              <v-img class="ma-5" :src="eventInfo.imatges_list[0]" :max-height="250" :max-width="250" aspect-ratio="1/1"
+                cover style="border-radius: 15px" />
               <v-col class="d-flex fill-height">
                 <v-col>
-                  <v-card-title>{{ nom }}</v-card-title>
-                  <v-card-subtitle>{{
-                    transformDate(dataIni)
-                  }}</v-card-subtitle>
-                  <v-card-subtitle>{{ espai }}</v-card-subtitle>
+                  <v-card-title>{{ eventInfo.nom }}</v-card-title>
+                  <v-card-subtitle>{{ transformDate(eventInfo.dataIni) }}</v-card-subtitle>
+                  <v-card-subtitle>{{ eventInfo.espai }}</v-card-subtitle>
 
                   <!-- No nos pasan tags -->
                   <!-- <v-chip-group class="mx-2">
@@ -28,11 +26,16 @@
                 </v-chip-group> -->
 
                   <v-card class="mt-14" rounded="lg" color="#ff6961" style="max-width: 220px">
-                    <div class="d-flex justify-center align-center" v-if="preu">
+                    <div class="d-flex justify-center align-center" v-if="eventInfo.preu">
                       <div class="mr-2">
-                        {{ extraerTextoPreu(preu) }}
+                        {{ extraerTextoPreu(eventInfo.preu) }}
                       </div>
-                      <v-btn class="ma-2">Buy</v-btn>
+                      <v-btn class="ma-2" @click="dialogBuy = true">Buy</v-btn>
+                      <!-- ------------------------- dialog para comprar ------------------------- -->
+                      <v-dialog v-model="dialogBuy" scrollable max-width="800px">
+                        <BuyComponent :eventInfo="eventInfo" @confirmed-buy="buyConfirmed" @cancel-buy="reset" />
+                      </v-dialog>
+                      <!-- ----------------------------------------------------------------------- -->
                     </div>
                     <div class="d-flex justify-center align-center" v-else>
                       <v-btn variant="text" :ripple="false" class="ma-2" density="compact">Preu no disponible</v-btn>
@@ -42,10 +45,12 @@
               </v-col>
               <v-col class="d-flex flex-column fill-height ma-5 mt-15">
                 <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true">See assistants</v-btn>
+                <!-- --------------------- dialog para ver asistentes ---------------------- -->
                 <v-dialog v-model="dialog" scrollable max-width="800px">
                   <v-card>
-                    <v-toolbar dark>
-                      <v-toolbar-title class="ml-15">Assistants</v-toolbar-title>
+                    <v-toolbar color="#ff6961" dark>
+                      <v-icon size="35" class="ml-6">mdi-account-group</v-icon>
+                      <v-toolbar-title class="ml-6">Assistants</v-toolbar-title>
                       <v-spacer></v-spacer>
                       <v-toolbar-items>
                         <v-btn icon dark variant="plain" @click="dialog = false">
@@ -54,12 +59,13 @@
                       </v-toolbar-items>
                     </v-toolbar>
                     <v-card-text style="height: 600px">
-                      <ListOfItems v-if="assistants.length > 0" :items="assistants" />
+                      <ListOfItems v-if="eventInfo.assistants.length > 0" :items="eventInfo.assistants" />
                       <span v-else style="display: flex; justify-content: center;">No hi ha usuaris amb entrada per aquest
                         esdeveniment</span>
                     </v-card-text>
                   </v-card>
                 </v-dialog>
+                <!-- ----------------------------------------------------------------------- -->
                 <v-btn class="ma-2 pa-2" rounded="lg">Add to calendar</v-btn>
                 <v-btn @click="handleButtonMaps" class="ma-2 pa-2" rounded="lg">See location</v-btn>
               </v-col>
@@ -68,18 +74,18 @@
               <v-col class="ma-5" style="width: 80%">
                 <h2>Description</h2>
                 <div style="text-align: justify">
-                  {{ descripcio }}
+                  {{ eventInfo.descripcio }}
                 </div>
                 <v-divider class="my-2" />
                 <h2>Do you know?</h2>
                 <div style="text-align: justify">
-                  {{ curiosity }}
+                  {{ eventInfo.curiosity }}
                 </div>
                 <v-divider class="my-2" />
                 <h2>Comment</h2>
                 <commentForm @comment-posted="fetchComments"></commentForm>
-                <template v-if="comments && comments.results.length > 0">
-                  <comment v-for="comment in comments.results" :comment="comment" :key="comment.id"></comment>
+                <template v-if="eventInfo.comments && eventInfo.comments.results.length > 0">
+                  <comment v-for="comment in eventInfo.comments.results" :comment="comment" :key="comment.id"></comment>
                 </template>
               </v-col>
             </v-row>
@@ -94,6 +100,9 @@
 import commentForm from "@/components/commentForm.vue";
 import comment from "@/components/comment.vue";
 import ListOfItems from "@/components/listOfItems.vue";
+import BuyComponent from "@/components/buy.vue";
+import { mapGetters } from "vuex";
+import axios from "axios";
 </script>
 
 <script>
@@ -102,34 +111,42 @@ export default {
   components: {
     commentForm,
     comment,
+    BuyComponent,
+    ListOfItems,
   },
   data() {
     return {
-      nom: null,
-      descripcio: null,
-      dataIni: null,
-      espai: null,
-      preu: null,
-      imatges_list: null,
-      latitud: null,
-      longitud: null,
-      link: null,
-      comments: null,
-      curiosity:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac sapien quis libero ullamcorper varius. In ut turpis id quam auctor porta. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam auctor bibendum justo, a rhoncus turpis hendrerit ac. Maecenas id tellus sed dolor tempus congue. Nunc at diam vel massa mattis elementum ac a dolor. Nulla facilisi. Sed in lacinia nunc. Quisque vel justo euismod, feugiat arcu ac, efficitur ipsum. Sed vulputate mi id odio consequat, sit amet varius neque rhoncus. Integer eu sollicitudin libero.",
-      assistants: [],
+      eventInfo: {
+        id: null,
+        nom: null,
+        descripcio: null,
+        dataIni: null,
+        espai: null,
+        preu: null,
+        imatges_list: null,
+        latitud: null,
+        longitud: null,
+        link: null,
+        comments: null,
+        curiosity:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac sapien quis libero ullamcorper varius. In ut turpis id quam auctor porta. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam auctor bibendum justo, a rhoncus turpis hendrerit ac. Maecenas id tellus sed dolor tempus congue. Nunc at diam vel massa mattis elementum ac a dolor. Nulla facilisi. Sed in lacinia nunc. Quisque vel justo euismod, feugiat arcu ac, efficitur ipsum. Sed vulputate mi id odio consequat, sit amet varius neque rhoncus. Integer eu sollicitudin libero.",
+        assistants: [],
+      },
       dialog: false,
+      dialogBuy: false,
+      buyLoading: false,
     };
   },
   computed: {
     mapsURL() {
       return (
         "https://maps.google.com/?q=" +
-        this.latitud +
+        this.eventInfo.latitud +
         "," +
-        this.longitud
+        this.eventInfo.longitud
       );
     },
+    ...mapGetters(["user"]),
   },
   created() {
     fetch("https://cultucat.hemanuelpc.es/events/" + this.$route.params.event_id + "/")
@@ -140,19 +157,21 @@ export default {
         return response.json();
       })
       .then((data) => {
-        this.nom = data.nom;
-        this.descripcio = data.descripcio;
-        this.dataIni = data.dataIni;
-        this.espai = data.espai;
-        this.preu = data.preu;
-        this.imatges_list = data.imatges_list;
-        this.latitud = data.latitud;
-        this.longitud = data.longitud;
-        this.link = data.enllacos_list[0];
+        this.eventInfo.id = data.id;
+        this.eventInfo.nom = data.nom;
+        this.eventInfo.descripcio = data.descripcio;
+        this.eventInfo.dataIni = data.dataIni;
+        this.eventInfo.espai = data.espai.nom;
+        this.eventInfo.preu = data.preu;
+        this.eventInfo.imatges_list = data.imatges_list;
+        this.eventInfo.latitud = data.latitud;
+        this.eventInfo.longitud = data.longitud;
+        this.eventInfo.link = data.enllacos_list[0];
       })
       .catch((error) => {
         console.error("Error:", error);
       });
+
     fetch("https://cultucat.hemanuelpc.es/comments/?event=" + this.$route.params.event_id)
       .then((response) => {
         if (!response.ok) {
@@ -161,7 +180,7 @@ export default {
         return response.json();
       })
       .then((data) => {
-        this.comments = data;
+        this.eventInfo.comments = data;
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -174,7 +193,7 @@ export default {
         return response.json();
       })
       .then((data) => {
-        this.assistants = data;
+        this.eventInfo.assistants = data;
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -182,7 +201,7 @@ export default {
   },
   methods: {
     handleButtonLink() {
-      window.open(this.link, "_blank");
+      window.open(this.eventInfo.link, "_blank");
     },
     handleButtonMaps() {
       window.open(this.mapsURL, "_blank");
@@ -208,13 +227,47 @@ export default {
 
         if (response.ok) {
           const data = await response.json();
-          this.comments = data;
+          this.eventInfo.comments = data;
         } else {
           console.error('Error fetching comments');
         }
       } catch (error) {
         console.error('Error fetching comments:', error);
       }
+    },
+    buyConfirmed(isLoading) {
+      this.buyLoading = isLoading;
+      const params = JSON.stringify({
+        user: this.user.user.id,
+        event: this.eventInfo.id
+      });
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          //'Authorization': `Bearer ${token}`
+        }
+      };
+      axios
+        .post(
+          "https://cultucat.hemanuelpc.es/tickets/",
+          params,
+          config
+        )
+        .then((response) => {
+          window.location.pathname = "/home";
+          return response.json;
+        })
+        .catch((error) => {
+          // Maneja errores aquí
+          console.error("Error al comprar el ticket: ", error);
+        })
+        .finally(() => {
+          this.reset();
+          this.buyLoading = false;
+        });
+    },
+    reset() {
+      this.dialogBuy = false;
     },
   },
 };

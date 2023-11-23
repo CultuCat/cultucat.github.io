@@ -6,7 +6,7 @@
   <v-col>
     <v-container class="d-flex justify-center align-center">
       <v-col cols="10" md="10" sm="12">
-        <template v-if="items.length === 0">
+        <template v-if="items_get.length === 0">
           <div style="text-align: center;">
             <v-chip class="mr-2"> Sorry, no results found. </v-chip>
           </div>
@@ -14,7 +14,7 @@
         <template v-else>
           <v-card elevation="4">
             <v-card-item class="my-4">
-              <template v-slot:prepend v-if="items[0].dataIni">
+              <template v-slot:prepend v-if="items_get[0].dataIni">
                 <v-btn rounded="xl" prepend-icon="mdi-filter-outline"
                   >Filters</v-btn
                 >
@@ -34,7 +34,7 @@
                 hide-details
               ></v-text-field>
 
-              <template v-slot:append v-if="items[0].dataIni">
+              <template v-slot:append v-if="items_get[0].dataIni">
                 <v-btn
                   rounded="xl"
                   @click="handleBtnClick('/admin/events/create')"
@@ -44,7 +44,7 @@
             </v-card-item>
 
             <v-divider class="my-4"></v-divider>
-            <v-list v-if="items.length > 0">
+            <v-list v-if="items_get.length > 0">
               <v-list-item v-for="item in filteredItems" :key="item">
                 <itemPreview :item="item" />
               </v-list-item>
@@ -74,12 +74,15 @@ import axios from "axios";
 export default {
   data() {
     return {
-      items: [],
+      items_get: [],
       expanded: false,
       searchInput: "",
     };
   },
   props: {
+    items: {
+      type: Array,
+    },
     type: String,
     userId: Number,
   },
@@ -98,7 +101,8 @@ export default {
         .get("https://cultucat.hemanuelpc.es/users/")
         .then((response) => {
           if (response.status === 200) {
-            this.items = response.data;
+            this.items_get = response.data;
+            console.log("entra2 + " + this.items_get)
           }
         })
         .catch((error) => {
@@ -111,7 +115,7 @@ export default {
         .get("https://cultucat.hemanuelpc.es/users/"+ this.userId +"/")
         .then((response) => {
           if (response.status === 200) {
-            this.items = response.data.friends;
+            this.items_get = response.data.friends;
           }
         })
         .catch((error) => {
@@ -121,10 +125,10 @@ export default {
     },
     getEvents() {
       axios
-        .get("https://cultucat.hemanuelpc.es/users/")
+        .get("https://cultucat.hemanuelpc.es/events/?ordering=-dataIni")
         .then((response) => {
           if (response.status === 200) {
-            this.items = response.data;
+            this.items_get = response.data.results;
           }
         })
         .catch((error) => {
@@ -134,7 +138,9 @@ export default {
     },
   },
   created() {
+    this.items_get = this.items ? this.items : [];
     if (this.type === "ranking" || this.type === "list_users") {
+      console.log("entra")
       this.getUsers();
     } else if (this.type === "list_friends") {
       this.getFriends();
@@ -151,7 +157,7 @@ export default {
       };
     },
     filteredItems() {
-      return this.items
+      return this.items_get
         .filter((item) => {
           if (!this.searchInput) return true;
           const searchInput = this.searchInput.toLowerCase();
