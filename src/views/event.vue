@@ -30,7 +30,8 @@
                       <div class="mr-2">
                         {{ extraerTextoPreu(eventInfo.preu) }}
                       </div>
-                      <v-btn class="ma-2" @click="dialogBuy = true">Buy</v-btn>
+                      <v-btn v-if="canIBuy" class="ma-2" @click="dialogBuy = true">Buy</v-btn>
+                      <v-btn v-else class="ma-2" disabled>Buy</v-btn>
                       <!-- ------------------------- dialog para comprar ------------------------- -->
                       <v-dialog v-model="dialogBuy" scrollable max-width="800px">
                         <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" @confirmed-buy="buyConfirmed" @cancel-buy="reset" />
@@ -38,7 +39,7 @@
                       <!-- ----------------------------------------------------------------------- -->
                     </div>
                     <div class="d-flex justify-center align-center" v-else>
-                      <v-btn variant="text" :ripple="false" class="ma-2" density="compact">Preu no disponible</v-btn>
+                      <v-btn variant="text" :ripple="false" class="ma-2" density="compact" disabled>Preu no disponible</v-btn>
                     </div>
                   </v-card>
                 </v-col>
@@ -135,6 +136,7 @@ export default {
       dialog: false,
       dialogBuy: false,
       buyLoading: false,
+      canIBuy: true,
     };
   },
   computed: {
@@ -219,6 +221,7 @@ export default {
     extraerTextoPreu(texto) {
       // Utilizamos una expresión regular para buscar la parte deseada del texto
       const match = texto.match(/(\d[^€]*)€/);
+      if (!match) this.canIBuy = false;
       return match ? match[0] : texto;
     },
     async fetchComments() {
