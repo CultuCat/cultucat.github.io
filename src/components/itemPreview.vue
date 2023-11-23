@@ -3,13 +3,11 @@
 <!-- ======================================================================= -->
 
 <template>
-  <v-card v-if="item.dataIni" class="my-3 mx-3" elevation="6" @click.prevent="handleClick('/events/' + item.id)">
+  <v-card v-if="item.espai" class="my-3 mx-3" elevation="6" @click.prevent="handleClick('/events/' + item.id)">
     <v-row>
       <v-col cols="1" xl="1" md="2" sm="1">
         <v-avatar
-          :image="
-            this.item.imatges_list.length > 0 ? this.item.imatges_list[0] : null
-          "
+          :image="this.item.imatges_list.length > 0 ? this.item.imatges_list[0] : null"
           class="my-2 mx-5"
           size="120"
         >

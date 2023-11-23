@@ -60,23 +60,19 @@
   
   <!-- =============================== SCRIPTS =============================== -->
   
-<script setup>
-import axios from "axios";
-</script>
-  
 <script>
 export default {
     data() {
         return {
-            buyLoading: false,
         };
     },
     props: {
         eventInfo: Object,
+        buyLoading: Boolean,
     },
     methods: {
         buy() {
-            this.$emit("confirmed-buy", this.buyLoading);
+            this.$emit("confirmed-buy", true);
         },
         cancel() {
             this.$emit("cancel-buy");

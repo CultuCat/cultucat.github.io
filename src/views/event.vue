@@ -33,7 +33,7 @@
                       <v-btn class="ma-2" @click="dialogBuy = true">Buy</v-btn>
                       <!-- ------------------------- dialog para comprar ------------------------- -->
                       <v-dialog v-model="dialogBuy" scrollable max-width="800px">
-                        <BuyComponent :eventInfo="eventInfo" @confirmed-buy="buyConfirmed" @cancel-buy="reset" />
+                        <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" @confirmed-buy="buyConfirmed" @cancel-buy="reset" />
                       </v-dialog>
                       <!-- ----------------------------------------------------------------------- -->
                     </div>
@@ -238,13 +238,12 @@ export default {
     buyConfirmed(isLoading) {
       this.buyLoading = isLoading;
       const params = JSON.stringify({
-        user: this.user.user.id,
         event: this.eventInfo.id
       });
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          //'Authorization': `Bearer ${token}`
+          'Authorization': `Token ${this.user.token}`
         }
       };
       axios
@@ -254,8 +253,10 @@ export default {
           config
         )
         .then((response) => {
-          window.location.pathname = "/home";
-          return response.json;
+          if (response.status === 201) {
+            window.location.pathname = "/home";
+            return response.json;
+          }
         })
         .catch((error) => {
           // Maneja errores aquí

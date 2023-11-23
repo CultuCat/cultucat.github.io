@@ -102,7 +102,6 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.items_get = response.data;
-            console.log("entra2 + " + this.items_get)
           }
         })
         .catch((error) => {
@@ -140,7 +139,6 @@ export default {
   created() {
     this.items_get = this.items ? this.items : [];
     if (this.type === "ranking" || this.type === "list_users") {
-      console.log("entra")
       this.getUsers();
     } else if (this.type === "list_friends") {
       this.getFriends();
