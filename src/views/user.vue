@@ -101,6 +101,7 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text style="height: 600px">
+            <ListOfPending :items="user.user.pending_friend_requests" />
             <ListOfFavs :items="profile.friends" />
           </v-card-text>
         </v-card>
@@ -114,6 +115,7 @@
 import confirmDelete from "@/components/confirmDelete.vue";
 import SlideGroup from "@/components/slideGroup.vue";
 import ListOfFavs from "@/components/listOfItems.vue";
+import ListOfPending from "@/components/listOfPending.vue";
 import { mapGetters } from "vuex";
 import axios from "axios";
 </script>
@@ -130,12 +132,14 @@ export default {
       itemToDelete: null,
       idxToDelete: null,
       userId: null,
+      friendRequests:null,
     };
   },
   components: {
     SlideGroup,
     confirmDelete,
     ListOfFavs,
+    ListOfPending
   },
   computed: {
     ...mapGetters(["user"]),
@@ -166,7 +170,9 @@ export default {
   },
   methods: {
     handleIconClick(route) {
-      this.$router.push(route);
+      console.log(this.user);
+      console.log(this.friendRequests)
+      //this.$router.push(route);
     },
     deleteItem({ index, chipName, chipCat }) {
       this.itemToDelete = { chipName, chipCat };

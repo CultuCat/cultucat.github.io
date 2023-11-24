@@ -8,7 +8,7 @@
   </template>
   
   <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters} from 'vuex';
   export default {
     props:{
         id: {
@@ -51,36 +51,38 @@
                    this.iconName="mdi-clock-plus-outline"; 
                 }      
             }
-            console.log(this.user);
         },
         addFriend() {
-            fetch(this.urlAdd, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    "to_user": this.id,
-                }),
-            })
-            .then((response) => {
-                if (!response.ok) {
-                throw new Error("No se pudo obtener el archivo JSON");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                this.response= data;
-                this.urlAdd = data.next;
-                this.iconName="mdi-clock-plus-outline";
-                console.log(this.user.user);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            })
-            .finally(() => {
-                //this.isLoading = false; // Restablecer isLoading después de la solicitud, ya sea exitosa o con error
-            });
+            if (this.iconName == "mdi-heart-plus-outline") {
+                fetch(this.urlAdd, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "to_user": this.id,
+                    }),
+                })
+                .then((response) => {
+                    if (!response.ok) {
+                    throw new Error("No se pudo obtener el archivo JSON");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    this.response= data;
+                    this.urlAdd = data.next;
+                    this.iconName="mdi-clock-plus-outline";
+                    console.log(this.user.user);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                })
+                .finally(() => {
+                    //this.isLoading = false; // Restablecer isLoading después de la solicitud, ya sea exitosa o con error
+                });
+            }
+            
         }
     }
   }

@@ -43,7 +43,15 @@
           <v-divider class="my-4"></v-divider>
           <v-list v-if="items.length > 0">
             <v-list-item v-for="item in filteredItems" :key="item">
-              <itemPreview :item="item" :view="view"/>
+              <v-row justify="space-between" align="center">
+                <v-col cols>
+                  <itemPreview :item="item" :view="view"/> 
+                </v-col>
+                <v-col cols="auto" justify="end">
+                  <addFriend v-if="!item.dataIni" :id="item.id.toString()"/>
+                </v-col>
+              </v-row>
+              
             </v-list-item>
             <div v-if="filteredItems.length === 0" style="text-align: center;" class="my-10">
               <v-chip>
@@ -63,6 +71,7 @@
 
 <script setup>
 import itemPreview from "@/components/itemPreview.vue";
+import addFriend from "@/components/addFriend.vue";
 </script>
 
 <script>
@@ -126,6 +135,7 @@ export default {
   },
   components: {
     itemPreview,
+    addFriend,
   },
 };
 </script>
