@@ -34,7 +34,7 @@
                       <v-btn v-else class="ma-2" disabled>Buy</v-btn>
                       <!-- ------------------------- dialog para comprar ------------------------- -->
                       <v-dialog v-model="dialogBuy" scrollable max-width="800px">
-                        <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" @confirmed-buy="buyConfirmed" @cancel-buy="reset" />
+                        <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" :discounts="discounts" @confirmed-buy="buyConfirmed" @cancel-buy="reset" />
                       </v-dialog>
                       <!-- ----------------------------------------------------------------------- -->
                     </div>
@@ -136,6 +136,7 @@ export default {
       dialogBuy: false,
       buyLoading: false,
       canIBuy: true,
+      discounts: [],
     };
   },
   computed: {
@@ -168,6 +169,19 @@ export default {
         this.eventInfo.latitud = data.latitud;
         this.eventInfo.longitud = data.longitud;
         this.eventInfo.link = data.enllacos_list[0];
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+      fetch("https://cultucat.hemanuelpc.es/discounts/?userDiscount=" + this.user.user.id)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("No se pudo obtener el archivo JSON");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        this.discounts = data;
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -281,10 +295,12 @@ END:VCALENDAR
         console.error('Error fetching comments:', error);
       }
     },
-    buyConfirmed(isLoading) {
+    buyConfirmed(isLoading, discountUsed) {
       this.buyLoading = isLoading;
+      console.log(discountUsed);
       const params = JSON.stringify({
-        event: this.eventInfo.id
+        event: this.eventInfo.id,
+        discount: discountUsed
       });
       const config = {
         headers: {

@@ -155,6 +155,7 @@ export default {
       };
     },
     filteredItems() {
+      this.items_get = this.items ? this.items : this.items_get;
       return this.items_get
         .filter((item) => {
           if (!this.searchInput) return true;

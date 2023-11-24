@@ -6,23 +6,13 @@
   <v-card v-if="item.espai" class="my-3 mx-3" elevation="6" @click.prevent="handleClick('/events/' + item.id)">
     <v-row>
       <v-col cols="1" xl="1" md="2" sm="1">
-        <v-avatar
-          :image="this.item.imatges_list.length > 0 ? this.item.imatges_list[0] : null"
-          class="my-2 mx-5"
-          :size="view === 'map' ? '45' : '120'"
-        >
+        <v-avatar :image="item.imatges_list && item.imatges_list.length > 0 ? item.imatges_list[0] : null"
+          class="my-2 mx-5" :size="view === 'map' ? '45' : '120'">
         </v-avatar>
       </v-col>
       <v-col cols="11" lg="10" md="9" sm="9">
-        <v-card-title
-          
-        >
-          <v-btn
-            icon="mdi-chevron-right"
-            variant="plain"
-            :ripple="false"
-            class="pb-1"
-          ></v-btn>
+        <v-card-title>
+          <v-btn icon="mdi-chevron-right" variant="plain" :ripple="false" class="pb-1"></v-btn>
           <strong>{{ item.nom }}</strong>
           <p v-if="item.dataIni" class="dates">
             {{ transformDate(item.dataIni) }}
@@ -42,23 +32,16 @@
   </v-card>
 
   <v-card v-else class="my-2 mx-3" elevation="4" rounded="xl">
-    <v-card-item
-      @click="handleClick('/users/' + this.item.id)"
-      class="clickable"
-    >
-    <template v-slot:prepend>
-      <v-avatar
-        :image="item.imatge"
-        size="50"
-        class="ml-2 mr-5 my-2"
-      ></v-avatar>
-      <strong>{{ item.first_name }}</strong>
-    </template>
-    <template v-slot:append>
+    <v-card-item @click="handleClick('/users/' + this.item.id)" class="clickable">
+      <template v-slot:prepend>
+        <v-avatar :image="item.imatge" size="50" class="ml-2 mr-5 my-2"></v-avatar>
+        <strong>{{ item.first_name }}</strong>
+      </template>
+      <template v-slot:append>
         Score: {{ item.puntuacio }}
         <v-icon>mdi-chevron-right</v-icon>
-    </template>
-      
+      </template>
+
     </v-card-item>
   </v-card>
 </template>

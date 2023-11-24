@@ -194,7 +194,7 @@ export default {
           this.profile_favs,
           3,
           "Trophies",
-          this.profile.trofeus
+          [{nom:"Parlaner",nivell: 1}, {nom: "Reviewer",nivell: 2}, {nom: "Més esdeveniments", nivell: 3}]
         );
         this.$store.commit("setProfileData", this.profile);
 
