@@ -9,7 +9,7 @@
         <v-avatar
           :image="this.item.imatges_list.length > 0 ? this.item.imatges_list[0] : null"
           class="my-2 mx-5"
-          size="120"
+          :size="view === 'map' ? '45' : '120'"
         >
         </v-avatar>
       </v-col>
@@ -73,6 +73,9 @@ export default {
   props: {
     item: {
       type: Object,
+    },
+    view: {
+      type: String,
     },
   },
   methods: {
