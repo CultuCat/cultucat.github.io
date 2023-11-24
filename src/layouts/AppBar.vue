@@ -26,7 +26,7 @@
     <v-list dense nav>
       <v-list-group :value="profile.group">
         <template v-slot:activator="{ props }">
-          <v-list-item v-bind="props" :prepend-avatar="profile.avatar" :title="profile.name"
+          <v-list-item v-bind="props" :prepend-avatar="profile.avatar" :title="profile.username"
             :subtitle="profile.email"></v-list-item>
         </template>
 
@@ -63,6 +63,12 @@ export default {
           to: "/search",
         },
         {
+          title: "Map",
+          icon: "mdi-map-outline",
+          fillIcon: "mdi-map",
+          to: "/map",
+        },
+        {
           title: "Tickets",
           icon: "mdi-ticket-outline",
           fillIcon: "mdi-ticket",
@@ -97,7 +103,7 @@ export default {
       ],
       profile: {
         group: "User",
-        name: null, //username
+        username: null, //username
         email: null,//this.user.user.email, //email
         avatar: null,//this.user.user.imatge, //profile photo
         children: [],
@@ -109,7 +115,7 @@ export default {
   },
   mounted() {
     this.setChildren();
-    this.profile.name = this.user.user.username;
+    this.profile.username = this.user.user.username;
     this.profile.email = this.user.user.email;
     this.profile.avatar = this.user.user.imatge;
     this.isAdmin = this.user.user.is_staff;

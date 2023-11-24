@@ -4,7 +4,7 @@
 
 <template>
   <v-row justify="center">
-    <v-col cols="8" md="8" sm="5">
+    <v-col cols="10" sm="10">
       <v-sheet class="d-flex justify-center align-center">
         <v-slide-group
           show-arrows
@@ -20,7 +20,7 @@
               @mouseenter="showDeleteIcon = index"
               @mouseleave="showDeleteIcon = -1"
             >
-              {{ tag }}
+              {{ tag.nom }}
               <v-icon
                 class="ml-1"
                 v-if="showDeleteIcon === index && !trophyTab"
@@ -33,8 +33,13 @@
         </v-slide-group>
 
         <v-chip v-else>
-          There aren't any {{ compData.title.toLowerCase() }}. Try adding new
+          <template v-if="!trophyTab">
+            There aren't any {{ compData.title.toLowerCase() }}. Try adding new
           ones!
+          </template>
+          <template v-else>
+            There aren't any {{ compData.title.toLowerCase() }}. Go win some!
+          </template>
         </v-chip>
       </v-sheet>
     </v-col>
