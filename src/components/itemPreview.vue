@@ -67,6 +67,7 @@ export default {
     view: {
       type: String,
     },
+      index: Number,
   },
   methods: {
     handleClick(route) {
@@ -97,6 +98,28 @@ export default {
       const match = texto.match(regex);
       return match ? match[0] : texto;
     },
+    getCardClasses() {
+      if (this.view === 'ranking') {
+        return {
+          'ranking-style': true,
+          'first-place': this.isFirst,
+          'second-place': this.isSecond,
+          'third-place': this.isThird,
+        };
+      }
+      return {}; // Sin clases adicionales si view no es 'ranking'
+    },
+  },
+  computed: {
+    isFirst() {
+      return this.index === 0;
+    },
+    isSecond() {
+      return this.index === 1;
+    },
+    isThird() {
+      return this.index === 2;
+    },
   },
 };
 </script>
@@ -112,5 +135,17 @@ export default {
   display: inline-block;
   font-size: 0.6em;
   margin-left: 1rem;
+}
+
+.first-place {
+  background-color: #ffd700; /* Color para el primer lugar */
+}
+
+.second-place {
+  background-color: #c0c0c0; /* Color para el segundo lugar */
+}
+
+.third-place {
+  background-color: #cd7f32; /* Color para el tercer lugar */
 }
 </style>
