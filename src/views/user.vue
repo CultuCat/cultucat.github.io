@@ -86,6 +86,7 @@
       <confirmDelete
         v-if="dialogDelete"
         :itemToDelete="itemToDelete"
+        :deleteLoading="deleteLoading"
         @confirmed-delete="deleteConfirmed"
         @cancel-delete="deleteCancel"
       />
@@ -129,6 +130,8 @@ export default {
       dialogDelete: false,
       itemToDelete: null,
       idxToDelete: null,
+      idToDelete: null,
+      deleteLoading: false,
       userId: null,
     };
   },
@@ -145,37 +148,79 @@ export default {
     this.userId = this.$route.params.user_id;
   },
   mounted() {
-    axios.get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
-    .then(response => {
-      // Almacena la respuesta en la propiedad profile cuando la solicitud se completa
-      this.profile = response.data;
+    axios
+      .get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
+      .then((response) => {
+        // Almacena la respuesta en la propiedad profile cuando la solicitud se completa
+        this.profile = response.data;
 
-      // Ahora, puedes realizar las operaciones necesarias con la respuesta de manera asincrónica
-      this.agregarSlideGroup(this.profile_favs, 1, "Favourite Tags", this.profile.tags_preferits);
-      this.agregarSlideGroup(this.profile_favs, 2, "Favourite Places", this.profile.espais_preferits);
-      this.agregarSlideGroup(this.profile_favs, 3, "Trophies", this.profile.trofeus);
-      this.$store.commit('setProfileData', this.profile);
+        // Ahora, puedes realizar las operaciones necesarias con la respuesta de manera asincrónica
+        this.agregarSlideGroup(
+          this.profile_favs,
+          1,
+          "Favourite Tags",
+          this.profile.tags_preferits
+        );
+        this.agregarSlideGroup(
+          this.profile_favs,
+          2,
+          "Favourite Places",
+          this.profile.espais_preferits
+        );
+        this.agregarSlideGroup(
+          this.profile_favs,
+          3,
+          "Trophies",
+          this.profile.trofeus
+        );
+        this.$store.commit("setProfileData", this.profile);
 
-      this.isAdmin = this.profile.is_staff;
-    })
-    .catch(error => {
-      // Maneja errores aquí
-      console.error("Error al obtener el perfil del usuario:", error);
-    });
+        this.isAdmin = this.profile.is_staff;
+      })
+      .catch((error) => {
+        // Maneja errores aquí
+        console.error("Error al obtener el perfil del usuario:", error);
+      });
     this.isAdmin = this.user.user.is_staff;
   },
   methods: {
     handleIconClick(route) {
       this.$router.push(route);
     },
-    deleteItem({ index, chipName, chipCat }) {
+    deleteItem({ index, chipName, chipCat, id }) {
       this.itemToDelete = { chipName, chipCat };
       this.dialogDelete = true;
       this.idxToDelete = index;
+      this.idToDelete = id;
     },
-    deleteConfirmed() {
-      this.profile.favs[this.tab - 1].arr.splice(this.idxToDelete, 1);
-      this.reset();
+    deleteConfirmed(isLoading) {
+      this.deleteLoading = isLoading;
+      let tabTitle = "tags_preferits";
+      if (this.tab - 1 === 1) tabTitle = "espais_preferits";
+      axios
+        .delete(
+          "https://cultucat.hemanuelpc.es/users/" +
+            this.userId +
+            "/" +
+            tabTitle +
+            "/" +
+            this.idToDelete +
+            "/"
+        )
+        .then((response) => {
+          if (response.status === 204) {
+            this.profile_favs[this.tab - 1].arr.splice(this.idxToDelete, 1);
+            this.$store.commit("setProfileData", this.profile);
+          }
+        })
+        .catch((error) => {
+          // Maneja errores aquí
+          console.error("Error al obtener borrar elemento.", error);
+        })
+        .finally(() => {
+          this.reset(); // Mueve esto aquí para que se ejecute después de la eliminación exitosa o con error
+          this.deleteLoading = false; // Establecer el estado de carga a false independientemente de si la solicitud fue exitosa o no
+        });
     },
     deleteCancel() {
       this.reset();

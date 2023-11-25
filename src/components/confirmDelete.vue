@@ -9,14 +9,14 @@
         <v-card-title class="headline">Delete Confirmation</v-card-title>
         <v-card-text>
           ¿Are you sure you want to delete
-          <strong>{{ itemToDelete.chipName }}</strong> from your
+          <strong>'{{ itemToDelete.chipName.nom }}'</strong> from your
           <strong>{{ itemToDelete.chipCat.toLowerCase() }}</strong
           >?
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn @click="deleteCancel">Cancelar</v-btn>
-          <v-btn @click="deleteConfirmed">Eliminar</v-btn>
+          <v-btn @click="deleteConfirmed" :loading="deleteLoading" color="error">Eliminar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -32,11 +32,12 @@ export default {
   },
   props: {
     itemToDelete: Object, //Recibe datos de la vista padre
+    deleteLoading: Boolean,
   },
   methods: {
     deleteConfirmed() {
       // Emitir un evento para confirmar la eliminación
-      this.$emit("confirmed-delete");
+      this.$emit("confirmed-delete", true);
     },
     deleteCancel() {
       this.$emit("cancel-delete");
