@@ -5,17 +5,11 @@
       <v-col cols="12">
         <v-card>
 
-          <v-form @submit="submitForm">
+          <v-form @submit.prevent="submitForm">
             <p v-if="v$.formData.nom.$error" style="color: red;" class="ma-4">Name can't be empty.</p>
             <v-text-field label="Nom" v-model="formData.nom" variant="outlined" class="ma-4"></v-text-field>
             <p v-if="v$.formData.descripcio.$error" style="color: red;" class="ma-4">Descripció max characters=560.</p>
             <v-textarea label="Descripció" v-model="formData.descripcio" variant="outlined" auto-grow class="ma-4"></v-textarea>
-            <!-- <v-file-input
-              label="Selecciona imatge (jpg o png)"
-              :accept="'image/jpeg, image/png'"
-              variant="outlined"
-              v-model="formData.imatge"
-            ></v-file-input> -->
 
             <v-row>
               <v-col cols="12" class="text-center">
@@ -64,6 +58,7 @@
 <script>
   import { useVuelidate } from '@vuelidate/core'
   import { required, url, decimal, maxLength } from '@vuelidate/validators'
+  import { mapGetters } from 'vuex';
 
   export default {
     name: "CreateEvent",
@@ -73,7 +68,6 @@
         formData: {
           nom: '',
           descripcio: '',
-          //imatge: null, 
           dataIni: null, 
           dataFi: null,
           preu: '',
@@ -87,12 +81,14 @@
         dateError: false,
       };
     },
+    computed: {
+      ...mapGetters(['user']),
+    },
     validations () {
       return {
         formData: {
           nom: { required, $autoDirty: true},
           descripcio: { maxLengthValue: maxLength(560), $autoDirty: true },
-          //imatge: {  },
           dataIni: {  }, 
           dataFi: {  },
           preu: {  },
@@ -128,12 +124,17 @@
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'Authorization': `Token ${this.user.token}`,
             },
             body: JSON.stringify(this.formData),
           });
 
           if (!response.ok) {
             console.error('Error de solicitud:', response.status, response.statusText);
+          }
+          else {
+            const responseData = await response.json();
+            window.location.href = 'https://cultucat.netlify.app/events/' + responseData.id +'/';
           }
         } catch (error) {
           console.error('Error de solicitud:', error);
