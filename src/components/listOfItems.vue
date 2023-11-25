@@ -6,8 +6,7 @@
   <v-col>
     <v-container class="d-flex justify-center align-center">
       <v-col cols="10" md="10" sm="12">
-        <template v-if="loaded">
-          <template v-if="items.length === 0">
+        <template v-if="items_get.length === 0">
           <div style="text-align: center;">
             <v-chip class="mr-2"> Sorry, no results found. </v-chip>
           </div>
@@ -15,60 +14,77 @@
         <template v-else>
           <v-card elevation="4">
             <v-card-item class="my-4">
-              <template v-slot:prepend v-if="items[0].espai">
-                <v-btn rounded="xl" prepend-icon="mdi-filter-outline">Filters</v-btn>
+              <template v-slot:prepend v-if="items_get[0].dataIni">
+                <v-btn rounded="xl" prepend-icon="mdi-filter-outline"
+                  >Filters</v-btn
+                >
               </template>
-              <v-text-field v-model="searchInput" placeholder="Search" prepend-inner-icon="mdi-magnify custom-cursor"
-                class="expanding-search mx-3 my-1" :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch"
-                clearable rounded="xl" variant="solo" density="compact" hide-details></v-text-field>
+              <v-text-field
+                v-model="searchInput"
+                placeholder="Search"
+                prepend-inner-icon="mdi-magnify custom-cursor"
+                class="expanding-search mx-3 my-1"
+                :style="textFieldStyle"
+                @focus="expandSearch"
+                @blur="expandSearch"
+                clearable
+                rounded="xl"
+                variant="solo"
+                density="compact"
+                hide-details
+              ></v-text-field>
 
-              <template v-slot:append v-if="items[0].dataIni && this.view !== 'map'">
-                <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">Create Event</v-btn>
+              <template v-slot:append v-if="items_get[0].dataIni">
+                <v-btn
+                  rounded="xl"
+                  @click="handleBtnClick('/admin/events/create')"
+                  >Create Event</v-btn
+                >
               </template>
             </v-card-item>
-            <v-list>
-              <v-divider class="my-4"></v-divider>
-              <v-list-item v-for="(item, index) in filteredItems" :key="item">
-                <itemPreview :item="item" :index="index" :view="view" />
+
+            <v-divider class="my-4"></v-divider>
+            <v-list v-if="items_get.length > 0">
+              <v-list-item v-for="item in filteredItems" :key="item">
+                <itemPreview :item="item" />
               </v-list-item>
-              <div v-if="filteredItems.length === 0" style="text-align: center;" class="my-10">
-                <v-chip>
-                  Sorry, no results found for your search.
-                </v-chip>
+              <div
+                v-if="filteredItems.length === 0"
+                style="text-align: center"
+                class="my-10"
+              >
+                <v-chip> Sorry, no results found for your search. </v-chip>
               </div>
             </v-list>
           </v-card>
         </template>
-      </template>
-
-    </v-col>
-  </v-container>
-</v-col></template>
+      </v-col>
+    </v-container>
+  </v-col>
+</template>
 
 <!-- =============================== SCRIPTS =============================== -->
 
 <script setup>
 import itemPreview from "@/components/itemPreview.vue";
 import axios from "axios";
-import { integer } from "@vuelidate/validators";
 </script>
 
 <script>
 export default {
   data() {
     return {
-      items: [],
-      loaded: false,
+      items_get: [],
       expanded: false,
       searchInput: "",
     };
   },
   props: {
+    items: {
+      type: Array,
+    },
     type: String,
     userId: Number,
-    view: {
-      type: String,
-    }
   },
   methods: {
     expandSearch() {
@@ -85,7 +101,7 @@ export default {
         .get("https://cultucat.hemanuelpc.es/users/")
         .then((response) => {
           if (response.status === 200) {
-            this.items = response.data;
+            this.items_get = response.data;
             this.loaded = true;
           }
         })
@@ -96,10 +112,11 @@ export default {
     },
     getFriends() {
       axios
-        .get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
+        .get("https://cultucat.hemanuelpc.es/users/"+ this.userId +"/")
         .then((response) => {
           if (response.status === 200) {
-            this.items = response.data.friends;
+            this.items_get = response.data.friends;
+            this.loaded = true;
           }
         })
         .catch((error) => {
@@ -109,10 +126,11 @@ export default {
     },
     getEvents() {
       axios
-        .get("https://cultucat.hemanuelpc.es/users/")
+        .get("https://cultucat.hemanuelpc.es/events/?ordering=-dataIni")
         .then((response) => {
           if (response.status === 200) {
-            this.items = response.data;
+            this.items_get = response.data.results;
+            this.loaded = true;
           }
         })
         .catch((error) => {
@@ -122,6 +140,7 @@ export default {
     },
   },
   created() {
+    this.items_get = this.items ? this.items : [];
     if (this.type === "ranking" || this.type === "list_users") {
       this.getUsers();
     } else if (this.type === "list_friends") {
@@ -139,7 +158,8 @@ export default {
       };
     },
     filteredItems() {
-      return this.items
+      this.items_get = this.items ? this.items : this.items_get;
+      return this.items_get
         .filter((item) => {
           if (!this.searchInput) return true;
           const searchInput = this.searchInput.toLowerCase();

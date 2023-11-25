@@ -31,7 +31,7 @@
               <v-card-text class="mx-16">{{ profile.bio }}</v-card-text>
             </template>
 
-            <template v-slot:append>
+            <template v-slot:append v-if="this.userId == this.user.user.id">
               <v-btn
                 variant="text"
                 icon="mdi-pencil"
@@ -83,7 +83,7 @@
           </v-card>
         </v-col>
       </v-container>
-      <!--  Dialog para confirmacion de eliminar -->
+      <!-- ---------------- Dialog para confirmacion de eliminar ----------------- -->
       <confirmDelete
         v-if="dialogDelete"
         :itemToDelete="itemToDelete"
@@ -92,10 +92,12 @@
         @confirmed-delete="deleteConfirmed"
         @cancel-delete="deleteCancel"
       />
+      <!-- ----------------------- dialog para ver amigos ------------------------ -->
       <v-dialog v-model="dialogFriends" scrollable max-width="800px">
         <v-card>
-          <v-toolbar dark>
-            <v-toolbar-title class="ml-15">Friends</v-toolbar-title>
+          <v-toolbar color="#ff6961" dark>
+            <v-icon size="35" class="ml-6">mdi-account-multiple</v-icon>
+            <v-toolbar-title class="ml-6">Friends</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn icon dark variant="plain" @click="dialogFriends = false">
@@ -108,10 +110,12 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- ----------------------- dialog para ver ranking ----------------------- -->
       <v-dialog v-model="dialogRanking" scrollable max-width="800px">
         <v-card>
-          <v-toolbar dark>
-            <v-toolbar-title class="ml-15">Ranking</v-toolbar-title>
+          <v-toolbar color="#ff6961" dark>
+            <v-icon size="35" class="ml-6">mdi-star-circle-outline</v-icon>
+            <v-toolbar-title class="ml-6">Ranking</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn icon dark variant="plain" @click="dialogRanking = false">
@@ -124,6 +128,7 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- ----------------------------------------------------------------------- -->
     </v-col>
   </template>
 </template>
@@ -190,7 +195,7 @@ export default {
           this.profile_favs,
           3,
           "Trophies",
-          this.profile.trofeus
+          [{nom:"Parlaner",nivell: 1}, {nom: "Reviewer",nivell: 2}, {nom: "Més esdeveniments", nivell: 3}]
         );
         this.$store.commit("setProfileData", this.profile);
 

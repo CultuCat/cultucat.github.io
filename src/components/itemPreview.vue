@@ -6,25 +6,13 @@
   <v-card v-if="item.espai" class="my-3 mx-3" elevation="6" @click.prevent="handleClick('/events/' + item.id)">
     <v-row>
       <v-col cols="1" xl="1" md="2" sm="1">
-        <v-avatar
-          :image="
-            this.item.imatges_list.length > 0 ? this.item.imatges_list[0] : null
-          "
-          class="my-2 mx-5"
-          :size="view === 'map' ? '45' : '120'"
-        >
+        <v-avatar :image="item.imatges_list && item.imatges_list.length > 0 ? item.imatges_list[0] : null"
+          class="my-2 mx-5" :size="view === 'map' ? '45' : '120'">
         </v-avatar>
       </v-col>
       <v-col cols="11" lg="10" md="9" sm="9">
-        <v-card-title
-          
-        >
-          <v-btn
-            icon="mdi-chevron-right"
-            variant="plain"
-            :ripple="false"
-            class="pb-1"
-          ></v-btn>
+        <v-card-title>
+          <v-btn icon="mdi-chevron-right" variant="plain" :ripple="false" class="pb-1"></v-btn>
           <strong>{{ item.nom }}</strong>
           <p v-if="item.dataIni" class="dates">
             {{ transformDate(item.dataIni) }}
@@ -50,7 +38,7 @@
     >
     <template v-slot:prepend>
       <v-avatar
-        :image="item.avatar"
+        :image="item.imatge"
         size="50"
         class="ml-2 mr-5 my-2"
       ></v-avatar>
@@ -59,8 +47,8 @@
     <template v-slot:append>
         Score: {{ item.puntuacio }}
         <v-icon>mdi-chevron-right</v-icon>
-    </template>
-      
+      </template>
+
     </v-card-item>
   </v-card>
 </template>
@@ -79,13 +67,10 @@ export default {
     view: {
       type: String,
     },
-    index: {
-      type: Number,
-    },
   },
   methods: {
     handleClick(route) {
-      this.$router.push(route);
+      window.location.pathname = route;
     },
     transformDate(date) {
       const dateObj = new Date(date);
@@ -112,29 +97,7 @@ export default {
       const match = texto.match(regex);
       return match ? match[0] : texto;
     },
-    getCardClasses() {
-      if (this.view === 'ranking') {
-        return {
-          'ranking-style': true,
-          'first-place': this.isFirst,
-          'second-place': this.isSecond,
-          'third-place': this.isThird,
-        };
-      }
-      return {}; // Sin clases adicionales si view no es 'ranking'
-    },
   },
-  computed: {
-    isFirst() {
-      return this.index === 0;
-    },
-    isSecond() {
-      return this.index === 1;
-    },
-    isThird() {
-      return this.index === 2;
-    },
-  }
 };
 </script>
 
@@ -149,17 +112,5 @@ export default {
   display: inline-block;
   font-size: 0.6em;
   margin-left: 1rem;
-}
-
-.first-place {
-  background-color: #FFD700;
-}
-
-.second-place {
-  background-color: #C0C0C0;
-}
-
-.third-place {
-  background-color: #CD7F32;
 }
 </style>
