@@ -22,7 +22,7 @@
                   class="expanding-search mx-3 my-1" :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch"
                   clearable rounded="xl" variant="solo" density="compact" hide-details></v-text-field>
 
-                <template v-slot:append v-if="items_get[0].dataIni">
+                <template v-slot:append v-if="items_get[0].dataIni && !(view === 'map')">
                   <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">Create Event</v-btn>
                 </template>
               </v-card-item>
