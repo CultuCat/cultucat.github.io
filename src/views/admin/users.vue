@@ -7,6 +7,7 @@
 
 <script setup>
 import ListOfItems from "@/components/listOfItems.vue";
+import {obtenerUsuarios}  from '@/assets/datos.js';
 </script>
 
 <script>
@@ -21,7 +22,7 @@ export default {
       const baseUrl = "https://ui-avatars.com/api/?name=";
       this.items = this.items.map((user) => ({
         ...user,
-        imatge: baseUrl + encodeURIComponent(user.name),
+        avatar: baseUrl + encodeURIComponent(user.name),
       }));
     },
   },
