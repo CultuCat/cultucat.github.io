@@ -50,7 +50,7 @@
     >
     <template v-slot:prepend>
       <v-avatar
-        :image="item.imatge"
+        :image="item.avatar"
         size="50"
         class="ml-2 mr-5 my-2"
       ></v-avatar>

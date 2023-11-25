@@ -7,6 +7,7 @@
 
 <script setup>
 import ListOfItems from "@/components/listOfItems.vue";
+import {obtenerUsuarios}  from '@/assets/datos.js';
 </script>
 
 <script>

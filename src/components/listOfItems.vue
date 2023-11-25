@@ -6,7 +6,8 @@
   <v-col>
     <v-container class="d-flex justify-center align-center">
       <v-col cols="10" md="10" sm="12">
-        <template v-if="items.length === 0">
+        <template v-if="loaded">
+          <template v-if="items.length === 0">
           <div style="text-align: center;">
             <v-chip class="mr-2"> Sorry, no results found. </v-chip>
           </div>
@@ -14,46 +15,35 @@
         <template v-else>
           <v-card elevation="4">
             <v-card-item class="my-4">
-              <template v-slot:prepend v-if="items[0].dataIni">
-                <v-btn rounded="xl" prepend-icon="mdi-filter-outline"
-                  >Filters</v-btn
-                >
+              <template v-slot:prepend v-if="items[0].espai">
+                <v-btn rounded="xl" prepend-icon="mdi-filter-outline">Filters</v-btn>
               </template>
-              <v-text-field
-                v-model="searchInput"
-                placeholder="Search"
-                prepend-inner-icon="mdi-magnify custom-cursor"
-                class="expanding-search mx-3 my-1"
-                :style="textFieldStyle"
-                @focus="expandSearch"
-                @blur="expandSearch"
-                clearable
-                rounded="xl"
-                variant="solo"
-                density="compact"
-                hide-details
-              ></v-text-field>
+              <v-text-field v-model="searchInput" placeholder="Search" prepend-inner-icon="mdi-magnify custom-cursor"
+                class="expanding-search mx-3 my-1" :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch"
+                clearable rounded="xl" variant="solo" density="compact" hide-details></v-text-field>
 
-              <template v-slot:append v-if="items[0].dataIni && this.user.user.is_staff && this.view !== 'map'">
+              <template v-slot:append v-if="items[0].dataIni && this.view !== 'map'">
                 <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">Create Event</v-btn>
               </template>
             </v-card-item>
-
-            <v-divider class="my-4"></v-divider>
-            <v-list-item v-for="(item,index) in filteredItems" :key="item">
-              <itemPreview :item="item" :index="index" :view="view"/>
-            </v-list-item>
-            <div v-if="filteredItems.length === 0" style="text-align: center;" class="my-10">
-              <v-chip>
-                Sorry, no results found for your search.
-              </v-chip>
-            </div>
+            <v-list>
+              <v-divider class="my-4"></v-divider>
+              <v-list-item v-for="(item, index) in filteredItems" :key="item">
+                <itemPreview :item="item" :index="index" :view="view" />
+              </v-list-item>
+              <div v-if="filteredItems.length === 0" style="text-align: center;" class="my-10">
+                <v-chip>
+                  Sorry, no results found for your search.
+                </v-chip>
+              </div>
+            </v-list>
           </v-card>
         </template>
-      </v-col>
-    </v-container>
-  </v-col>
-</template>
+      </template>
+
+    </v-col>
+  </v-container>
+</v-col></template>
 
 <!-- =============================== SCRIPTS =============================== -->
 
@@ -68,6 +58,7 @@ export default {
   data() {
     return {
       items: [],
+      loaded: false,
       expanded: false,
       searchInput: "",
     };
@@ -95,6 +86,7 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.items = response.data;
+            this.loaded = true;
           }
         })
         .catch((error) => {
@@ -104,7 +96,7 @@ export default {
     },
     getFriends() {
       axios
-        .get("https://cultucat.hemanuelpc.es/users/"+ this.userId +"/")
+        .get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
         .then((response) => {
           if (response.status === 200) {
             this.items = response.data.friends;
@@ -152,16 +144,17 @@ export default {
           if (!this.searchInput) return true;
           const searchInput = this.searchInput.toLowerCase();
 
-          const indicesToSearch = [1, 2];
-
-          for (const index of indicesToSearch) {
-            const key = Object.keys(item)[index];
-            if (item[key] && item[key].toString().toLowerCase().includes(searchInput)) {
+          for (const key in item) {
+            if (
+              item[key] &&
+              item[key].toString().toLowerCase().includes(searchInput)
+            ) {
               return true;
             }
-          };
+          }
+
           return false;
-    })
+        })
         .sort((a, b) => {
           if (this.type === "ranking") {
             return b.puntuacio - a.puntuacio;
