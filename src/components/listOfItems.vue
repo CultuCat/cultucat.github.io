@@ -18,14 +18,14 @@
                 class="expanding-search mx-3 my-1" :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch"
                 clearable rounded="xl" variant="solo" density="compact" hide-details></v-text-field>
 
-              <template v-slot:append v-if="items[0].dataIni && this.user.user.is_staff">
+              <template v-slot:append v-if="items[0].dataIni && this.user.user.is_staff && this.view !== 'map'">
                 <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">Create Event</v-btn>
               </template>
             </v-card-item>
 
             <v-divider class="my-4"></v-divider>
             <v-list-item v-for="item in filteredItems" :key="item">
-              <itemPreview :item="item" />
+              <itemPreview :item="item" :view="view"/>
             </v-list-item>
             <div v-if="filteredItems.length === 0" style="text-align: center;" class="my-10">
               <v-chip>
@@ -59,6 +59,9 @@ export default {
     items: {
       type: Array,
     },
+    view: {
+      type: String,
+    }
   },
   methods: {
     expandSearch() {
