@@ -3,7 +3,7 @@
 <!-- ======================================================================= -->
 
 <template>
-  <v-card v-if="item.dataIni" class="my-3 mx-3" elevation="6" @click.prevent="handleClick('/events/' + item.id)">
+  <v-card v-if="item.espai" class="my-3 mx-3" elevation="6" @click.prevent="handleClick('/events/' + item.id)">
     <v-row>
       <v-col cols="1" xl="1" md="2" sm="1">
         <v-avatar
@@ -43,7 +43,7 @@
     </v-row>
   </v-card>
 
-  <v-card v-else class="my-2 mx-3" elevation="4" rounded="xl">
+  <v-card v-else class="my-2 mx-3" elevation="4" rounded="xl" :class="getCardClasses()">
     <v-card-item
       @click="handleClick('/users/' + this.item.id)"
       class="clickable"
@@ -79,6 +79,9 @@ export default {
     view: {
       type: String,
     },
+    index: {
+      type: Number,
+    },
   },
   methods: {
     handleClick(route) {
@@ -109,7 +112,29 @@ export default {
       const match = texto.match(regex);
       return match ? match[0] : texto;
     },
+    getCardClasses() {
+      if (this.view === 'ranking') {
+        return {
+          'ranking-style': true,
+          'first-place': this.isFirst,
+          'second-place': this.isSecond,
+          'third-place': this.isThird,
+        };
+      }
+      return {}; // Sin clases adicionales si view no es 'ranking'
+    },
   },
+  computed: {
+    isFirst() {
+      return this.index === 0;
+    },
+    isSecond() {
+      return this.index === 1;
+    },
+    isThird() {
+      return this.index === 2;
+    },
+  }
 };
 </script>
 
@@ -124,5 +149,17 @@ export default {
   display: inline-block;
   font-size: 0.6em;
   margin-left: 1rem;
+}
+
+.first-place {
+  background-color: #FFD700;
+}
+
+.second-place {
+  background-color: #C0C0C0;
+}
+
+.third-place {
+  background-color: #CD7F32;
 }
 </style>

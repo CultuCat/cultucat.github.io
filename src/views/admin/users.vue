@@ -13,23 +13,10 @@ import ListOfItems from "@/components/listOfItems.vue";
 export default {
   data() {
     return {
-      items: obtenerUsuarios(),
     };
-  },
-  methods: {
-    updateAvatarUrls() {
-      const baseUrl = "https://ui-avatars.com/api/?name=";
-      this.items = this.items.map((user) => ({
-        ...user,
-        imatge: baseUrl + encodeURIComponent(user.name),
-      }));
-    },
   },
   components: {
     ListOfItems,
   },
-  created(){
-    this.updateAvatarUrls();
-  }
 };
 </script>

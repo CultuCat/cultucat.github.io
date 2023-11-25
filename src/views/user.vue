@@ -121,7 +121,7 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text style="height: 600px">
-            <ListOfItems :type="'ranking'"/>
+            <ListOfItems :type="'ranking'" :view="'ranking'"/>
           </v-card-text>
         </v-card>
       </v-dialog>

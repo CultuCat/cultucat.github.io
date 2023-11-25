@@ -40,8 +40,8 @@
             </v-card-item>
 
             <v-divider class="my-4"></v-divider>
-            <v-list-item v-for="item in filteredItems" :key="item">
-              <itemPreview :item="item" :view="view"/>
+            <v-list-item v-for="(item,index) in filteredItems" :key="item">
+              <itemPreview :item="item" :index="index" :view="view"/>
             </v-list-item>
             <div v-if="filteredItems.length === 0" style="text-align: center;" class="my-10">
               <v-chip>
