@@ -31,7 +31,7 @@
               <v-card-text class="mx-16">{{ profile.bio }}</v-card-text>
             </template>
 
-            <template v-slot:append>
+            <template v-slot:append v-if="this.userId == this.user.user.id">
               <v-btn
                 variant="text"
                 icon="mdi-pencil"
@@ -57,6 +57,7 @@
                       <!-- :compData pasa los datos de cada slide a SlideGroup (chips deslizables) -->
                       <SlideGroup
                         :compData="profile_favs[n - 1]"
+                        :userId="userId"
                         @delete-item="deleteItem"
                       />
                     </v-window-item>
