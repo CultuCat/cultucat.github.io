@@ -50,11 +50,11 @@
       append-icon="mdi-chevron-right"
     >
       <v-avatar
-        :image="item.imatge"
+        :image="item.avatar"
         size="50"
         class="ml-2 mr-5 my-2"
       ></v-avatar>
-      <strong>{{ item.first_name }}</strong>
+      <strong>{{ item.name }}</strong>
     </v-card-item>
   </v-card>
 </template>
