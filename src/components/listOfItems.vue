@@ -34,28 +34,20 @@
                 hide-details
               ></v-text-field>
 
-              <template v-slot:append v-if="items[0].dataIni">
-                <v-btn
-                  rounded="xl"
-                  @click="handleBtnClick('/admin/events/create')"
-                  >Create Event</v-btn
-                >
+              <template v-slot:append v-if="items[0].dataIni && this.user.user.is_staff && this.view !== 'map'">
+                <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">Create Event</v-btn>
               </template>
             </v-card-item>
 
             <v-divider class="my-4"></v-divider>
-            <v-list v-if="items.length > 0">
-              <v-list-item v-for="item in filteredItems" :key="item">
-                <itemPreview :item="item" />
-              </v-list-item>
-              <div
-                v-if="filteredItems.length === 0"
-                style="text-align: center"
-                class="my-10"
-              >
-                <v-chip> Sorry, no results found for your search. </v-chip>
-              </div>
-            </v-list>
+            <v-list-item v-for="item in filteredItems" :key="item">
+              <itemPreview :item="item" :view="view"/>
+            </v-list-item>
+            <div v-if="filteredItems.length === 0" style="text-align: center;" class="my-10">
+              <v-chip>
+                Sorry, no results found for your search.
+              </v-chip>
+            </div>
           </v-card>
         </template>
       </v-col>
@@ -68,6 +60,7 @@
 <script setup>
 import itemPreview from "@/components/itemPreview.vue";
 import axios from "axios";
+import { integer } from "@vuelidate/validators";
 </script>
 
 <script>
@@ -82,6 +75,9 @@ export default {
   props: {
     type: String,
     userId: Number,
+    view: {
+      type: String,
+    }
   },
   methods: {
     expandSearch() {
@@ -156,17 +152,16 @@ export default {
           if (!this.searchInput) return true;
           const searchInput = this.searchInput.toLowerCase();
 
-          for (const key in item) {
-            if (
-              item[key] &&
-              item[key].toString().toLowerCase().includes(searchInput)
-            ) {
+          const indicesToSearch = [1, 2];
+
+          for (const index of indicesToSearch) {
+            const key = Object.keys(item)[index];
+            if (item[key] && item[key].toString().toLowerCase().includes(searchInput)) {
               return true;
             }
-          }
-
+          };
           return false;
-        })
+    })
         .sort((a, b) => {
           if (this.type === "ranking") {
             return b.puntuacio - a.puntuacio;
