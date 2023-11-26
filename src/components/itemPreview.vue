@@ -37,7 +37,7 @@
       class="clickable"
     >
     <template v-slot:prepend>
-      <template v-if="view='ranking'">
+      <template v-if="view === 'ranking'">
         <strong>{{ index + 1 }}. </strong>   
       </template>
       <v-avatar
@@ -48,7 +48,9 @@
       <strong>{{ item.first_name || item.first_name }}</strong>
     </template>
     <template v-slot:append>
+      <template v-if="view === 'ranking'">
         Score: {{ item.puntuacio }}
+      </template>
         <v-icon>mdi-chevron-right</v-icon>
       </template>
 
@@ -69,6 +71,7 @@ export default {
     },
     view: {
       type: String,
+      default: "",
     },
       index: Number,
   },
