@@ -31,14 +31,26 @@
     </v-row>
   </v-card>
 
-  <v-card v-else class="my-2 mx-3" elevation="4" rounded="xl">
-    <v-card-item @click="handleClick('/users/' + this.item.id)" class="clickable">
-      <template v-slot:prepend>
-        <v-avatar :image="item.imatge" size="50" class="ml-2 mr-5 my-2"></v-avatar>
-        <strong>{{ item.first_name }}</strong>
+  <v-card v-else class="my-2 mx-3" elevation="4" rounded="xl" :class="getCardClasses()">
+    <v-card-item
+      @click="handleClick('/users/' + (item.id || item.idUser))"
+      class="clickable"
+    >
+    <template v-slot:prepend>
+      <template v-if="view === 'ranking'">
+        <strong>{{ index + 1 }}. </strong>   
       </template>
-      <template v-slot:append>
+      <v-avatar
+        :image="item.imatge || item.avatar"
+        size="50"
+        class="ml-2 mr-5 my-2"
+      ></v-avatar>
+      <strong>{{ item.first_name || item.name }}</strong>
+    </template>
+    <template v-slot:append>
+      <template v-if="view === 'ranking'">
         Score: {{ item.puntuacio }}
+      </template>
         <v-icon>mdi-chevron-right</v-icon>
       </template>
 
@@ -59,11 +71,13 @@ export default {
     },
     view: {
       type: String,
+      default: "",
     },
+      index: Number,
   },
   methods: {
     handleClick(route) {
-      this.$router.push(route);
+      window.location.pathname = route;
     },
     transformDate(date) {
       const dateObj = new Date(date);
@@ -90,6 +104,28 @@ export default {
       const match = texto.match(regex);
       return match ? match[0] : texto;
     },
+    getCardClasses() {
+      if (this.view === 'ranking') {
+        return {
+          'ranking-style': true,
+          'first-place': this.isFirst,
+          'second-place': this.isSecond,
+          'third-place': this.isThird,
+        };
+      }
+      return {}; // Sin clases adicionales si view no es 'ranking'
+    },
+  },
+  computed: {
+    isFirst() {
+      return this.index === 0;
+    },
+    isSecond() {
+      return this.index === 1;
+    },
+    isThird() {
+      return this.index === 2;
+    },
   },
 };
 </script>
@@ -105,5 +141,17 @@ export default {
   display: inline-block;
   font-size: 0.6em;
   margin-left: 1rem;
+}
+
+.first-place {
+  background-color: #ffd700; /* Color para el primer lugar */
+}
+
+.second-place {
+  background-color: #c0c0c0; /* Color para el segundo lugar */
+}
+
+.third-place {
+  background-color: #cd7f32; /* Color para el tercer lugar */
 }
 </style>
