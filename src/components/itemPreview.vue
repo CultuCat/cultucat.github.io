@@ -9,7 +9,7 @@
         <v-avatar
           :image="this.item.imatges_list.length > 0 ? this.item.imatges_list[0] : null"
           class="my-2 mx-5"
-          size="120"
+          :size="view === 'map' ? '45' : '120'"
         >
         </v-avatar>
       </v-col>
@@ -74,6 +74,9 @@ export default {
     item: {
       type: Object,
     },
+    view: {
+      type: String,
+    },
   },
   methods: {
     handleClick(route) {
@@ -91,7 +94,7 @@ export default {
     },
     acortarTexto(texto) {
       const palabras = texto.split(" ");
-      const maxPalabras = 20;
+      const maxPalabras=20;
       if (palabras.length > maxPalabras) {
         const textoAcortado = palabras.slice(0, maxPalabras).join(" ");
         return textoAcortado + "...";

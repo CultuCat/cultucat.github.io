@@ -224,6 +224,50 @@ export default {
       if (!match) this.canIBuy = false;
       return match ? match[0] : texto;
     },
+    agregarEventoAlCalendario() {
+      const evento = {
+        title: this.nom,
+        description: this.descripcio,
+        startDate: this.dataIni,
+        endDate: this.dataFi || this.dataIni,
+        location: this.espai.nom,
+      };
+
+      const calendarEvent = {
+        title: evento.title,
+        description: evento.description,
+        location: evento.location,
+        start: evento.startDate,
+        end: evento.endDate
+      };
+
+      const icalData = `
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${calendarEvent.start}
+DTEND:${calendarEvent.end}
+SUMMARY:${calendarEvent.title}
+DESCRIPTION:${calendarEvent.description}
+LOCATION:${calendarEvent.location}
+END:VEVENT
+END:VCALENDAR
+`;
+
+      const icalDataFormatted = icalData.replace(/\n\s+/g, '\n').trim();
+
+
+      const blob = new Blob([icalData], { type: 'text/calendar;charset=utf-8' });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'event.ics');
+      document.body.appendChild(link);
+      link.click();
+
+      window.URL.revokeObjectURL(url);
+    },
     async fetchComments() {
       try {
         const response = await fetch('https://cultucat.hemanuelpc.es/comments/?event=' + this.$route.params.event_id);

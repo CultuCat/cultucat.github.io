@@ -15,47 +15,39 @@
           <v-card elevation="4">
             <v-card-item class="my-4">
               <template v-slot:prepend v-if="items_get[0].dataIni">
-                <v-btn rounded="xl" prepend-icon="mdi-filter-outline"
-                  >Filters</v-btn
-                >
+                <v-btn rounded="xl" prepend-icon="mdi-filter-outline">Filters</v-btn>
               </template>
-              <v-text-field
-                v-model="searchInput"
-                placeholder="Search"
-                prepend-inner-icon="mdi-magnify custom-cursor"
-                class="expanding-search mx-3 my-1"
-                :style="textFieldStyle"
-                @focus="expandSearch"
-                @blur="expandSearch"
-                clearable
-                rounded="xl"
-                variant="solo"
-                density="compact"
-                hide-details
-              ></v-text-field>
+              <v-text-field v-model="searchInput" placeholder="Search" prepend-inner-icon="mdi-magnify custom-cursor"
+                class="expanding-search mx-3 my-1" :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch"
+                clearable rounded="xl" variant="solo" density="compact" hide-details></v-text-field>
 
-              <template v-slot:append v-if="items_get[0].dataIni">
-                <v-btn
-                  rounded="xl"
-                  @click="handleBtnClick('/admin/events/create')"
-                  >Create Event</v-btn
-                >
+              <template v-slot:append v-if="items_get[0].dataIni && view !== 'map'">
+                <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">Create Event</v-btn>
               </template>
             </v-card-item>
 
             <v-divider class="my-4"></v-divider>
-            <v-list v-if="items_get.length > 0">
+            <v-list v-if="items.length > 0">
               <v-list-item v-for="item in filteredItems" :key="item">
-                <itemPreview :item="item" />
+                <itemPreview :item="item" :view="view" />
               </v-list-item>
-              <div
-                v-if="filteredItems.length === 0"
-                style="text-align: center"
-                class="my-10"
-              >
-                <v-chip> Sorry, no results found for your search. </v-chip>
+              <div v-if="filteredItems.length === 0" style="text-align: center;" class="my-10">
+                <v-chip>
+                  Sorry, no results found for your search.
+                </v-chip>
               </div>
             </v-list>
+          </v-card>
+          <v-card>
+          <v-divider class="my-4"></v-divider>
+          <v-list v-if="items_get.length > 0">
+            <v-list-item v-for="item in filteredItems" :key="item">
+              <itemPreview :item="item" />
+            </v-list-item>
+            <div v-if="filteredItems.length === 0" style="text-align: center" class="my-10">
+              <v-chip> Sorry, no results found for your search. </v-chip>
+            </div>
+          </v-list>
           </v-card>
         </template>
       </v-col>
@@ -85,6 +77,9 @@ export default {
     },
     type: String,
     userId: Number,
+    view: {
+      type: String,
+    }
   },
   methods: {
     expandSearch() {
@@ -111,7 +106,7 @@ export default {
     },
     getFriends() {
       axios
-        .get("https://cultucat.hemanuelpc.es/users/"+ this.userId +"/")
+        .get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
         .then((response) => {
           if (response.status === 200) {
             this.items_get = response.data.friends;
