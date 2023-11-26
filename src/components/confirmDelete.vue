@@ -15,7 +15,8 @@
         <v-card-text v-else>
           ¿Are you sure you want to delete
           <strong>'{{ itemToDelete.chipName.nom }}'</strong> from your
-          <strong>{{ itemToDelete.chipCat.toLowerCase() }}</strong>?
+          <strong>{{ itemToDelete.chipCat.toLowerCase() }}</strong
+          >?
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -37,7 +38,6 @@ export default {
   props: {
     itemToDelete: Object, //Recibe datos de la vista padre
     deleteLoading: Boolean,
-    delUser: Boolean,
   },
   methods: {
     deleteConfirmed() {
