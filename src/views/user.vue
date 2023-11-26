@@ -24,14 +24,14 @@
             <template v-slot:subtitle>
               <pre
                 class="text-none text-subtitle-1"
-              ><strong>Score: {{profile.puntuacio}}       <v-btn prepend-icon="mdi-account-multiple" elevation="4" rounded="xl" class="mb-1 text-none text-subtitle-1" size="small" @click="dialogFriends = true">Friends: 0</v-btn></strong></pre>
+              ><strong>Score: {{profile.puntuacio}}       <v-btn prepend-icon="mdi-account-multiple" elevation="4" rounded="xl" class="mb-1 text-none text-subtitle-1" size="small" @click="dialogFriends = true">Friends: {{ profile.friends.length }}</v-btn></strong></pre>
             </template>
 
             <template v-slot:text>
               <v-card-text class="mx-16">{{ profile.bio }}</v-card-text>
             </template>
 
-            <template v-slot:append>
+            <template v-slot:append v-if="this.userId == this.user.user.id">
               <v-btn
                 variant="text"
                 icon="mdi-pencil"
@@ -74,6 +74,7 @@
                   size="large"
                   elevation="4"
                   append-icon="mdi-star-circle-outline"
+                  @click="dialogRanking = true"
                 >
                   Ranking
                 </v-btn>
@@ -82,7 +83,7 @@
           </v-card>
         </v-col>
       </v-container>
-      <!--  Dialog para confirmacion de eliminar -->
+      <!-- ---------------- Dialog para confirmacion de eliminar ----------------- -->
       <confirmDelete
         v-if="dialogDelete"
         :itemToDelete="itemToDelete"
@@ -91,10 +92,12 @@
         @confirmed-delete="deleteConfirmed"
         @cancel-delete="deleteCancel"
       />
+      <!-- ----------------------- dialog para ver amigos ------------------------ -->
       <v-dialog v-model="dialogFriends" scrollable max-width="800px">
         <v-card>
-          <v-toolbar dark>
-            <v-toolbar-title class="ml-15">Friends</v-toolbar-title>
+          <v-toolbar color="#ff6961" dark>
+            <v-icon size="35" class="ml-6">mdi-account-multiple</v-icon>
+            <v-toolbar-title class="ml-6">Friends</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn icon dark variant="plain" @click="dialogFriends = false">
@@ -103,10 +106,29 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text style="height: 600px">
-            <ListOfFavs :items="profile.friends" />
+            <ListOfItems :type="'list_friends'" :userId="userId"/>
           </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- ----------------------- dialog para ver ranking ----------------------- -->
+      <v-dialog v-model="dialogRanking" scrollable max-width="800px">
+        <v-card>
+          <v-toolbar color="#ff6961" dark>
+            <v-icon size="35" class="ml-6">mdi-star-circle-outline</v-icon>
+            <v-toolbar-title class="ml-6">Ranking</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn icon dark variant="plain" @click="dialogRanking = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-card-text style="height: 600px">
+            <ListOfItems :type="'ranking'" :view="'ranking'"/>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <!-- ----------------------------------------------------------------------- -->
     </v-col>
   </template>
 </template>
@@ -115,7 +137,7 @@
 <script setup>
 import confirmDelete from "@/components/confirmDelete.vue";
 import SlideGroup from "@/components/slideGroup.vue";
-import ListOfFavs from "@/components/listOfItems.vue";
+import ListOfItems from "@/components/listOfItems.vue";
 import { mapGetters } from "vuex";
 import axios from "axios";
 </script>
@@ -128,6 +150,7 @@ export default {
       profile_favs: [],
       tab: null,
       dialogFriends: false,
+      dialogRanking: false,
       dialogDelete: false,
       itemToDelete: null,
       idxToDelete: null,
@@ -139,7 +162,7 @@ export default {
   components: {
     SlideGroup,
     confirmDelete,
-    ListOfFavs,
+    ListOfItems,
   },
   computed: {
     ...mapGetters(["user"]),
@@ -172,7 +195,7 @@ export default {
           this.profile_favs,
           3,
           "Trophies",
-          this.profile.trofeus
+          [{nom:"Parlaner",nivell: 1}, {nom: "Reviewer",nivell: 2}, {nom: "Més esdeveniments", nivell: 3}]
         );
         this.$store.commit("setProfileData", this.profile);
 
@@ -225,6 +248,19 @@ export default {
     },
     deleteCancel() {
       this.reset();
+    },
+    getUsers() {
+      axios
+      .get("https://cultucat.hemanuelpc.es/users/")
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data;
+        }
+      })
+      .catch((error) => {
+        // Maneja errores aquí
+        console.error("Error al obtener el perfil del usuario:", error);
+      });
     },
     reset() {
       this.dialogDelete = false;
