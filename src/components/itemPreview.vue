@@ -33,7 +33,7 @@
 
   <v-card v-else class="my-2 mx-3" elevation="4" rounded="xl" :class="getCardClasses()">
     <v-card-item
-      @click="handleClick('/users/' + this.item.id)"
+      @click="handleClick('/users/' + (item.id || item.idUser))"
       class="clickable"
     >
     <template v-slot:prepend>
@@ -41,11 +41,11 @@
         <strong>{{ index + 1 }}. </strong>   
       </template>
       <v-avatar
-        :image="item.imatge"
+        :image="item.imatge || item.avatar"
         size="50"
         class="ml-2 mr-5 my-2"
       ></v-avatar>
-      <strong>{{ item.first_name }}</strong>
+      <strong>{{ item.first_name || item.first_name }}</strong>
     </template>
     <template v-slot:append>
         Score: {{ item.puntuacio }}
