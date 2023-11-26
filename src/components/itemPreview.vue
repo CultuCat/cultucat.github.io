@@ -88,7 +88,7 @@ export default {
     },
     acortarTexto(texto) {
       const palabras = texto.split(" ");
-      const maxPalabras = 20;
+      const maxPalabras=20;
       if (palabras.length > maxPalabras) {
         const textoAcortado = palabras.slice(0, maxPalabras).join(" ");
         return textoAcortado + "...";
