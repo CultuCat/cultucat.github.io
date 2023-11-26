@@ -6,8 +6,7 @@
   <template v-if="itemsJSON.length > 0">
   <v-col>
     <h1 style="color: #ff6961" class="my-5 ml-5">Events</h1>
-    
-      <ListOfItems :items="itemsJSON"/>
+      <ListOfItems :items="itemsJSON" view="admin_events"/>
   </v-col>
   </template>
 </template>

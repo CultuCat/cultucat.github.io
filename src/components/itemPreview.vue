@@ -3,7 +3,7 @@
 <!-- ======================================================================= -->
 
 <template>
-  <v-card v-if="item.espai" class="my-3 mx-3" elevation="6" @click.prevent="handleClick('/events/' + item.id)">
+  <v-card v-if="item.espai" class="my-3 mx-3" elevation="6" @click.prevent="handleClick('/events/', item.id)">
     <v-row>
       <v-col cols="1" xl="1" md="2" sm="1">
         <v-avatar :image="item.imatges_list && item.imatges_list.length > 0 ? item.imatges_list[0] : null"
@@ -32,38 +32,64 @@
   </v-card>
 
   <v-card v-else class="my-2 mx-3" elevation="4" rounded="xl" :class="getCardClasses()">
-    <v-card-item
-      @click="handleClick('/users/' + (item.id || item.idUser))"
-      class="clickable"
-    >
-    <template v-slot:prepend>
-      <template v-if="view === 'ranking'">
-        <strong>{{ index + 1 }}. </strong>   
+    <v-card-item @click="handleClick('/users/', (item.id || item.idUser))" class="clickable">
+      <template v-slot:prepend>
+        <template v-if="view === 'ranking'">
+          <strong>{{ index + 1 }}. </strong>
+        </template>
+        <v-avatar :image="item.imatge || item.avatar" size="50" class="ml-2 mr-5 my-2"></v-avatar>
+        <strong>{{ item.first_name || item.name }}</strong>
       </template>
-      <v-avatar
-        :image="item.imatge || item.avatar"
-        size="50"
-        class="ml-2 mr-5 my-2"
-      ></v-avatar>
-      <strong>{{ item.first_name || item.name }}</strong>
-    </template>
-    <template v-slot:append>
-      <template v-if="view === 'ranking'">
-        Score: {{ item.puntuacio }}
+      <template v-slot:append>
+        <template v-if="view === 'ranking'">
+          Score: {{ item.puntuacio }}
+        </template>
+        <v-icon v-if="view === 'admin_users' && item.isBlocked">mdi-lock</v-icon>
+        <v-icon v-else-if="view === 'admin_users'">mdi-lock-open-outline</v-icon>
+        <v-icon v-else>mdi-chevron-right</v-icon>
       </template>
-        <v-icon>mdi-chevron-right</v-icon>
-      </template>
-
     </v-card-item>
+    <v-dialog v-model="dialogBlock" persistent max-width="500px">
+      <v-card>
+        <v-card-text>Estas segur que vols bloquejar aquest usuari?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red-darken-1" variant="text" @click="dialogBlock = false">
+            Cancel
+          </v-btn>
+          <v-btn color="blue-darken-1" variant="text" @click="blockUser(item.id)">
+            Block
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogUnblock" persistent max-width="500px">
+      <v-card>
+        <v-card-text>Estas segur que vols desbloquejar aquest usuari?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red-darken-1" variant="text" @click="dialogUnblock = false">
+            Cancel
+          </v-btn>
+          <v-btn color="blue-darken-1" variant="text" @click="blockUser(item.id)">
+            Block
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <!-- =============================== SCRIPTS =============================== -->
 
 <script>
+
 export default {
   data() {
-    return {};
+    return {
+      dialogBlock: false,
+      dialogUnblock: false,
+    };
   },
   props: {
     item: {
@@ -73,25 +99,72 @@ export default {
       type: String,
       default: "",
     },
-      index: Number,
+    index: Number,
+  },
+  computed: {
+    token() {
+      return this.$store.state.user.token;
+    },
+    isFirst() {
+      return this.index === 0;
+    },
+    isSecond() {
+      return this.index === 1;
+    },
+    isThird() {
+      return this.index === 2;
+    },
   },
   methods: {
-    handleClick(route) {
-      window.location.pathname = route;
+    handleClick(path, id) {
+      if (this.view === 'admin_users') {
+        if (this.item.isBlocked)
+          this.dialogUnblock = true;
+        else
+          this.dialogBlock = true;
+      }
+      else
+        window.location.pathname = path + id;
+    },
+    async blockUser(id) {
+      try {
+        const response = await fetch(`https://cultucat.hemanuelpc.es/users/${id}/block_profile/`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${this.token}`,
+          },
+          body: JSON.stringify({
+            isBlocked: !this.item.isBlocked,
+          }),
+        });
+        if (response.ok) {
+          if (this.item.isBlocked)
+            this.dialogUnblock = true;
+          else
+            this.dialogBlock = true;
+          window.location.reload();
+        } else {
+          console.error('Error al bloquear usuario');
+        }
+      } catch (error) {
+        console.error('Error en la solicitud POST:', error);
+      }
     },
     transformDate(date) {
       const dateObj = new Date(date);
       const formatOptions = {
-        weekday: "short", // Short weekday format (e.g., Sat)
-        month: "long", // Long month format (e.g., October)
-        day: "numeric", // Numeric day format (e.g., 22)
+        weekday: "short",
+        month: "long",
+        day: "numeric",
       };
       const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
       return formatter.format(dateObj);
     },
     acortarTexto(texto) {
+      if (!texto) return null;
       const palabras = texto.split(" ");
-      const maxPalabras=20;
+      const maxPalabras = 20;
       if (palabras.length > maxPalabras) {
         const textoAcortado = palabras.slice(0, maxPalabras).join(" ");
         return textoAcortado + "...";
@@ -116,17 +189,6 @@ export default {
       return {}; // Sin clases adicionales si view no es 'ranking'
     },
   },
-  computed: {
-    isFirst() {
-      return this.index === 0;
-    },
-    isSecond() {
-      return this.index === 1;
-    },
-    isThird() {
-      return this.index === 2;
-    },
-  },
 };
 </script>
 
@@ -144,14 +206,17 @@ export default {
 }
 
 .first-place {
-  background-color: #ffd700; /* Color para el primer lugar */
+  background-color: #ffd700;
+  /* Color para el primer lugar */
 }
 
 .second-place {
-  background-color: #c0c0c0; /* Color para el segundo lugar */
+  background-color: #c0c0c0;
+  /* Color para el segundo lugar */
 }
 
 .third-place {
-  background-color: #cd7f32; /* Color para el tercer lugar */
+  background-color: #cd7f32;
+  /* Color para el tercer lugar */
 }
 </style>
