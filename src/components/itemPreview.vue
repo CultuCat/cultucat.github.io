@@ -45,7 +45,7 @@
         size="50"
         class="ml-2 mr-5 my-2"
       ></v-avatar>
-      <strong>{{ item.first_name || item.first_name }}</strong>
+      <strong>{{ item.first_name || item.name }}</strong>
     </template>
     <template v-slot:append>
       <template v-if="view === 'ranking'">
