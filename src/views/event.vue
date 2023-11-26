@@ -298,7 +298,6 @@ END:VCALENDAR
     },
     buyConfirmed(isLoading, discountUsed) {
       this.buyLoading = isLoading;
-      console.log(discountUsed);
       const params = JSON.stringify({
         event: this.eventInfo.id,
         discount: discountUsed

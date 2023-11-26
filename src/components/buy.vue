@@ -92,7 +92,13 @@ export default {
     },
     methods: {
         buy(selectedDiscount) {
-            this.$emit("confirmed-buy", true, selectedDiscount.codi);
+            if(selectedDiscount != null){
+                this.$emit("confirmed-buy", true, selectedDiscount.codi);
+            }
+            else{
+               this.$emit("confirmed-buy", true, null); 
+            }
+            
         },
         cancel() {
             this.$emit("cancel-buy");
