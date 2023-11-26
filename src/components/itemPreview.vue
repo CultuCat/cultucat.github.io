@@ -37,6 +37,9 @@
       class="clickable"
     >
     <template v-slot:prepend>
+      <template v-if="view='ranking'">
+        <strong>{{ index + 1 }}. </strong>   
+      </template>
       <v-avatar
         :image="item.imatge"
         size="50"
