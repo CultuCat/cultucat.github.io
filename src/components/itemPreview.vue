@@ -45,16 +45,16 @@
 
   <v-card v-else class="my-2 mx-3" elevation="4" rounded="xl">
     <v-card-item
-      @click="handleClick('/users/' + this.item.id)"
+      @click="handleClick('/users/' + (item.id || item.idUser))"
       class="clickable"
       append-icon="mdi-chevron-right"
     >
       <v-avatar
-        :image="item.avatar"
+        :image="item.imatge || item.avatar"
         size="50"
         class="ml-2 mr-5 my-2"
       ></v-avatar>
-      <strong>{{ item.name }}</strong>
+      <strong>{{ item.first_name || item.name }}</strong>
     </v-card-item>
   </v-card>
 </template>
