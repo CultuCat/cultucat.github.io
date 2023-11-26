@@ -31,7 +31,7 @@
               hide-details
             ></v-text-field>
 
-            <template v-slot:append v-if="items[0].dataIni && this.view !== 'map'">
+            <template v-slot:append v-if="items[0].dataIni && view !== 'map'">
               <v-btn
                 rounded="xl"
                 @click="handleBtnClick('/admin/events/create')"
