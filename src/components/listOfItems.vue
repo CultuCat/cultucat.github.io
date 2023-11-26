@@ -22,10 +22,10 @@
                   class="expanding-search mx-3 my-1" :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch"
                   clearable rounded="xl" variant="solo" density="compact" hide-details></v-text-field>
 
-                <template v-slot:append v-if="items_get[0].dataIni && !(view === 'map')">
-                  <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">Create Event</v-btn>
-                </template>
-              </v-card-item>
+              <template v-slot:append v-if="items_get[0].dataIni && view !== 'map'">
+                <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">Create Event</v-btn>
+              </template>
+            </v-card-item>
 
               <v-divider class="my-4"></v-divider>
               <v-list v-if="items_get.length > 0">
@@ -96,7 +96,7 @@ export default {
     },
     getFriends() {
       axios
-        .get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
+        .get("https://cultucat.hemanuelpc.es/users/"  + this.userId +  "/")
         .then((response) => {
           if (response.status === 200) {
             this.items_get = response.data.friends;

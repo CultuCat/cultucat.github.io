@@ -66,7 +66,8 @@
                     </v-card-text>
                   </v-card>
                 </v-dialog>
-                <v-btn @click="agregarEventoAlCalendario" class="ma-2 pa-2" rounded="lg">Add to calendar</v-btn>
+                <!-- ----------------------------------------------------------------------- -->
+                <v-btn class="ma-2 pa-2" rounded="lg">Add to calendar</v-btn>
                 <v-btn @click="handleButtonMaps" class="ma-2 pa-2" rounded="lg">See location</v-btn>
               </v-col>
             </v-row>
