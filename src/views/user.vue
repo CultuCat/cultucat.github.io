@@ -24,14 +24,14 @@
             <template v-slot:subtitle>
               <pre
                 class="text-none text-subtitle-1"
-              ><strong>Score: {{profile.puntuacio}}       <v-btn prepend-icon="mdi-account-multiple" elevation="4" rounded="xl" class="mb-1 text-none text-subtitle-1" size="small" @click="dialogFriends = true">Friends: {{ profile.friends.length }}</v-btn></strong></pre>
+              ><strong>Score: {{profile.puntuacio}}       <v-btn prepend-icon="mdi-account-multiple" elevation="4" rounded="xl" class="mb-1 text-none text-subtitle-1" size="small" @click="dialogFriends = true">Friends: {{ profile.friends?.length}}</v-btn></strong></pre>
             </template>
 
             <template v-slot:text>
               <v-card-text class="mx-16">{{ profile.bio }}</v-card-text>
             </template>
 
-            <template v-slot:append v-if="this.userId == this.user.user.id">
+            <template v-slot:append v-if="userId == user.user.id">
               <v-btn
                 variant="text"
                 icon="mdi-pencil"
@@ -174,8 +174,8 @@ export default {
     axios
       .get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
       .then((response) => {
-        // Almacena la respuesta en la propiedad profile cuando la solicitud se completa
-        this.profile = response.data;
+        if(response.status == 200){
+          this.profile = response.data;
 
         // Ahora, puedes realizar las operaciones necesarias con la respuesta de manera asincrónica
         this.agregarSlideGroup(
@@ -199,6 +199,9 @@ export default {
         this.$store.commit("setProfileData", this.profile);
 
         this.isAdmin = this.profile.is_staff;
+        }
+        // Almacena la respuesta en la propiedad profile cuando la solicitud se completa
+        
       })
       .catch((error) => {
         // Maneja errores aquí
