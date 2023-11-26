@@ -19,6 +19,12 @@
             <span class="ml-2">Incorrect username or password</span>
           </v-card-text>
         </v-card>
+        <v-card v-else-if="block" class="text-medium-emphasis text-caption mb-6" color="red" variant="tonal">
+          <v-card-text class="pa-3">
+            <v-icon icon="mdi-alert-circle" />
+            <span class="ml-2">Blocked account</span>
+          </v-card-text>
+        </v-card>
         <br v-else>
         <v-btn block color="#ff6961" type="submit" variant="elevated">
           Log In
@@ -45,6 +51,7 @@ export default {
       username: null,
       password: null,
       error: false,
+      block: false,
       userRules: [v => !!v || 'El username es obligatorio'],
       passwordRules: [v => !!v || 'La contraseña es obligatoria'],
     };
@@ -137,9 +144,6 @@ export default {
         }),
       })
         .then((response) => {
-          if (!response.ok) {
-            this.error = true;
-          }
           return response.json();
         })
         .then((data) => {
@@ -147,6 +151,10 @@ export default {
             this.loginUser(data);
             window.location.pathname = "/home";
           }
+          else if (data.detail.includes('bloquejat'))
+            this.block = true;
+          else
+            this.error = true;
         })
         .catch((error) => {
           console.error("Error:", error);
