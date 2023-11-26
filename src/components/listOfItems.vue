@@ -6,50 +6,40 @@
   <v-col>
     <v-container class="d-flex justify-center align-center">
       <v-col cols="10" md="10" sm="12">
-        <template v-if="items_get.length === 0">
-          <div style="text-align: center;">
-            <v-chip class="mr-2"> Sorry, no results found. </v-chip>
-          </div>
-        </template>
-        <template v-else>
-          <v-card elevation="4">
-            <v-card-item class="my-4">
-              <template v-slot:prepend v-if="items_get[0].dataIni">
-                <v-btn rounded="xl" prepend-icon="mdi-filter-outline">Filters</v-btn>
-              </template>
-              <v-text-field v-model="searchInput" placeholder="Search" prepend-inner-icon="mdi-magnify custom-cursor"
-                class="expanding-search mx-3 my-1" :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch"
-                clearable rounded="xl" variant="solo" density="compact" hide-details></v-text-field>
+        <template v-if="loaded">
+          <template v-if="items_get.length === 0">
+            <div style="text-align: center;">
+              <v-chip class="mr-2"> Sorry, no results found. </v-chip>
+            </div>
+          </template>
+          <template v-else>
+            <v-card elevation="4">
+              <v-card-item class="my-4">
+                <template v-slot:prepend v-if="items_get[0].dataIni">
+                  <v-btn rounded="xl" prepend-icon="mdi-filter-outline">Filters</v-btn>
+                </template>
+                <v-text-field v-model="searchInput" placeholder="Search" prepend-inner-icon="mdi-magnify custom-cursor"
+                  class="expanding-search mx-3 my-1" :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch"
+                  clearable rounded="xl" variant="solo" density="compact" hide-details></v-text-field>
 
               <template v-slot:append v-if="items_get[0].dataIni && view !== 'map'">
                 <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">Create Event</v-btn>
               </template>
             </v-card-item>
 
-            <v-divider class="my-4"></v-divider>
-            <v-list v-if="items.length > 0">
-              <v-list-item v-for="item in filteredItems" :key="item">
-                <itemPreview :item="item" :view="view" />
-              </v-list-item>
-              <div v-if="filteredItems.length === 0" style="text-align: center;" class="my-10">
-                <v-chip>
-                  Sorry, no results found for your search.
-                </v-chip>
-              </div>
-            </v-list>
-          </v-card>
-          <v-card>
-          <v-divider class="my-4"></v-divider>
-          <v-list v-if="items_get.length > 0">
-            <v-list-item v-for="item in filteredItems" :key="item">
-              <itemPreview :item="item" />
-            </v-list-item>
-            <div v-if="filteredItems.length === 0" style="text-align: center" class="my-10">
-              <v-chip> Sorry, no results found for your search. </v-chip>
-            </div>
-          </v-list>
-          </v-card>
+              <v-divider class="my-4"></v-divider>
+              <v-list v-if="items_get.length > 0">
+                <v-list-item v-for="(item, index) in filteredItems" :key="item">
+                  <itemPreview :item="item" :index="index" :view="view"/>
+                </v-list-item>
+                <div v-if="filteredItems.length === 0" style="text-align: center" class="my-10">
+                  <v-chip> Sorry, no results found for your search. </v-chip>
+                </div>
+              </v-list>
+            </v-card>
+          </template>
         </template>
+
       </v-col>
     </v-container>
   </v-col>
@@ -69,6 +59,7 @@ export default {
       items_get: [],
       expanded: false,
       searchInput: "",
+      loaded: false,
     };
   },
   props: {
@@ -77,9 +68,7 @@ export default {
     },
     type: String,
     userId: Number,
-    view: {
-      type: String,
-    }
+    view: String
   },
   methods: {
     expandSearch() {
@@ -97,6 +86,7 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.items_get = response.data;
+            this.loaded = true;
           }
         })
         .catch((error) => {
@@ -106,10 +96,11 @@ export default {
     },
     getFriends() {
       axios
-        .get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
+        .get("https://cultucat.hemanuelpc.es/users/"  + this.userId +  "/")
         .then((response) => {
           if (response.status === 200) {
             this.items_get = response.data.friends;
+            this.loaded = true;
           }
         })
         .catch((error) => {
@@ -123,6 +114,7 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.items_get = response.data.results;
+            this.loaded = true;
           }
         })
         .catch((error) => {
@@ -132,8 +124,12 @@ export default {
     },
   },
   created() {
-    this.items_get = this.items ? this.items : [];
-    if (this.type === "ranking" || this.type === "list_users") {
+    if(this.items){
+      this.items_get = this.items;
+      this.loaded = true;
+    }
+    else {
+      if (this.type === "ranking" || this.type === "list_users") {
       this.getUsers();
     } else if (this.type === "list_friends") {
       this.getFriends();
@@ -142,6 +138,8 @@ export default {
     } else {
       console.log("Error: type not found");
     }
+    }
+    
   },
   computed: {
     textFieldStyle() {
@@ -150,6 +148,7 @@ export default {
       };
     },
     filteredItems() {
+      this.items_get = this.items ? this.items : this.items_get;
       return this.items_get
         .filter((item) => {
           if (!this.searchInput) return true;
