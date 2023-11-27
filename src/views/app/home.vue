@@ -12,7 +12,7 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="12">
-        <events :items="this.events" />
+        <ListOfItems :items="currentEvents" :view="view"/>
       </v-col>
     </v-row>
   </v-container>
@@ -20,26 +20,34 @@
 
 <script setup>
   import { mapGetters } from "vuex";
-  import events from '@/components/listOfItems.vue'
+  import ListOfItems from "@/components/listOfItems.vue";
 </script>
 
 <script>
 export default {
   data() {
     return {
-      events: [],
+      currentEvents: [],
       url: "",
       eventsUrl: "",
+      view: "map",
     };
   },
   created() {
     this.url = "https://cultucat.hemanuelpc.es";
-    this.eventsUrl = `${this.url}/events/?ordering=-dataIni`;
-    //this.events = this.fetchEvents();
+    let promises = this.user.user.espais_preferits.map(espai => {
+      return this.fetchEvents(espai);
+    });
+    Promise.all(promises).then(results => {
+      this.currentEvents = [].concat(...results);
+      this.$forceUpdate();
+      console.log(this.currentEvents);
+    });
   },
   methods: {
-    fetchEvents() {
-      fetch(this.fetchEventsUrl)
+    fetchEvents(espai) {
+      this.eventsUrl = `${this.url}/events/?espai=${espai.id}`;
+      return fetch(this.eventsUrl)
       .then((response) => {
         if (!response.ok) {
           throw new Error("No se pudo obtener el archivo JSON");
@@ -47,8 +55,8 @@ export default {
         return response.json();
       })
       .then((data) => {
-        this.events= data.results;
-        this.eventsUrl = data.next;
+        return data.results;
+        
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -62,7 +70,7 @@ export default {
     ...mapGetters(["user"]),
   },
   components: {
-    events,
+    ListOfItems,
   },
 };
 </script>
