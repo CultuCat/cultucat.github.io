@@ -2,7 +2,7 @@
   <template v-if="items != null">
   <v-col>
     <h1 style="color: #ff6961" class="my-5 ml-5">Users</h1>
-    <ListOfItems :type="'list_users'" />
+    <ListOfItems :type="'list_users'" view="admin_users" />
   </v-col>
 </template>
 </template>

@@ -103,9 +103,9 @@ export default {
       ],
       profile: {
         group: "User",
-        username: null, //username
-        email: null,//this.user.user.email, //email
-        avatar: null,//this.user.user.imatge, //profile photo
+        username: null,
+        email: null,
+        avatar: null,
         children: [],
       },
     };
@@ -114,11 +114,11 @@ export default {
     ...mapGetters(['user']),
   },
   mounted() {
-    this.setChildren();
     this.profile.username = this.user.user.username;
     this.profile.email = this.user.user.email;
     this.profile.avatar = this.user.user.imatge;
     this.isAdmin = this.user.user.is_staff;
+    this.setChildren();
   },
   methods: {
     ...mapActions(['logoutUser']),
@@ -170,7 +170,7 @@ export default {
         window.location.pathname = route;
       }
       else if(route === "/login") this.logoutUser();
-      else window.location.pathname = route;;
+      else window.location.pathname = route;
     }
   },
 };

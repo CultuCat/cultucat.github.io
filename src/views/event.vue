@@ -67,7 +67,7 @@
                   </v-card>
                 </v-dialog>
                 <!-- ----------------------------------------------------------------------- -->
-                <v-btn class="ma-2 pa-2" rounded="lg">Add to calendar</v-btn>
+                <v-btn @click="agregarEventoAlCalendario" class="ma-2 pa-2" rounded="lg">Add to calendar</v-btn>
                 <v-btn @click="handleButtonMaps" class="ma-2 pa-2" rounded="lg">See location</v-btn>
               </v-col>
             </v-row>
@@ -240,11 +240,11 @@ export default {
     },
     agregarEventoAlCalendario() {
       const evento = {
-        title: this.nom,
-        description: this.descripcio,
-        startDate: this.dataIni,
-        endDate: this.dataFi || this.dataIni,
-        location: this.espai.nom,
+        title: this.eventInfo.nom,
+        description: this.eventInfo.descripcio,
+        startDate: this.eventInfo.dataIni,
+        endDate: this.eventInfo.dataFi || this.eventInfo.dataIni,
+        location: this.eventInfo.espai.nom,
       };
 
       const calendarEvent = {
