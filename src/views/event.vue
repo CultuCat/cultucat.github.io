@@ -284,6 +284,7 @@ END:VCALENDAR
     },
     async fetchComments() {
       try {
+        console.log(this.$route.params.event_id)
         const response = await fetch('https://cultucat.hemanuelpc.es/comments/?event=' + this.$route.params.event_id);
 
         if (response.ok) {

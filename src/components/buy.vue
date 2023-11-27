@@ -98,7 +98,6 @@ export default {
             else{
                this.$emit("confirmed-buy", true, null); 
             }
-            
         },
         cancel() {
             this.$emit("cancel-buy");
