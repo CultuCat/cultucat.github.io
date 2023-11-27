@@ -26,7 +26,7 @@
                 <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">Create Event</v-btn>
               </template>
             </v-card-item>
-            
+         
           <v-divider class="my-4"></v-divider>
           <v-list v-if="items.length > 0">
             <v-list-item v-for="item in filteredItems" :key="item">
@@ -46,8 +46,9 @@
               </v-chip>
             </div>
           </v-list>
+        
         </v-card>
-
+      </template>
         </template>
 
       </v-col>
