@@ -133,6 +133,8 @@ export default {
       }
     },
     onSubmit() {
+      this.block = false;
+      this.error = false;
       fetch("https://cultucat.hemanuelpc.es/users/login", {
         method: "POST",
         headers: {
