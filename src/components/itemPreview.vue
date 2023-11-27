@@ -72,7 +72,7 @@
             Cancel
           </v-btn>
           <v-btn color="blue-darken-1" variant="text" @click="blockUser(item.id)">
-            Block
+            Unblock
           </v-btn>
         </v-card-actions>
       </v-card>
