@@ -24,14 +24,14 @@
             <template v-slot:subtitle>
               <pre
                 class="text-none text-subtitle-1"
-              ><strong>Score: {{profile.puntuacio}}       <v-btn prepend-icon="mdi-account-multiple" elevation="4" rounded="xl" class="mb-1 text-none text-subtitle-1" size="small" @click="dialogFriends = true">Friends: 0</v-btn></strong></pre>
+              ><strong>Score: {{profile.puntuacio}}       <v-btn prepend-icon="mdi-account-multiple" elevation="4" rounded="xl" class="mb-1 text-none text-subtitle-1" size="small" @click="dialogFriends = true">Friends: {{ profile.friends?.length}}</v-btn></strong></pre>
             </template>
 
             <template v-slot:text>
               <v-card-text class="mx-16">{{ profile.bio }}</v-card-text>
             </template>
 
-            <template v-slot:append>
+            <template v-slot:append v-if="userId == user.user.id">
               <v-btn
                 variant="text"
                 icon="mdi-pencil"
@@ -74,6 +74,7 @@
                   size="large"
                   elevation="4"
                   append-icon="mdi-star-circle-outline"
+                  @click="dialogRanking = true"
                 >
                   Ranking
                 </v-btn>
@@ -82,17 +83,20 @@
           </v-card>
         </v-col>
       </v-container>
-      <!--  Dialog para confirmacion de eliminar -->
+      <!-- ---------------- Dialog para confirmacion de eliminar ----------------- -->
       <confirmDelete
         v-if="dialogDelete"
         :itemToDelete="itemToDelete"
+        :deleteLoading="deleteLoading"
         @confirmed-delete="deleteConfirmed"
         @cancel-delete="deleteCancel"
       />
+      <!-- ----------------------- dialog para ver amigos ------------------------ -->
       <v-dialog v-model="dialogFriends" scrollable max-width="800px">
         <v-card>
-          <v-toolbar dark>
-            <v-toolbar-title class="ml-15">Friends</v-toolbar-title>
+          <v-toolbar color="#ff6961" dark>
+            <v-icon size="35" class="ml-6">mdi-account-multiple</v-icon>
+            <v-toolbar-title class="ml-6">Friends</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn icon dark variant="plain" @click="dialogFriends = false">
@@ -101,11 +105,32 @@
             </v-toolbar-items>
           </v-toolbar>
           <v-card-text style="height: 600px">
+
             <ListOfPending :items="user.user.pending_friend_requests" />
-            <ListOfFavs :items="profile.friends" />
+            <ListOfItems :type="'list_friends'" :userId="userId"/>
+
           </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- ----------------------- dialog para ver ranking ----------------------- -->
+      <v-dialog v-model="dialogRanking" scrollable max-width="800px">
+        <v-card>
+          <v-toolbar color="#ff6961" dark>
+            <v-icon size="35" class="ml-6">mdi-star-circle-outline</v-icon>
+            <v-toolbar-title class="ml-6">Ranking</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn icon dark variant="plain" @click="dialogRanking = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+          <v-card-text style="height: 600px">
+            <ListOfItems :type="'ranking'" :view="'ranking'"/>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <!-- ----------------------------------------------------------------------- -->
     </v-col>
   </template>
 </template>
@@ -116,6 +141,7 @@ import confirmDelete from "@/components/confirmDelete.vue";
 import SlideGroup from "@/components/slideGroup.vue";
 import ListOfFavs from "@/components/listOfItems.vue";
 import ListOfPending from "@/components/listOfPending.vue";
+import ListOfItems from "@/components/listOfItems.vue";
 import { mapGetters } from "vuex";
 import axios from "axios";
 </script>
@@ -128,9 +154,12 @@ export default {
       profile_favs: [],
       tab: null,
       dialogFriends: false,
+      dialogRanking: false,
       dialogDelete: false,
       itemToDelete: null,
       idxToDelete: null,
+      idToDelete: null,
+      deleteLoading: false,
       userId: null,
       friendRequests:null,
     };
@@ -138,8 +167,10 @@ export default {
   components: {
     SlideGroup,
     confirmDelete,
+
     ListOfFavs,
-    ListOfPending
+    ListOfPending,
+    ListOfItems,
   },
   computed: {
     ...mapGetters(["user"]),
@@ -149,23 +180,42 @@ export default {
     this.userId = this.$route.params.user_id;
   },
   mounted() {
-    axios.get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
-    .then(response => {
-      // Almacena la respuesta en la propiedad profile cuando la solicitud se completa
-      this.profile = response.data;
+    axios
+      .get("https://cultucat.hemanuelpc.es/users/" + this.userId + "/")
+      .then((response) => {
+        if(response.status == 200){
+          this.profile = response.data;
 
-      // Ahora, puedes realizar las operaciones necesarias con la respuesta de manera asincrónica
-      this.agregarSlideGroup(this.profile_favs, 1, "Favourite Tags", this.profile.tags_preferits);
-      this.agregarSlideGroup(this.profile_favs, 2, "Favourite Places", this.profile.espais_preferits);
-      this.agregarSlideGroup(this.profile_favs, 3, "Trophies", this.profile.trofeus);
-      this.$store.commit('setProfileData', this.profile);
+        // Ahora, puedes realizar las operaciones necesarias con la respuesta de manera asincrónica
+        this.agregarSlideGroup(
+          this.profile_favs,
+          1,
+          "Favourite Tags",
+          this.profile.tags_preferits
+        );
+        this.agregarSlideGroup(
+          this.profile_favs,
+          2,
+          "Favourite Places",
+          this.profile.espais_preferits
+        );
+        this.agregarSlideGroup(
+          this.profile_favs,
+          3,
+          "Trophies",
+          [{nom:"Parlaner",nivell: 1}, {nom: "Reviewer",nivell: 2}, {nom: "Més esdeveniments", nivell: 3}]
+        );
+        this.$store.commit("setProfileData", this.profile);
 
-      this.isAdmin = this.profile.is_staff;
-    })
-    .catch(error => {
-      // Maneja errores aquí
-      console.error("Error al obtener el perfil del usuario:", error);
-    });
+        this.isAdmin = this.profile.is_staff;
+        }
+        // Almacena la respuesta en la propiedad profile cuando la solicitud se completa
+        
+      })
+      .catch((error) => {
+        // Maneja errores aquí
+        console.error("Error al obtener el perfil del usuario:", error);
+      });
     this.isAdmin = this.user.user.is_staff;
   },
   methods: {
@@ -174,17 +224,56 @@ export default {
       console.log(this.friendRequests)
       //this.$router.push(route);
     },
-    deleteItem({ index, chipName, chipCat }) {
+    deleteItem({ index, chipName, chipCat, id }) {
       this.itemToDelete = { chipName, chipCat };
       this.dialogDelete = true;
       this.idxToDelete = index;
+      this.idToDelete = id;
     },
-    deleteConfirmed() {
-      this.profile.favs[this.tab - 1].arr.splice(this.idxToDelete, 1);
-      this.reset();
+    deleteConfirmed(isLoading) {
+      this.deleteLoading = isLoading;
+      let tabTitle = "tags_preferits";
+      if (this.tab - 1 === 1) tabTitle = "espais_preferits";
+      axios
+        .delete(
+          "https://cultucat.hemanuelpc.es/users/" +
+            this.userId +
+            "/" +
+            tabTitle +
+            "/" +
+            this.idToDelete +
+            "/"
+        )
+        .then((response) => {
+          if (response.status === 204) {
+            this.profile_favs[this.tab - 1].arr.splice(this.idxToDelete, 1);
+            this.$store.commit("setProfileData", this.profile);
+          }
+        })
+        .catch((error) => {
+          // Maneja errores aquí
+          console.error("Error al obtener borrar elemento.", error);
+        })
+        .finally(() => {
+          this.reset(); // Mueve esto aquí para que se ejecute después de la eliminación exitosa o con error
+          this.deleteLoading = false; // Establecer el estado de carga a false independientemente de si la solicitud fue exitosa o no
+        });
     },
     deleteCancel() {
       this.reset();
+    },
+    getUsers() {
+      axios
+      .get("https://cultucat.hemanuelpc.es/users/")
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data;
+        }
+      })
+      .catch((error) => {
+        // Maneja errores aquí
+        console.error("Error al obtener el perfil del usuario:", error);
+      });
     },
     reset() {
       this.dialogDelete = false;

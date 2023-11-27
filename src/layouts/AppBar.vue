@@ -170,7 +170,7 @@ export default {
         window.location.pathname = route;
       }
       else if(route === "/login") this.logoutUser();
-      else this.$router.push(route);
+      else window.location.pathname = route;;
     }
   },
 };
