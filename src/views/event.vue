@@ -34,12 +34,14 @@
                       <v-btn v-else class="ma-2" disabled>Buy</v-btn>
                       <!-- ------------------------- dialog para comprar ------------------------- -->
                       <v-dialog v-model="dialogBuy" scrollable max-width="800px">
-                        <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" :discounts="discounts" @confirmed-buy="buyConfirmed" @cancel-buy="reset" />
+                        <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" :discounts="discounts"
+                          @confirmed-buy="buyConfirmed" @cancel-buy="reset" />
                       </v-dialog>
                       <!-- ----------------------------------------------------------------------- -->
                     </div>
                     <div class="d-flex justify-center align-center" v-else>
-                      <v-btn variant="text" :ripple="false" class="ma-2" density="compact" disabled>Preu no disponible</v-btn>
+                      <v-btn variant="text" :ripple="false" class="ma-2" density="compact" disabled>Preu no
+                        disponible</v-btn>
                     </div>
                   </v-card>
                 </v-col>
@@ -85,7 +87,9 @@
                 <v-divider class="my-2" />
                 <h2>Comment</h2>
                 <commentForm @comment-posted="fetchComments"></commentForm>
-                <template v-for="comment in eventInfo.comments?.results" :key="comment.id">
+                {{ eventInfo.comments.results }}
+                <template v-for="comment in eventInfo.comments.results" :key="comment.id">
+                  {{ comment }}
                   <comment :comment="comment"></comment>
                 </template>
               </v-col>
@@ -128,7 +132,7 @@ export default {
         latitud: null,
         longitud: null,
         link: null,
-        comments: null,
+        comments: [],
         curiosity:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac sapien quis libero ullamcorper varius. In ut turpis id quam auctor porta. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam auctor bibendum justo, a rhoncus turpis hendrerit ac. Maecenas id tellus sed dolor tempus congue. Nunc at diam vel massa mattis elementum ac a dolor. Nulla facilisi. Sed in lacinia nunc. Quisque vel justo euismod, feugiat arcu ac, efficitur ipsum. Sed vulputate mi id odio consequat, sit amet varius neque rhoncus. Integer eu sollicitudin libero.",
         assistants: [],
@@ -174,7 +178,7 @@ export default {
       .catch((error) => {
         console.error("Error:", error);
       });
-      fetch("https://cultucat.hemanuelpc.es/discounts/?userDiscount=" + this.user.user.id)
+    fetch("https://cultucat.hemanuelpc.es/discounts/?userDiscount=" + this.user.user.id)
       .then((response) => {
         if (!response.ok) {
           throw new Error("No se pudo obtener el archivo JSON");
@@ -225,9 +229,9 @@ export default {
     transformDate(date) {
       const dateObj = new Date(date);
       const formatOptions = {
-        weekday: "short", // Short weekday format (e.g., Sat)
-        month: "long", // Long month format (e.g., October)
-        day: "numeric", // Numeric day format (e.g., 22)
+        weekday: "short",
+        month: "long",
+        day: "numeric",
       };
       const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
       return formatter.format(dateObj);
@@ -268,9 +272,6 @@ END:VEVENT
 END:VCALENDAR
 `;
 
-      const icalDataFormatted = icalData.replace(/\n\s+/g, '\n').trim();
-
-
       const blob = new Blob([icalData], { type: 'text/calendar;charset=utf-8' });
       const url = window.URL.createObjectURL(blob);
 
@@ -284,7 +285,6 @@ END:VCALENDAR
     },
     async fetchComments() {
       try {
-        console.log(this.$route.params.event_id)
         const response = await fetch('https://cultucat.hemanuelpc.es/comments/?event=' + this.$route.params.event_id);
 
         if (response.ok) {
@@ -322,7 +322,6 @@ END:VCALENDAR
           }
         })
         .catch((error) => {
-          // Maneja errores aquí
           console.error("Error al comprar el ticket: ", error);
         })
         .finally(() => {
