@@ -85,9 +85,8 @@
                 <v-divider class="my-2" />
                 <h2>Comment</h2>
                 <commentForm @comment-posted="fetchComments"></commentForm>
-                <template v-if="eventInfo.comments && eventInfo.comments.results.length > 0">
-                  {{ eventInfo.comments.results }}
-                  <comment v-for="comment in eventInfo.comments.results" :comment="comment" :key="comment.id"></comment>
+                <template v-for="comment in eventInfo.comments.results" :key="comment.id">
+                  <comment :comment="comment"></comment>
                 </template>
               </v-col>
             </v-row>
