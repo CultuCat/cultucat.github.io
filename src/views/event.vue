@@ -87,7 +87,6 @@
                 <v-divider class="my-2" />
                 <h2>Comment</h2>
                 <commentForm @comment-posted="fetchComments"></commentForm>
-                {{ eventInfo.comments.results }}
                 <template v-for="comment in eventInfo.comments.results" :key="comment.id">
                   {{ comment }}
                   <comment :comment="comment"></comment>

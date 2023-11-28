@@ -1,4 +1,5 @@
 <template>
+  {{ comment }}
   <div class="comment">
     <div class="comment-content">
       <div class="comment-header">
