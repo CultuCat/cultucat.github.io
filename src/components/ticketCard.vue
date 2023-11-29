@@ -1,5 +1,5 @@
 <template>
-    <v-card class="v-card" :image="ticket.imatge" link width="250" height="250" :variant="elevated" @click="handleClick()">
+    <v-card class="v-card" :image="ticket.imatge" link width="250" height="250" :variant="elevated">
         <div class="overlay d-flex flex-column justify-end">
             <v-card-title class="text">{{ ticket.nomEvent }}</v-card-title>
             <v-card-subtitle class="text">{{ transformDate(ticket.data) }}</v-card-subtitle>
@@ -15,9 +15,6 @@ export default {
         ticket: Object,
     },
     methods: {
-        handleClick() {
-            this.$router.push({ path: `/tickets/${this.ticket.id}` });
-        },
         transformDate(date) {
             const dateObj = new Date(date);
             const formatOptions = {
