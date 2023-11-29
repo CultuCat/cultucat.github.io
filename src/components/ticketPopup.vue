@@ -4,15 +4,26 @@
         <div class="pop-up-close" @click="closePopup">
             &times;
         </div>
-        <div>
-            <h1>{{title}}</h1>
-            <p>This is your ticket for the event.</p>
-        </div>
-        <img :src="image" alt="Popup Image" />
-        
-        <v-btn block color="#ff6961" type="submit" variant="elevated" @click="closePopup">
+        <v-col>
+            <v-row justify="center">
+              <h1>{{title}}</h1>
+            </v-row>
+            <v-row justify="center">
+              <p>This is your ticket for the event.</p>
+            </v-row>
+            <v-row justify="center">
+              <img :src="image" alt="Popup Image" />
+            </v-row>
+            <v-row justify="center">
+              <v-btn block color="#ff6961" type="submit" variant="elevated" @click="closePopup">
             Close
         </v-btn>
+            </v-row>
+        </v-col>
+        
+        
+        
+        
       </div>
     </div>
   </template>
@@ -30,7 +41,7 @@
     },
     id: {
       type: String,
-      default: '1'
+      default: null
     }
   },
     data() {
@@ -40,6 +51,9 @@
         image: this.imageSrc,
       }
     },
+    created() {
+      this.url = 'https://cultucat.hemanuelpc.es/tickets/';
+    },
     methods: {
       closePopup() {
         this.show = false;
@@ -48,26 +62,27 @@
         this.fetchImg();
         this.show = true;
       },
+      
       fetchImg(){
-        fetch(this.url+this.id+'/')
-        .then((response) => {
-            if (!response.ok) {
-            throw new Error("No se pudo obtener el archivo JSON");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            if (data.image == 'http://127.0.0.1:8000/images/qr.jpg'){
-                data.image = this.imageSrc;
-            }else this.image= data.image;
-            this.url = data.next;
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        })
-        .finally(() => {
-            //this.isLoading = false; // Restablecer isLoading después de la solicitud, ya sea exitosa o con error
-        });
+        if (this.id != null){
+          fetch(this.url+this.id+'/')
+            .then((response) => {
+                if (!response.ok) {
+                throw new Error("No se pudo obtener el archivo JSON");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                this.image = this.imageSrc;
+                console.log(data.image);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            })
+            .finally(() => {
+                //this.isLoading = false; // Restablecer isLoading después de la solicitud, ya sea exitosa o con error
+            });
+        }
       }
     }
   }
@@ -97,7 +112,7 @@
         cursor: pointer;
     }
     &-inner{
-        background-color: #d0d2d2;
+        background-color: rgba(208, 210, 210, 0.94);
         color:#ff6961;
         position:relative;
         width: 40%;

@@ -16,7 +16,7 @@ export default {
     },
     methods: {
         handleClick() {
-            this.$router.push({ path: `/tickets/${this.ticket.id}` });
+            //this.$router.push({ path: `/tickets/${this.ticket.id}` });
         },
         transformDate(date) {
             const dateObj = new Date(date);
