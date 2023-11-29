@@ -89,7 +89,7 @@
                 <commentForm @comment-posted="fetchComments"></commentForm>
                 <template v-for="comment in eventInfo.comments.results" :key="comment.id">
                   {{ comment }}
-                  <comment :comment="comment"></comment>
+                  <comment :commentProp="comment"></comment>
                 </template>
               </v-col>
             </v-row>
@@ -100,16 +100,14 @@
   </v-col>
 </template>
 
-<script setup>
+<script>
 import commentForm from "@/components/commentForm.vue";
 import comment from "@/components/comment.vue";
 import ListOfItems from "@/components/listOfItems.vue";
 import BuyComponent from "@/components/buy.vue";
 import { mapGetters } from "vuex";
 import axios from "axios";
-</script>
 
-<script>
 export default {
   name: "Event",
   components: {
