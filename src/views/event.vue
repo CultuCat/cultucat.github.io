@@ -88,7 +88,6 @@
                 <h2>Comment</h2>
                 <commentForm @comment-posted="fetchComments"></commentForm>
                 <template v-for="comment in eventInfo.comments.results" :key="comment.id">
-                  {{ comment }}
                   <comment :commentProp="comment"></comment>
                 </template>
               </v-col>
