@@ -2,10 +2,10 @@
   <div class="comment">
     <div class="comment-content">
       <div class="comment-header">
-        <span class="comment-username">{{ comment.username }}</span>
-        <span class="comment-timestamp">{{ transformDate(comment.created_at) }}</span>
+        <span class="comment-username">{{ commentProp.username }}</span>
+        <span class="comment-timestamp">{{ transformDate(commentProp.created_at) }}</span>
       </div>
-      <div class="comment-text">{{ comment.text }}</div>
+      <div class="comment-text">{{ commentProp.text }}</div>
     </div>
   </div>
 </template>
@@ -13,7 +13,7 @@
 <script>
 export default {
   props: {
-    comment: Object,
+    commentProp: Object,
   },
   methods: {
     transformDate(date) {

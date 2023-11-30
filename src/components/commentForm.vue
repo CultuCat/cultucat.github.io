@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
@@ -15,6 +17,9 @@ export default {
       },
       comment: "",
     };
+  },
+  computed: {
+      ...mapGetters(['user']),
   },
   methods: {
     async submitComment() {
@@ -26,6 +31,7 @@ export default {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Token ${this.user.token}`,
           },
           body: JSON.stringify(this.formData),
         });
