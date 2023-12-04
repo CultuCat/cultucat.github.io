@@ -7,12 +7,15 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="12" class="text-center">
-        <h2 class="subtitle">Events in favourite places</h2>
+        <h2 class="subtitle">Benvingut, {{ user.user.first_name }}</h2>
       </v-col>
     </v-row>
-    <v-row justify="center">
-      <v-col cols="12">
-        <ListOfItems :items="currentEvents" :view="view"/>
+    <v-row justify="center" align="center">
+      <v-col cols="12" sm="6" md="4" lg="3" v-if="currentEvents.length > 0" v-for="ticket in currentEvents" :key="ticket.id">
+        <eventCard class="ma-5" @click="openPopup(ticket)" :ticket="ticket"></eventCard>
+      </v-col>
+      <v-col cols="12" class="text-center" v-else>
+        <v-card-text>Carregant sugerencies...</v-card-text>
       </v-col>
     </v-row>
   </v-container>
@@ -21,6 +24,7 @@
 <script setup>
   import { mapGetters } from "vuex";
   import ListOfItems from "@/components/listOfItems.vue";
+  import eventCard from "@/components/eventCard.vue";
 </script>
 
 <script>
@@ -40,8 +44,6 @@ export default {
     });
     Promise.all(promises).then(results => {
       this.currentEvents = [].concat(...results);
-      this.$forceUpdate();
-      console.log(this.currentEvents);
     });
   },
   methods: {
@@ -71,6 +73,7 @@ export default {
   },
   components: {
     ListOfItems,
+    eventCard
   },
 };
 </script>
