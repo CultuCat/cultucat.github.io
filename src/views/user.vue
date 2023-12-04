@@ -190,12 +190,27 @@ export default {
           "Favourite Places",
           this.profile.espais_preferits
         );
-        this.agregarSlideGroup(
-          this.profile_favs,
-          3,
-          "Trophies",
-          [{nom:"Parlaner",nivell: 1}, {nom: "Reviewer",nivell: 2}, {nom: "Més esdeveniments", nivell: 3}]
-        );
+        // ============================= GET TROFEOS =============================
+        axios
+      .get("https://cultucat.hemanuelpc.es/trophies/", {},{
+          'Authorization': `Token ${this.user.token}`,
+          'Content-Type': 'application/json',
+        })
+      .then((response) => {
+        if(response.status == 200){
+          this.agregarSlideGroup(
+            this.profile_favs,
+            3,
+            "Trophies",
+            response.data
+          );
+        }
+      })
+      .catch((error) => {
+        // Maneja errores aquí
+        console.error("Error al obtener los trofeos del usuario:", error);
+      });
+      // =========================== COMMIT CHANGES ============================
         this.$store.commit("setProfileData", this.profile);
 
         this.isAdmin = this.profile.is_staff;
