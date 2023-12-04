@@ -8,17 +8,19 @@
       <v-sheet class="d-flex justify-center align-center">
         <v-slide-group show-arrows v-if="compData.arr.length !== 0" center-active>
           <v-slide-group-item v-for="(item, index) in compData.arr" :key="item">
-            <v-btn class="ma-2" rounded :style="{
-              backgroundColor: trophyTab ? getBackgroundColor(item.nivell) : '',
-              color: trophyTab ? getTextColor(item.nivell) : ''
+            <v-btn class="ma-2" 
+            rounded
+            :style="{
+              backgroundColor: trophyTab ? getBackgroundColor(item.level_achived_user) : '',
+              color: trophyTab ? getTextColor(item.level_achived_user) : ''
             }" @mouseenter="showDeleteIcon = index" @mouseleave="showDeleteIcon = -1">
-              <v-icon class="mr-1" v-if="trophyTab && item.nivell === 1">
+              <v-icon class="mr-1" v-if="trophyTab && item.level_achived_user === 1">
                 mdi-trophy-variant
               </v-icon>
-              <v-icon class="mr-1" v-else-if="trophyTab && item.nivell === 2">
+              <v-icon class="mr-1" v-else-if="trophyTab && item.level_achived_user === 2">
                 mdi-trophy-outline
               </v-icon>
-              <v-icon class="mr-1" v-else-if="trophyTab && item.nivell === 3">
+              <v-icon class="mr-1" v-else-if="trophyTab && item.level_achived_user === 3">
                 mdi-trophy-award
               </v-icon>
               {{ item.nom }}

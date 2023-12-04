@@ -176,7 +176,7 @@ export default {
       .then((response) => {
         if(response.status == 200){
           this.profile = response.data;
-
+          console.log(response.data);
         // Ahora, puedes realizar las operaciones necesarias con la respuesta de manera asincrónica
         this.agregarSlideGroup(
           this.profile_favs,
@@ -196,13 +196,16 @@ export default {
           'Authorization': `Token ${this.user.token}`,
           'Content-Type': 'application/json',
         })
-      .then((response) => {
+      .then((response2) => {
         if(response.status == 200){
+          const trophies = response2.data.filter((trophy) => {
+            return trophy.level_achived_user != -1;
+          });
           this.agregarSlideGroup(
             this.profile_favs,
             3,
             "Trophies",
-            response.data
+            trophies
           );
         }
       })
@@ -290,6 +293,7 @@ export default {
         title: title,
         arr: arr || [], // Si no se proporciona un array específico, se crea un array vacío
       });
+      console.log(array);
     },
   },
 };
