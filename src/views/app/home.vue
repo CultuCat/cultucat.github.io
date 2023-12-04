@@ -12,7 +12,7 @@
     </v-row>
     <v-row justify="center" align="center">
       <v-col cols="12" sm="6" md="4" lg="3" v-if="currentEvents.length > 0" v-for="ticket in currentEvents" :key="ticket.id">
-        <eventCard class="ma-5" @click="openPopup(ticket)" :ticket="ticket"></eventCard>
+        <eventCard class="ma-5" @click="navigateToEvent(ticket.id)" :ticket="ticket"></eventCard>
       </v-col>
       <v-col cols="12" class="text-center" v-else>
         <v-card-text>Carregant sugerencies...</v-card-text>
@@ -47,6 +47,9 @@ export default {
     });
   },
   methods: {
+    navigateToEvent(eventId) {
+      this.$router.push(/events/+eventId);
+    },
     fetchEvents(espai) {
       this.eventsUrl = `${this.url}/events/?espai=${espai.id}`;
       return fetch(this.eventsUrl)
