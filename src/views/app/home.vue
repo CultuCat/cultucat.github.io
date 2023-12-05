@@ -8,7 +8,7 @@
     <template v-if="currentEvents.length > 0">
       <v-col cols="12">
         <v-row justify="space-evenly">
-          <event-card v-for="event in currentEvents" :key="event.id" @click="navigateToEvent(event.id)" :ticket="event"
+          <ticketCard v-for="event in currentEvents" :key="event.id" @click="navigateToEvent(event.id)" :ticket="event"
             class="my-4" />
         </v-row>
       </v-col>
@@ -27,13 +27,13 @@
 
 <script setup>
 import { mapGetters } from "vuex";
-import EventCard from "@/components/EventCard.vue";
+import ticketCard from "@/components/ticketCard.vue";
 </script>
 
 <script>
 export default {
   components: {
-    EventCard,
+    ticketCard,
   },
   data() {
     return {
