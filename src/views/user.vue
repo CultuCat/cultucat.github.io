@@ -176,7 +176,6 @@ export default {
       .then((response) => {
         if(response.status == 200){
           this.profile = response.data;
-          console.log(response.data);
         // Ahora, puedes realizar las operaciones necesarias con la respuesta de manera asincrónica
         this.agregarSlideGroup(
           this.profile_favs,
@@ -293,7 +292,6 @@ export default {
         title: title,
         arr: arr || [], // Si no se proporciona un array específico, se crea un array vacío
       });
-      console.log(array);
     },
   },
 };
