@@ -1,91 +1,77 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <v-col cols="12" class="text-center">
-        <h1 class="title">Cultucat</h1>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
-      <v-col cols="12" class="text-center">
-        <h2 class="subtitle">Events in favourite places</h2>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
+  <v-row justify="center">
+    <v-col class="mb-0 pb-0">
+      <h1 style="color: #ff6961" class="my-5 ml-5">Benvingut, {{ user.user.first_name }}</h1>
+    </v-col>
+  </v-row>
+  <v-row>
+    <template v-if="currentEvents.length > 0">
       <v-col cols="12">
-        <ListOfItems :items="currentEvents" :view="view"/>
+        <v-row justify="space-evenly">
+          <ticketCard v-for="event in currentEvents" :key="event.id" @click="navigateToEvent(event.id)" :ticket="event"
+            class="my-4" />
+        </v-row>
       </v-col>
-    </v-row>
-  </v-container>
+    </template>
+    <template v-else>
+      <v-col cols="12">
+        <v-row justify="space-evenly">
+          <v-card v-for="n in 12" :key="n" class="my-4 v-card" width="250" height="250" :variant="elevated">
+            <v-skeleton-loader type="image, image" />
+          </v-card>
+        </v-row>
+      </v-col>
+    </template>
+  </v-row>
 </template>
 
 <script setup>
-  import { mapGetters } from "vuex";
-  import ListOfItems from "@/components/listOfItems.vue";
+import { mapGetters } from "vuex";
+import ticketCard from "@/components/ticketCard.vue";
 </script>
 
 <script>
 export default {
+  components: {
+    ticketCard,
+  },
   data() {
     return {
       currentEvents: [],
-      url: "",
-      eventsUrl: "",
-      view: "map",
     };
   },
   created() {
-    this.url = "https://cultucat.hemanuelpc.es";
-    let promises = this.user.user.espais_preferits.map(espai => {
-      return this.fetchEvents(espai);
-    });
-    Promise.all(promises).then(results => {
-      this.currentEvents = [].concat(...results);
-      this.$forceUpdate();
-      console.log(this.currentEvents);
-    });
+    const promises = this.user.user.espais_preferits.map(espai => this.fetchEvents(espai));
+    Promise.all(promises)
+      .then(results => this.currentEvents = [].concat(...results))
+      .catch(error => console.error("Error fetching events:", error));
   },
   methods: {
+    navigateToEvent(eventId) {
+      this.$router.push(`/events/${eventId}`);
+    },
     fetchEvents(espai) {
-      this.eventsUrl = `${this.url}/events/?espai=${espai.id}`;
-      return fetch(this.eventsUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("No se pudo obtener el archivo JSON");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        return data.results;
-        
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      })
-      .finally(() => {
-        
-      });
+      return fetch(`https://cultucat.hemanuelpc.es/events/?espai=${espai.id}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("No se pudo obtener el archivo JSON");
+          }
+          return response.json();
+        })
+        .then(data => data.results)
+        .catch(error => {
+          console.error("Error:", error);
+        });
     },
   },
   computed: {
     ...mapGetters(["user"]),
   },
-  components: {
-    ListOfItems,
-  },
 };
 </script>
-<style lang="scss" scoped>
-.title {
-  font-size: 3em;
-  color: $primary;
-  font-weight: bold;
-  margin-bottom: 0.5em;
-}
 
-.subtitle {
-  font-size: 1.5em;
-  color: $terciary;
-  font-style: italic;
-  margin-bottom: 2em;
+<style scoped>
+.v-card {
+  border-radius: 15px;
 }
 </style>
