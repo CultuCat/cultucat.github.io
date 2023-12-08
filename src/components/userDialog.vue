@@ -2,11 +2,14 @@
   <v-dialog v-model="openDialog" scrollable max-width="600px">
     <v-card :loading="isLoading">
       <v-toolbar color="#ff6961">
-        <v-icon size="35" class="ml-6">mdi-star-circle-outline</v-icon>
-        <v-toolbar-title class="ml-6">
-          <span v-if="isRanking">Ranking</span>
-          <span v-else-if="isFriends">Ranking</span>
-        </v-toolbar-title>
+        <template v-if="isRanking">
+          <v-icon size="35" class="ml-6">mdi-star-circle-outline</v-icon>
+          <v-toolbar-title class="ml-6">Ranking</v-toolbar-title>
+        </template>
+        <template v-else-if="isFriends">
+          <v-icon size="35" class="ml-6">mdi-account-multiple</v-icon>
+          <v-toolbar-title class="ml-6">Friends</v-toolbar-title>
+        </template>
         <v-spacer></v-spacer>
         <v-toolbar-items>
           <v-btn icon dark variant="plain" @click="this.$emit('closeDialog')">
