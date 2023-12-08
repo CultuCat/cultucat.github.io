@@ -1,12 +1,12 @@
 <template>
   <v-card class="my-3 mx-3 pa-2" elevation="6" @click.prevent="handleClick('/events/', item.id)">
     <v-row>
-      <v-col cols="2" class="d-flex align-center">
+      <v-col :cols="isSmall ? '3' : '2'" class="d-flex align-center">
         <v-img v-if="item.imatges_list?.length > 0" :src="item.imatges_list[0]" :alt="item.nom" class="ma-2" cover
           aspect-ratio="1" style="border-radius: 5px;" width="125px" />
       </v-col>
-      <v-col cols="10">
-        <template v-if="!isSmall">
+      <template v-if="!isSmall">
+        <v-col cols="10">
           <v-card-title style="overflow: hidden;">
             <strong>{{ item.nom }}</strong>
             <p v-if="item.dataIni" class="dates">{{ transformDate(item.dataIni) }}</p>
@@ -18,17 +18,21 @@
             <br /><br />
             <strong>{{ item.preu ? extraerTextoPreu(item.preu) : "Preu no disponible." }}</strong>
           </v-card-text>
-        </template>
-        <template v-else>
+        </v-col>
+      </template>
+      <template v-else>
+        <v-col cols="9">
           <v-card-title>
             <strong>{{ item.nom }}</strong>
           </v-card-title>
           <v-card-text>
             <p v-if="item.dataIni">{{ transformDate(item.dataIni) }}</p>
             <p v-if="item.espai">{{ item.espai.nom }}</p>
+            <br />
+            <strong>{{ item.preu ? extraerTextoPreu(item.preu) : "Preu no disponible." }}</strong>
           </v-card-text>
-        </template>
-      </v-col>
+        </v-col>
+      </template>
     </v-row>
   </v-card>
 </template>
