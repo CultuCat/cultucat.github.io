@@ -13,7 +13,8 @@
               </template>
               <v-text-field v-model="searchInput" placeholder="Search" prepend-inner-icon="mdi-magnify custom-cursor"
                 class="expanding-search mx-3 my-1" :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch"
-                clearable rounded="xl" variant="solo" density="compact" hide-details></v-text-field>
+                clearable rounded="xl" variant="solo" density="compact" hide-details @keyup.enter="search"
+                @click:clear="items_get=items"></v-text-field>
 
               <template v-slot:append v-if="view === 'admin_events'">
                 <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ Create Event</v-btn>
@@ -53,6 +54,7 @@ export default {
       expanded: false,
       searchInput: "",
       loaded: false,
+      searchMade: false,
     };
   },
   props: {
@@ -72,6 +74,25 @@ export default {
     },
     handleBtnClick(route) {
       this.$router.push(route);
+    },
+    search() {
+      const searchQuery = this.searchInput.toLowerCase();
+      fetch("https://cultucat.hemanuelpc.es/events/?query=" + searchQuery)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Error al obtener los usuarios: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+        console.log(data);
+          this.items_get = data.results;
+          this.loaded = true;
+          this.searchMade = true;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
     getUsers() {
       fetch("https://cultucat.hemanuelpc.es/users/")
@@ -129,23 +150,8 @@ export default {
       return this.view === 'admin_users';
     },
     filteredItems() {
-      this.items_get = this.items ? this.items : this.items_get;
+      this.items_get = (this.items && !this.searchMade) ? this.items : this.items_get;
       return this.items_get
-        .filter((item) => {
-          if (!this.searchInput) return true;
-          const searchInput = this.searchInput.toLowerCase();
-
-          for (const key in item) {
-            if (
-              item[key] &&
-              item[key].toString().toLowerCase().includes(searchInput)
-            ) {
-              return true;
-            }
-          }
-
-          return false;
-        })
         .sort((a, b) => {
           if (a.first_name && b.first_name) {
             return a.first_name.localeCompare(b.first_name);
