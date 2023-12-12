@@ -65,13 +65,14 @@ export default {
       searchInput: "",
       loaded: false,
       orderByList:[
-        {title: 'Date', value: "-dataIni"},
-        {title: 'Name', value: "-nom"},
-        {title: 'Price', value: "-preu"},
-        {title: 'Places', value: "-espai"},
+        {title: 'Ascending Date', value: "dataIni"},
+        {title: 'Descending Date', value: "-dataIni"},
+        {title: 'Ascending Price', value: "preu"},
+        {title: 'Descending Price', value: "-preu"},
       ],
-      orderBySelected: 0,
+      orderBySelected: 1,
       loadingOrder: false,
+      ordered: false,
     };
   },
   props: {
@@ -112,6 +113,8 @@ export default {
       const selected = this.orderByList[index].value;
       if(selected !== this.orderByList[this.orderBySelected].value){
         this.orderBySelected = index;
+        console.log(selected);
+        this.ordered  = true;
         this.getEvents(selected);
       }
     },
@@ -163,23 +166,8 @@ export default {
       return this.view === 'admin_users';
     },
     filteredItems() {
-      this.items_get = this.items ? this.items : this.items_get;
+      this.items_get = (this.items && !this.ordered) ? this.items : this.items_get;
       return this.items_get
-        .filter((item) => {
-          if (!this.searchInput) return true;
-          const searchInput = this.searchInput.toLowerCase();
-
-          for (const key in item) {
-            if (
-              item[key] &&
-              item[key].toString().toLowerCase().includes(searchInput)
-            ) {
-              return true;
-            }
-          }
-
-          return false;
-        })
         .sort((a, b) => {
           if (a.first_name && b.first_name) {
             return a.first_name.localeCompare(b.first_name);
