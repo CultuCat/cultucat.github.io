@@ -10,6 +10,17 @@
             <v-card-item class="my-4">
               <template v-slot:prepend v-if="items_get[0]?.dataIni">
                 <v-btn rounded="xl" prepend-icon="mdi-filter-outline">Filters</v-btn>
+                <v-menu location="end">
+                  <template v-slot:activator="{ props }">
+                    <v-btn dark v-bind="props" icon="mdi-swap-vertical" size="35" class="ml-4" :loading="loadingOrder">
+                    </v-btn>
+                  </template>
+                  <v-list v-model="orderBySelected">
+                    <v-list-item v-for="(item, index) in orderByList" :key="index" :value="index" @click="sortBy(index)">
+                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </template>
               <v-text-field v-model="searchInput" placeholder="Search" prepend-inner-icon="mdi-magnify custom-cursor"
                 class="expanding-search mx-3 my-1" :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch"
@@ -53,6 +64,14 @@ export default {
       expanded: false,
       searchInput: "",
       loaded: false,
+      orderByList:[
+        {title: 'Date', value: "-dataIni"},
+        {title: 'Name', value: "-nom"},
+        {title: 'Price', value: "-preu"},
+        {title: 'Places', value: "-espai"},
+      ],
+      orderBySelected: 0,
+      loadingOrder: false,
     };
   },
   props: {
@@ -89,8 +108,21 @@ export default {
           console.error(error);
         });
     },
-    getEvents() {
-      fetch("https://cultucat.hemanuelpc.es/events/?ordering=-dataIni")
+    sortBy(index){
+      const selected = this.orderByList[index].value;
+      if(selected !== this.orderByList[this.orderBySelected].value){
+        this.orderBySelected = index;
+        this.getEvents(selected);
+      }
+    },
+    getEvents(param) {
+      let ordering = "-dataIni";
+      if (param){
+        ordering = param;
+        this.loadingOrder = true;
+      }
+      const url = `https://cultucat.hemanuelpc.es/events/?ordering=${ordering}`;
+      fetch(url)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`Error al obtener los eventos: ${response.status}`);
@@ -98,8 +130,10 @@ export default {
           return response.json();
         })
         .then((data) => {
+          console.log(url);
           this.items_get = data.results;
           this.loaded = true;
+          this.loadingOrder = false;
         })
         .catch((error) => {
           console.error(error);
