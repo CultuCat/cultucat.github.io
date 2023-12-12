@@ -76,41 +76,9 @@
       <confirmDelete v-if="dialogDelete" :itemToDelete="itemToDelete" :deleteLoading="deleteLoading"
         @confirmed-delete="deleteConfirmed" @cancel-delete="deleteCancel" />
       <!-- ----------------------- dialog para ver amigos ------------------------ -->
-      <v-dialog v-model="dialogFriends" scrollable max-width="800px">
-        <v-card>
-          <v-toolbar color="#ff6961" dark>
-            <v-icon size="35" class="ml-6">mdi-account-multiple</v-icon>
-            <v-toolbar-title class="ml-6">Friends</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items>
-              <v-btn icon dark variant="plain" @click="dialogFriends = false">
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-            </v-toolbar-items>
-          </v-toolbar>
-          <v-card-text style="height: 600px">
-            <ListOfItems :type="'list_friends'" :userId="userId" />
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+      <userDialog :dialog="dialogFriends" :isFriends="true" :userId="userId" @closeDialog="dialogFriends = false" />
       <!-- ----------------------- dialog para ver ranking ----------------------- -->
-      <v-dialog v-model="dialogRanking" scrollable max-width="800px">
-        <v-card>
-          <v-toolbar color="#ff6961" dark>
-            <v-icon size="35" class="ml-6">mdi-star-circle-outline</v-icon>
-            <v-toolbar-title class="ml-6">Ranking</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items>
-              <v-btn icon dark variant="plain" @click="dialogRanking = false">
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-            </v-toolbar-items>
-          </v-toolbar>
-          <v-card-text style="height: 600px">
-            <ListOfItems :type="'ranking'" :view="'ranking'" />
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+      <userDialog :dialog="dialogRanking" :isRanking="true" @closeDialog="dialogRanking = false" />
       <!-- ----------------------------------------------------------------------- -->
       <v-dialog v-model="trophyDialog">
         <trophyInfo @quit-trophyDialog="quitTrophyDialog" :trophy="trophySelected"/>
@@ -125,6 +93,7 @@ import confirmDelete from "@/components/confirmDelete.vue";
 import SlideGroup from "@/components/slideGroup.vue";
 import ListOfItems from "@/components/listOfItems.vue";
 import trophyInfo from "@/components/trophyInfo.vue";
+import userDialog from "@/components/userDialog.vue";
 import { mapGetters } from "vuex";
 import axios from "axios";
 </script>
@@ -154,6 +123,7 @@ export default {
     confirmDelete,
     ListOfItems,
     trophyInfo,
+    userDialog,
   },
   computed: {
     ...mapGetters(["user"]),
