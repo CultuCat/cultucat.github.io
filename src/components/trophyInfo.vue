@@ -94,7 +94,7 @@ export default {
                     this.logMessage = "Unexpected trophy.";
             }
             if (trophy.level_achived_user === 3) {
-                this.toAchieve = allAchieved;
+                this.toAchieve = this.allAchieved;
             }
         },
         calculatePercentage() {
