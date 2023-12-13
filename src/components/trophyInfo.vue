@@ -1,22 +1,19 @@
 <template>
     <v-fade-transition hide-on-leave>
-        <v-card append-icon="$close" class="mx-auto" elevation="16" width="500" title="Trophy">
-            <template v-slot:append>
-                <v-btn icon="$close" variant="text" @click="quitDialog"></v-btn>
-            </template>
+        <v-card class="mx-auto" elevation="16" rounded="lg" width="500">
 
             <v-divider></v-divider>
             <div class="text-center"><v-icon size="50" class="mt-6">mdi-medal-outline</v-icon></div>
             <div class="text-h4 font-weight-bold text-center mt-6">{{ trophy.nom }}</div>
             <div class="text-h5 font-weight-bold text-center mt-6">Level: {{ trophy.level_achived_user }}</div>
 
-            <v-progress-linear v-model="percentage" height="25" color="green" striped rounded class="my-6  w-75">
-                <strong>{{ this.percentage }}%</strong>
+            <v-progress-linear v-model="percentage" height="20" color="green" striped rounded class="my-6  w-75">
+                <strong>{{ Math.ceil(this.percentage) }}%</strong>
             </v-progress-linear>
 
-            <div class="py-12 pl-6 text-start">
+            <div class="py-8 pl-6 text-start">
                 <p><strong>Description:</strong> {{ trophy.descripcio }}.</p>
-                <p class="mt-10"><strong>{{ logMessage }}</strong></p>
+                <p class="mt-6"><strong>{{ logMessage }}</strong></p>
                 <p><strong>{{ toAchieve }}</strong></p>
             </div>
 
@@ -38,7 +35,7 @@ export default {
             allAchieved: "You've already achieved all levels!",
             logMessage: "",
             toAchieve: "",
-            percentage: null,
+            percentage: 0,
         };
     },
     props: {
@@ -58,7 +55,6 @@ export default {
                     if (trophy.level_achived_user < 3) {
                         this.toAchieve = `Win ${this.actionsToNextLevel} more trophies to achieve level ${trophy.level_achived_user + 1}.`;
                     }
-
                     break;
 
                 case "El més amigable":
@@ -69,22 +65,21 @@ export default {
                     break;
 
                 case "Més esdeveniments":
-                    this.logMessage = `You have attended ${trophy['punts_nivell' + trophy.level_achived_user]} events..`;
+                    this.logMessage = `You have attended ${trophy['punts_nivell' + trophy.level_achived_user]} events.`;
                     if (trophy.level_achived_user < 3) {
                         this.toAchieve = `Assist to ${this.actionsToNextLevel} more events to achieve level ${trophy.level_achived_user + 1}.`;
                     }
-
+                    break;
 
                 case "Reviewer":
                     this.logMessage = `You wrote ${trophy.level_achived_user} comments.`;
                     if (trophy.level_achived_user < 3) {
                         this.toAchieve = `Write ${this.actionsToNextLevel} more comments to achieve level ${trophy.level_achived_user + 1}.`;
                     }
-
                     break;
 
                 case "Xerraire":
-                    this.logMessage = `You sent ${trophy.level_achived_user} messages. `;
+                    this.logMessage = `You sent ${trophy.level_achived_user} messages.`;
                     if (trophy.level_achived_user < 3) {
                         this.toAchieve = `Send ${this.actionsToNextLevel} more messages to achieve level ${trophy.level_achived_user + 1}.`;
                     }
@@ -92,6 +87,7 @@ export default {
 
                 default:
                     this.logMessage = "Unexpected trophy.";
+                    break;
             }
             if (trophy.level_achived_user === 3) {
                 this.toAchieve = this.allAchieved;
@@ -99,9 +95,9 @@ export default {
         },
         calculatePercentage() {
             const pointsAchieved = this.trophy['punts_nivell' + this.trophy.level_achived_user];
-            const pointsToAchieve = this.trophy['punts_nivell' + (this.trophy.level_achived_user + 1)]
-            const percentage = (pointsAchieved / pointsToAchieve) * 100;
-            this.percentage = percentage;
+            const pointsToAchieve = this.trophy['punts_nivell' + (this.trophy.level_achived_user + 1)];
+            if (!pointsToAchieve) this.percentage = 100;
+            else this.percentage = (pointsAchieved / pointsToAchieve) * 100;
         }
     },
     mounted() {
