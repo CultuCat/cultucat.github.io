@@ -16,6 +16,7 @@
     "@vuelidate/validators": "^2.0.4",
     "axios": "^1.6.2",
     "core-js": "^3.29.0",
+    "pusher-js": "^8.4.0-rc2",
     "roboto-fontface": "*",
     "vue": "^3.2.0",
     "vue-google-oauth2": "^1.5.10",
