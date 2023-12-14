@@ -46,7 +46,12 @@ export default {
       this.$router.push(`/events/${eventId}`);
     },
     fetchEvents() {
-      return fetch(`https://cultucat.hemanuelpc.es/events/home`)
+      fetch('https://cultucat.hemanuelpc.es/events/home', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Token ${this.user.token}`,
+        },
+      })
         .then(response => {
           if (!response.ok) {
             throw new Error("No se pudo obtener el archivo JSON");
