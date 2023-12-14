@@ -159,7 +159,6 @@ export default {
                 'Content-Type': 'application/json',
               }
             }
-            console.log(config);
           axios
             .get("https://cultucat.hemanuelpc.es/trophies/", config)
             .then((response2) => {
