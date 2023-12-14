@@ -97,7 +97,7 @@ export default {
     },
     getFriends() {
       this.isLoading = true;
-      fetch(`https://cultucat.hemanuelpc.es/users/${this.userId}`, {
+      fetch(`https://cultucat.hemanuelpc.es/users/${this.userId}/`, {
         method: "GET"
       })
         .then((response) => {
