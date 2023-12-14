@@ -5,10 +5,10 @@
     </v-col>
   </v-row>
   <v-row>
-    <template v-if="currentEvents.length > 0">
+    <template v-if="events.length > 0">
       <v-col cols="12">
         <v-row justify="space-evenly">
-          <ticketCard v-for="event in currentEvents" :key="event.id" @click="navigateToEvent(event.id)" :ticket="event"
+          <ticketCard v-for="event in events" :key="event.id" @click="navigateToEvent(event.id)" :ticket="event"
             class="my-4" />
         </v-row>
       </v-col>
@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      currentEvents: [],
+      events: [],
     };
   },
   created() {
@@ -58,7 +58,7 @@ export default {
           }
           return response.json();
         })
-        .then(data => this.currentEvents = data)
+        .then(data => this.events = data)
         .catch(error => {
           console.error("Error:", error);
         });
