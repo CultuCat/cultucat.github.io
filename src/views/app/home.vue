@@ -5,10 +5,10 @@
     </v-col>
   </v-row>
   <v-row>
-    <template v-if="currentEvents.length > 0">
+    <template v-if="events.length > 0">
       <v-col cols="12">
         <v-row justify="space-evenly">
-          <ticketCard v-for="event in currentEvents" :key="event.id" @click="navigateToEvent(event.id)" :ticket="event"
+          <ticketCard v-for="event in events" :key="event.id" @click="navigateToEvent(event.id)" :ticket="event"
             class="my-4" />
         </v-row>
       </v-col>
@@ -16,7 +16,7 @@
     <template v-else>
       <v-col cols="12">
         <v-row justify="space-evenly">
-          <v-card v-for="n in 12" :key="n" class="my-4 v-card" width="250" height="250" :variant="elevated">
+          <v-card v-for="n in 20" :key="n" class="my-4 v-card" width="250" height="250" :variant="elevated">
             <v-skeleton-loader type="image, image" />
           </v-card>
         </v-row>
@@ -25,40 +25,40 @@
   </v-row>
 </template>
 
-<script setup>
+<script>
 import { mapGetters } from "vuex";
 import ticketCard from "@/components/ticketCard.vue";
-</script>
 
-<script>
 export default {
   components: {
     ticketCard,
   },
   data() {
     return {
-      currentEvents: [],
+      events: [],
     };
   },
   created() {
-    const promises = this.user.user.espais_preferits.map(espai => this.fetchEvents(espai));
-    Promise.all(promises)
-      .then(results => this.currentEvents = [].concat(...results))
-      .catch(error => console.error("Error fetching events:", error));
+    this.fetchEvents();
   },
   methods: {
     navigateToEvent(eventId) {
       this.$router.push(`/events/${eventId}`);
     },
-    fetchEvents(espai) {
-      return fetch(`https://cultucat.hemanuelpc.es/events/?espai=${espai.id}`)
+    fetchEvents() {
+      fetch('https://cultucat.hemanuelpc.es/events/home', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Token ${this.user.token}`,
+        },
+      })
         .then(response => {
           if (!response.ok) {
             throw new Error("No se pudo obtener el archivo JSON");
           }
           return response.json();
         })
-        .then(data => data.results)
+        .then(data => this.events = data)
         .catch(error => {
           console.error("Error:", error);
         });
