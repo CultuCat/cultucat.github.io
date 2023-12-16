@@ -28,8 +28,7 @@
           <v-card-text>
             <p v-if="item.dataIni">{{ transformDate(item.dataIni) }}</p>
             <p v-if="item.espai">{{ item.espai.nom }}</p>
-            <br />
-            <strong>{{ item.preu ? extraerTextoPreu(item.preu) : "Preu no disponible." }}</strong>
+            <strong>{{ isNumber(item.preu) ? `Preu: ${item.preu} €` : item.preu }}</strong>
           </v-card-text>
         </v-col>
       </template>
@@ -72,11 +71,9 @@ export default {
       }
       return texto;
     },
-    extraerTextoPreu(texto) {
-      const regex = /Preus?[^€]*€/;
-      const match = texto.match(regex);
-      return match ? match[0] : texto;
-    },
+    isNumber(value) {
+      return !isNaN(parseFloat(value)) && isFinite(value);
+    }
   },
 };
 </script>
