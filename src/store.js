@@ -12,7 +12,6 @@ export default createStore({
       state.user = user;
     },
     setUserImg(state, img) {
-      console.log(state.user);
       state.user.user.imatge = img;
     },
     clearUser(state) {

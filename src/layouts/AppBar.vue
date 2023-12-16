@@ -111,7 +111,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['user', 'profileData']),
+    ...mapGetters(['user']),
     avatar() {
       return this.user.user.imatge;
     }
