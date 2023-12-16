@@ -95,7 +95,9 @@ export default {
       try {
         const ruta = "https://cultucat.hemanuelpc.es/users/" + this.userId + "/";
         const formData = new FormData();
-        formData.append('imatge', this.imatge);
+        if (this.imatge instanceof File) {
+          formData.append('imatge', this.imatge);
+        }
         formData.append('first_name', this.formData.first_name);
         formData.append('bio', this.formData.bio);
         formData.append('wantsToTalk', this.formData.wantsToTalk);
