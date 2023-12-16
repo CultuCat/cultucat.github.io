@@ -83,12 +83,6 @@ export default {
       ],
       adminItems: [
         {
-          title: "Home",
-          icon: "mdi-home-outline",
-          fillIcon: "mdi-home",
-          to: "/admin/home",
-        },
-        {
           title: "Events",
           icon: "mdi-calendar-text-outline",
           fillIcon: "mdi-calendar-text",
@@ -146,7 +140,7 @@ export default {
             {
               title: "Go to admin",
               icon: "mdi-shield-crown-outline",
-              to: "/admin/home",
+              to: "/admin/events",
             }
           )
         }
