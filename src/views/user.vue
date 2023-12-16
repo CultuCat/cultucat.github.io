@@ -3,7 +3,7 @@
 <!-- ======================================================================= -->
 
 <template>
-  <template v-if="profile.imatge != undefined">
+  <template v-if="profile.username != undefined">
     <v-col>
       <h1 style="color: #ff6961" class="my-5 ml-5">Profile</h1>
 

@@ -11,6 +11,10 @@ export default createStore({
     setUser(state, user) {
       state.user = user;
     },
+    setUserImg(state, img) {
+      console.log(state.user);
+      state.user.user.imatge = img;
+    },
     clearUser(state) {
       state.user = null;
     },
@@ -28,6 +32,7 @@ export default createStore({
   },
   getters: {
     user: (state) => state.user,
+    profileData: (state) => state.profileData,
   },
   plugins: [createPersistedState()],
 });

@@ -12,7 +12,7 @@
         class="m-auto"
         style="position: relative"
       >
-        <v-img cover :src="img"></v-img>
+        <v-img cover :src="imageSource"></v-img>
       </v-avatar>
 
       <v-btn
@@ -49,17 +49,20 @@ export default {
     },
     handleFileChange(event) {
       const file = event.target.files[0];
-      if (file) {
-        // Aquí puedes manejar la lógica para cargar la nueva imagen
-        // Puedes usar FileReader para obtener la URL de la imagen y actualizar formData.imatge
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.formData.imatge = e.target.result;
-          // También puedes enviar la imagen al servidor o realizar otras acciones necesarias
-        };
-        reader.readAsDataURL(file);
-      }
+      this.$emit("update-img", file); //Envia datos a la vista padre
     },
   },
+  computed: {
+    imageSource() {
+      // Verificar si 'imatge' es una URL o un objeto File
+      if (this.img instanceof File) {
+        // Si es un objeto File, usar URL.createObjectURL para generar una URL temporal
+        return URL.createObjectURL(this.img);
+      } else {
+        // Si es una URL, simplemente devolver la URL
+        return this.img;
+      }
+    },
+  }
 };
 </script>
