@@ -26,7 +26,7 @@
     <v-list dense nav>
       <v-list-group :value="profile.group">
         <template v-slot:activator="{ props }">
-          <v-list-item v-bind="props" :prepend-avatar="profile.avatar" :title="profile.username"
+          <v-list-item v-bind="props" :prepend-avatar="avatar" :title="profile.username"
             :subtitle="profile.email"></v-list-item>
         </template>
 
@@ -106,6 +106,15 @@ export default {
   },
   computed: {
     ...mapGetters(['user']),
+    avatar() {
+      return this.user.user.imatge;
+    }
+  },
+  watch: {
+    avatar(newAvatar) {
+      // Puedes realizar acciones adicionales cuando la propiedad computada cambie, si es necesario
+      this.profile.avatar = newAvatar;
+    }
   },
   mounted() {
     this.profile.username = this.user.user.username;
