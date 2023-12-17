@@ -5,7 +5,7 @@
 <template>
   <template v-if="profile.username != undefined">
     <v-col>
-      <h1 style="color: #ff6961" class="my-5 ml-5">Profile</h1>
+      <h1 style="color: #ff6961" class="mt-5 ml-5">Profile</h1>
 
       <v-container class="d-flex justify-center align-center">
         <v-col cols="12">
