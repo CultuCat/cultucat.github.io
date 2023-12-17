@@ -1,5 +1,5 @@
 <template>
-    <v-card class="v-card" :image="ticket.imatge || ticket.imatges_list[0]" link width="250" height="250" :variant="elevated">
+    <v-card class="v-card" :image="ticket.imatge || ticket.imatges_list[0]" link width="250" height="250">
         <div class="overlay d-flex flex-column justify-end">
             <v-card-title class="text">{{ ticket.nom || ticket.nomEvent }}</v-card-title>
             <v-card-subtitle class="text">{{ transformDate(ticket.dataIni || ticket.data) }}</v-card-subtitle>
