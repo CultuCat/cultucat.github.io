@@ -16,7 +16,7 @@
           <v-card-text>
             {{ acortarTexto(item.descripcio) }}
             <br /><br />
-            <strong>{{ item.preu ? extraerTextoPreu(item.preu) : "Preu no disponible." }}</strong>
+            <strong>{{ isNumber(item.preu) ? `Preu: ${item.preu} €` : item.preu }}</strong>
           </v-card-text>
         </v-col>
       </template>
@@ -72,8 +72,10 @@ export default {
       return texto;
     },
     isNumber(value) {
-      return !isNaN(parseFloat(value)) && isFinite(value);
-    }
+      if (!value) return value;
+      value = value.replace(',', '.');
+      return !isNaN(Number(value)) && !isNaN(parseFloat(value));
+    },
   },
 };
 </script>
