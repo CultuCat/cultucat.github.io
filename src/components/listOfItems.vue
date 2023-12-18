@@ -75,8 +75,8 @@ export default {
       orderByList:[
         {title: 'Ascending Date', value: "dataIni"},
         {title: 'Descending Date', value: "-dataIni"},
-        {title: 'Ascending Price', value: "preu"},
-        {title: 'Descending Price', value: "-preu"},
+        {title: 'Ascending Name', value: "nom"},
+        {title: 'Descending Name', value: "-nom"},
       ],
       orderBySelected: 1,
       loadingOrder: false,
@@ -145,7 +145,6 @@ export default {
       const selected = this.orderByList[index].value;
       if(selected !== this.orderByList[this.orderBySelected].value){
         this.orderBySelected = index;
-        console.log(selected);
         this.ordered  = true;
         this.getEvents(selected);
       }
@@ -165,7 +164,6 @@ export default {
           return response.json();
         })
         .then((data) => {
-          console.log(url);
           this.items_get = data.results;
           this.loaded = true;
           this.loadingOrder = false;
@@ -198,14 +196,7 @@ export default {
       return this.view === 'admin_users';
     },
     filteredItems() {
-      this.items_get = this.items && !this.searchMade && !this.ordered ? this.items : this.items_get;
-      return this.items_get
-        .sort((a, b) => {
-          if (a.first_name && b.first_name) {
-            return a.first_name.localeCompare(b.first_name);
-          }
-          return 0;
-        });
+      return  (this.items && !this.searchMade && !this.ordered) ? this.items : this.items_get;
     },
   },
 };
