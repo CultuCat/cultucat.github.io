@@ -42,7 +42,7 @@
                         <v-list-item class="my-6">
                             <v-list-item-content>
                                 <v-list-item-title><strong>Price:</strong></v-list-item-title>
-                                <v-list-item-subtitle>{{ extraerTextoPreu(eventInfo.preu) }}</v-list-item-subtitle>
+                                <v-list-item-subtitle>{{eventInfo.preu}}€</v-list-item-subtitle>
                             </v-list-item-content>
                         </v-list-item>
                         <v-list-item>
@@ -112,11 +112,6 @@ export default {
             const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
             return formatter.format(dateObj);
         },
-        extraerTextoPreu(texto) {
-            // Utilizamos una expresión regular para buscar la parte deseada del texto
-            const match = texto.match(/(\d[^€]*)€/);
-            return match ? match[0] : texto;
-        },
         itemProps(item) {
             return {
                 title: this.calculateDiscountPercentage(item.nivellTrofeu) + '%',
@@ -143,21 +138,20 @@ export default {
         calculateTotalPrice() {
             if (this.selectedDiscount) {
                 const discountPercentage = this.calculateDiscountPercentage(this.selectedDiscount.nivellTrofeu);
-                const originalPriceText = this.extraerTextoPreu(this.eventInfo.preu);
 
                 // Extraer el valor numérico del texto con el signo de euro
-                const originalPrice = parseFloat(originalPriceText);
+                const originalPrice = parseFloat(this.eventInfo.preu);
 
                 if (!isNaN(originalPrice)) {
                     const discountedPrice = originalPrice - (originalPrice * discountPercentage) / 100;
                     return discountedPrice.toFixed(2) + '€'; // Ajusta el formato según tu necesidad
                 } else {
                     // Si no se pudo extraer un número válido, mostrar el texto original
-                    return originalPriceText;
+                    return originalPrice;
                 }
             } else {
                 // Si no hay descuento seleccionado, mostrar el precio original
-                return this.extraerTextoPreu(this.eventInfo.preu);
+                return this.eventInfo.preu + '€';
             }
         },
     },

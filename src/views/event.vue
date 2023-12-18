@@ -28,7 +28,7 @@
                   <v-card class="mt-14" rounded="lg" color="#ff6961" style="max-width: 220px">
                     <div class="d-flex justify-center align-center" v-if="eventInfo.preu">
                       <div class="mr-2">
-                        {{ extraerTextoPreu(eventInfo.preu) }}
+                        {{isNaN(eventInfo.preu) ? eventInfo.preu : eventInfo.preu + '€'}}
                       </div>
                       <v-btn v-if="canIBuy" class="ma-2" @click="dialogBuy = true">Buy</v-btn>
                       <v-btn v-else class="ma-2" disabled>Buy</v-btn>
@@ -136,7 +136,6 @@ export default {
       dialog: false,
       dialogBuy: false,
       buyLoading: false,
-      canIBuy: true,
       discounts: [],
     };
   },
@@ -150,6 +149,9 @@ export default {
       );
     },
     ...mapGetters(["user"]),
+    canIBuy() {
+      return isNaN(this.eventInfo.preu) ? false : true;
+    }
   },
   created() {
     fetch("https://cultucat.hemanuelpc.es/events/" + this.$route.params.event_id + "/")
@@ -231,12 +233,6 @@ export default {
       };
       const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
       return formatter.format(dateObj);
-    },
-    extraerTextoPreu(texto) {
-      // Utilizamos una expresión regular para buscar la parte deseada del texto
-      const match = texto.match(/(\d[^€]*)€/);
-      if (!match) this.canIBuy = false;
-      return match ? match[0] : texto;
     },
     agregarEventoAlCalendario() {
       const evento = {
