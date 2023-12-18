@@ -1,6 +1,12 @@
 <template>
   <template v-if="loading == true">
-    <v-card-text>Carregant...</v-card-text>
+    <div class="text-center">
+      <v-progress-circular
+      :size="50"
+      color= "red"
+      indeterminate
+    ></v-progress-circular>
+    </div>
   </template>
   <template v-else>
     <v-container class="container">
@@ -32,15 +38,22 @@
             <v-avatar :image="this.uImageR" size="40" class="ml-2 mr-5 my-2"></v-avatar>
             <strong style="color: white">{{ this.uNameR }}</strong>
           </div>
-          <div class="flex-grow-1 d-flex flex-column overflow-auto">
+          <div class="flex-grow-1 d-flex flex-column overflow-auto" ref="messageContainer">
             <v-card class="flex-grow-1 overflow-auto">
-              <v-card-text>
+              <v-card-text v-if="messageLoading == false">
                 <div v-for="(message, index) in messages" :key="index" :class="{'message-container-left': String(message.user_from) !== String(uId), 'message-container-right': String(message.user_from) === String(uId)}">
                   <div :class="{'message-left': String(message.user_from) !== String(uId), 'message-right': String(message.user_from) === String(uId)}">
                     <strong> {{ message.text }} </strong>
                   </div>
                 </div>
               </v-card-text>
+              <div v-else class="text-center">
+                <v-progress-circular
+                :size="50"
+                color= "red"
+                indeterminate
+              ></v-progress-circular>
+              </div>
             </v-card>
           </div>
           <div >
@@ -76,12 +89,13 @@ export default {
       uNameR:"Friend Username",
       uImageR: "",
       loading: true,
+      messageLoading: false,
     };
   },
   computed: {
       ...mapGetters(["user"]),
   },
-  
+
   async created(){
     this.uId = this.user.user.id;
     this.url = "https://cultucat.hemanuelpc.es";
@@ -110,6 +124,11 @@ export default {
           const data = await response.json();
           this.messages = data;
           this.loading = false;
+          this.messageLoading = false;
+          this.$nextTick(() => {
+            const container = this.$refs.messageContainer;
+            container.scrollTop = container.scrollHeight;
+          });
         } catch (error) {
           console.error('Error fetching messages:', error);
         }
@@ -136,6 +155,8 @@ export default {
         }
     },
     handleClick(user) {
+     this.messages = [];
+     this.messageLoading = true;
      console.log(user);
      this.uImageR = user.imatge;
      this.uNameR = user.first_name;
@@ -199,6 +220,7 @@ export default {
 .message-container-left {
     width: 100%;
     display: flex;
+   
     justify-content: flex-start;
     margin-bottom: 5px;
   }
