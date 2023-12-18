@@ -214,6 +214,7 @@ export default {
       .catch((error) => {
         console.error("Error:", error);
       });
+      this.getCuriosity();
   },
   methods: {
     handleButtonLink() {
@@ -292,6 +293,24 @@ END:VCALENDAR
       } catch (error) {
         console.error('Error fetching comments:', error);
       }
+    },
+    getCuriosity() {
+      fetch('http://nattech.fib.upc.edu:40520/api/questions/municipi/barcelona?type=random', {
+        method: 'GET',
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("No se pudo obtener el archivo JSON");
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data);
+          this.curiosity = data;
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
     },
     buyConfirmed(isLoading, discountUsed) {
       this.buyLoading = isLoading;
