@@ -48,11 +48,11 @@
                         <v-list-item>
                             <v-list-item-content>
                                 <v-list-item-title><strong>Discount:</strong></v-list-item-title>
-                                <v-select v-if="discounts.length > 0 && filteredDiscounts.length > 0" v-model="selectedDiscount" :items="filteredDiscounts"
-                                    :item-props="itemProps" density="compact" label="Choose a discount">
-                                </v-select>
+                                 <v-select v-if="discounts.length > 0 && filteredDiscounts.length > 0" v-model="selectedDiscount" :items="filteredDiscounts"
+                                    :item-props="itemProps" density="compact" label="Choose a discount" clearable>
+                                </v-select>   
                                 <v-alert v-else value="true" type="warning" class="mt-2">
-                                    No tienes descuentos disponibles.
+                                    No discounts available.
                                 </v-alert>
                             </v-list-item-content>
                         </v-list-item>
