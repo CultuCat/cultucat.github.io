@@ -6,13 +6,12 @@
           <v-card elevation="4">
             <v-card-item class="my-4">
               <template v-slot:prepend v-if="view === 'events'">
-                <v-btn rounded="xl" prepend-icon="mdi-filter-outline">Filters</v-btn>
+                <v-btn rounded="xl" prepend-icon="mdi-filter-outline" @click="filtersDialog = true" :loading="filtering">Filters</v-btn>
               </template>
               <v-text-field v-model="searchInput" placeholder="Search"
                 :prepend-inner-icon="!expanded ? 'mdi-magnify custom-cursor' : null" class="expanding-search mx-3 my-1"
                 :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch" clearable rounded="xl" variant="solo"
-                density="compact" hide-details @keyup.enter="search"
-                @click:clear="items_get = items">
+                density="compact" hide-details @keyup.enter="search" @click:clear="items_get = items">
                 <template v-slot:append-inner v-if="expanded">
                   <v-btn :loading="searching" @click="search" variant="plain" rounded="xl" :ripple="false">
                     <v-icon>mdi-magnify</v-icon>
@@ -24,7 +23,7 @@
                 <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ Create Event</v-btn>
               </template>
               <template v-slot:append v-else>
-                <v-btn rounded="xl"  variant="plain" icon="mdi-restart" @click="items_get = items"></v-btn>
+                <v-btn rounded="xl" variant="plain" icon="mdi-restart" @click="items_get = items"></v-btn>
               </template>
             </v-card-item>
 
@@ -36,24 +35,29 @@
               </v-list-item>
             </v-list>
             <div v-else style="text-align: center" class="my-10">
-                <v-chip> Sorry, no results found for your search. </v-chip>
-              </div>
+              <v-chip> Sorry, no results found for your search. </v-chip>
+            </div>
           </v-card>
         </template>
       </v-col>
     </v-container>
   </v-col>
+  <v-dialog v-model="filtersDialog">
+    <eventsFilters @quit-filters-dialog="filtersDialog = false" @filter-by="filterByEvent" />
+  </v-dialog>
 </template>
 
 <script>
 import eventPreview from "@/components/eventPreview.vue";
 import userPreview from "@/components/userPreview.vue";
+import eventsFilters from "@/components/eventsFilters.vue";
 
 export default {
   name: "listOfItems",
   components: {
     eventPreview,
     userPreview,
+    eventsFilters,
   },
   data() {
     return {
@@ -63,6 +67,9 @@ export default {
       loaded: false,
       searchMade: false,
       searching: false,
+      filtersDialog: false,
+      filtered: false,
+      filtering: false,
     };
   },
   props: {
@@ -121,8 +128,17 @@ export default {
           console.error(error);
         });
     },
-    getEvents() {
-      fetch("https://cultucat.hemanuelpc.es/events/?ordering=-dataIni")
+    getEvents(filterTags) {
+      let params = "ordering=-dataIni";
+      if (this.filtered && filterTags.length > 0) {
+        params = "";
+        filterTags.forEach((fTag, index) => {
+          params += ("tag=" + fTag.id);
+          if (index < filterTags.length - 1) params += "&";
+        })
+        this.filtering=true;
+      }
+      fetch("https://cultucat.hemanuelpc.es/events/?" + params)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`Error al obtener los eventos: ${response.status}`);
@@ -132,10 +148,17 @@ export default {
         .then((data) => {
           this.items_get = data.results;
           this.loaded = true;
+          this.filtering=false;
         })
         .catch((error) => {
           console.error(error);
         });
+    },
+    filterByEvent(filterTags) {
+      this.filtered = true;
+      this.filtersDialog = false;
+      console.log(filterTags);
+      this.getEvents(filterTags);
     }
   },
   created() {
@@ -161,7 +184,7 @@ export default {
       return this.view === 'admin_users';
     },
     filteredItems() {
-      this.items_get = (this.items && !this.searchMade) ? this.items : this.items_get;
+      this.items_get = (this.items && !this.filtered) ? this.items : this.items_get;
       return this.items_get
         .sort((a, b) => {
           if (a.first_name && b.first_name) {
