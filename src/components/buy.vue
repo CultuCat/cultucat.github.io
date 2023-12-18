@@ -162,7 +162,6 @@ export default {
         },
     },
     created() {
-        console.log(this.discounts);
     }
 };
 </script>
