@@ -42,15 +42,16 @@
                         <v-list-item class="my-6">
                             <v-list-item-content>
                                 <v-list-item-title><strong>Price:</strong></v-list-item-title>
-                                <v-list-item-subtitle>{{eventInfo.preu}}€</v-list-item-subtitle>
+                                <v-list-item-subtitle>{{ eventInfo.preu }}€</v-list-item-subtitle>
                             </v-list-item-content>
                         </v-list-item>
                         <v-list-item>
                             <v-list-item-content>
                                 <v-list-item-title><strong>Discount:</strong></v-list-item-title>
-                                 <v-select v-if="discounts.length > 0 && filteredDiscounts.length > 0" v-model="selectedDiscount" :items="filteredDiscounts"
-                                    :item-props="itemProps" density="compact" label="Choose a discount" clearable>
-                                </v-select>   
+                                <v-select v-if="discounts.length > 0 && filteredDiscounts.length > 0"
+                                    v-model="selectedDiscount" :items="filteredDiscounts" :item-props="itemProps"
+                                    density="compact" label="Choose a discount" clearable>
+                                </v-select>
                                 <v-alert v-else value="true" type="warning" class="mt-2">
                                     No discounts available.
                                 </v-alert>
@@ -60,7 +61,7 @@
                         <v-list-item class="my-6">
                             <v-list-item-content>
                                 <v-list-item-title><strong>Total:</strong></v-list-item-title>
-                                <v-list-item-subtitle>{{ calculateTotalPrice }}</v-list-item-subtitle>
+                                <v-list-item-subtitle>{{ isNaN(calculateTotalPrice) ? calculateTotalPrice : "Non valid price" }}</v-list-item-subtitle>
                             </v-list-item-content>
                         </v-list-item>
                     </v-list>
@@ -92,11 +93,11 @@ export default {
     },
     methods: {
         buy(selectedDiscount) {
-            if(selectedDiscount != null){
+            if (selectedDiscount != null) {
                 this.$emit("confirmed-buy", true, selectedDiscount.codi);
             }
-            else{
-               this.$emit("confirmed-buy", true, null); 
+            else {
+                this.$emit("confirmed-buy", true, null);
             }
         },
         cancel() {
@@ -136,24 +137,26 @@ export default {
             return this.discounts.filter(discount => !discount.usat);
         },
         calculateTotalPrice() {
+            let finalPrice;
+
             if (this.selectedDiscount) {
                 const discountPercentage = this.calculateDiscountPercentage(this.selectedDiscount.nivellTrofeu);
-
-                // Extraer el valor numérico del texto con el signo de euro
                 const originalPrice = parseFloat(this.eventInfo.preu);
 
                 if (!isNaN(originalPrice)) {
                     const discountedPrice = originalPrice - (originalPrice * discountPercentage) / 100;
-                    return discountedPrice.toFixed(2) + '€'; // Ajusta el formato según tu necesidad
+                    finalPrice = parseFloat(discountedPrice.toFixed(2));
                 } else {
-                    // Si no se pudo extraer un número válido, mostrar el texto original
-                    return originalPrice;
+                    // Si no se pudo extraer un número válido, mostrar el precio original
+                    finalPrice = NaN;
                 }
             } else {
                 // Si no hay descuento seleccionado, mostrar el precio original
-                return this.eventInfo.preu + '€';
+                finalPrice = parseFloat(this.eventInfo.preu);
             }
-        },
+
+            return finalPrice;
+        }
     },
     created() {
         console.log(this.discounts);
