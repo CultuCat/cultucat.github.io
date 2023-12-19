@@ -7,6 +7,17 @@
             <v-card-item class="my-4">
               <template v-slot:prepend v-if="view === 'events'">
                 <v-btn rounded="xl" prepend-icon="mdi-filter-outline">Filters</v-btn>
+                <v-menu location="end">
+                  <template v-slot:activator="{ props }">
+                    <v-btn dark v-bind="props" icon="mdi-swap-vertical" size="35" class="ml-4" :loading="loadingOrder">
+                    </v-btn>
+                  </template>
+                  <v-list v-model="orderBySelected">
+                    <v-list-item v-for="(item, index) in orderByList" :key="index" :value="index" @click="sortBy(index)">
+                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </template>
               <v-text-field v-model="searchInput" placeholder="Search"
                 :prepend-inner-icon="!expanded ? 'mdi-magnify custom-cursor' : null" class="expanding-search mx-3 my-1"
@@ -61,6 +72,15 @@ export default {
       expanded: false,
       searchInput: "",
       loaded: false,
+      orderByList:[
+        {title: 'Ascending Date', value: "dataIni"},
+        {title: 'Descending Date', value: "-dataIni"},
+        {title: 'Ascending Name', value: "nom"},
+        {title: 'Descending Name', value: "-nom"},
+      ],
+      orderBySelected: 1,
+      loadingOrder: false,
+      ordered: false,
       searchMade: false,
       searching: false,
     };
@@ -121,8 +141,22 @@ export default {
           console.error(error);
         });
     },
-    getEvents() {
-      fetch("https://cultucat.hemanuelpc.es/events/?ordering=-dataIni")
+    sortBy(index){
+      const selected = this.orderByList[index].value;
+      if(selected !== this.orderByList[this.orderBySelected].value){
+        this.orderBySelected = index;
+        this.ordered  = true;
+        this.getEvents(selected);
+      }
+    },
+    getEvents(param) {
+      let ordering = "-dataIni";
+      if (param){
+        ordering = param;
+        this.loadingOrder = true;
+      }
+      const url = `https://cultucat.hemanuelpc.es/events/?ordering=${ordering}`;
+      fetch(url)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`Error al obtener los eventos: ${response.status}`);
@@ -132,6 +166,7 @@ export default {
         .then((data) => {
           this.items_get = data.results;
           this.loaded = true;
+          this.loadingOrder = false;
         })
         .catch((error) => {
           console.error(error);
@@ -161,14 +196,7 @@ export default {
       return this.view === 'admin_users';
     },
     filteredItems() {
-      this.items_get = (this.items && !this.searchMade) ? this.items : this.items_get;
-      return this.items_get
-        .sort((a, b) => {
-          if (a.first_name && b.first_name) {
-            return a.first_name.localeCompare(b.first_name);
-          }
-          return 0;
-        });
+      return  (this.items && !this.searchMade && !this.ordered) ? this.items : this.items_get;
     },
   },
 };
