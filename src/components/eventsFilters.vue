@@ -65,6 +65,9 @@ export default {
             loading: false,
         };
     },
+    props:{
+        idxTagsProp: Array,
+    },
     methods: {
         getTags() {
             this.loading = true;
@@ -103,17 +106,17 @@ export default {
             this.$emit("quit-filters-dialog");
         },
         filterBy() {
-            const items = this.tags.filter((tag, index) => {
-                const indiceEnTagsSelected = this.tagsSelected.findIndex(obj => obj === tag.id);
+            let filterTags = this.tags.filter((tag, index) => {
+                const indiceEnTagsSelected = this.tagsSelected.findIndex(obj => obj === tag.id-1);
                 return indiceEnTagsSelected !== -1;
             });
-            console.log(items);
-            this.$emit("filter-by", items);
+            const idxTags = this.tagsSelected;
+            this.$emit("filter-by", {filterTags, idxTags});
         }
     },
     mounted() {
         this.getTags();
-        //this.getSpaces();
+        this.tagsSelected = this.idxTagsProp;
     }
 };
 </script>

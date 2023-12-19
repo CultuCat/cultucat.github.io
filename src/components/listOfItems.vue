@@ -15,7 +15,7 @@
                   </template>
                   <v-list v-model="orderBySelected">
                     <v-list-item v-for="(item, index) in orderByList" :key="index" :value="index" @click="sortBy(index)">
-                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                      <v-list-item-title>{{ item.title }} <v-icon v-if="index==orderBySelected">mdi-check</v-icon></v-list-item-title>
                     </v-list-item>
                   </v-list>
                 </v-menu>
@@ -190,11 +190,10 @@ export default {
       this.filtersDialog = false;
       this.selectedFilters = obj.filterTags;
       this.tagsSelected = obj.idxTags;
-      console.log(this.selectedFilters)
       this.getEvents();
     },
     resetView() {
-      this.items_get = items;
+      this.items_get = this.items;
       this.tagsSelected = [];
     },
   },
@@ -221,7 +220,7 @@ export default {
       return this.view === 'admin_users';
     },
     filteredItems() {
-      return  (this.items && !this.searchMade && !this.ordered && ) ? this.items : this.items_get;
+      return  (this.items && !this.searchMade && !this.ordered && !this.filtered) ? this.items : this.items_get;
     },
   },
 };
