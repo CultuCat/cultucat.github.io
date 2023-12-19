@@ -200,7 +200,7 @@ export default {
       })
       .catch((error) => {
         console.error("Error:", error);
-      });``
+      });
     fetch(`https://cultucat.hemanuelpc.es/events/${ this.$route.params.event_id}/`)
       .then((response) => {
         if (!response.ok) {
