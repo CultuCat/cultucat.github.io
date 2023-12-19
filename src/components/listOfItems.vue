@@ -6,7 +6,19 @@
           <v-card elevation="4">
             <v-card-item class="my-4">
               <template v-slot:prepend v-if="view === 'events'">
-                <v-btn rounded="xl" prepend-icon="mdi-filter-outline" @click="filtersDialog = true" :loading="filtering">Filters</v-btn>
+                <v-btn rounded="xl" prepend-icon="mdi-filter-outline" @click="filtersDialog = true"
+                  :loading="filtering">Filters</v-btn>
+                <v-menu location="end">
+                  <template v-slot:activator="{ props }">
+                    <v-btn dark v-bind="props" icon="mdi-swap-vertical" size="35" class="ml-4" :loading="loadingOrder">
+                    </v-btn>
+                  </template>
+                  <v-list v-model="orderBySelected">
+                    <v-list-item v-for="(item, index) in orderByList" :key="index" :value="index" @click="sortBy(index)">
+                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </template>
               <v-text-field v-model="searchInput" placeholder="Search"
                 :prepend-inner-icon="!expanded ? 'mdi-magnify custom-cursor' : null" class="expanding-search mx-3 my-1"
@@ -23,7 +35,7 @@
                 <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ Create Event</v-btn>
               </template>
               <template v-slot:append v-else>
-                <v-btn rounded="xl" variant="plain" icon="mdi-restart" @click="items_get = items"></v-btn>
+                <v-btn rounded="xl" variant="plain" icon="mdi-restart" @click="resetView"></v-btn>
               </template>
             </v-card-item>
 
@@ -43,7 +55,7 @@
     </v-container>
   </v-col>
   <v-dialog v-model="filtersDialog">
-    <eventsFilters @quit-filters-dialog="filtersDialog = false" @filter-by="filterByEvent" />
+    <eventsFilters @quit-filters-dialog="filtersDialog = false" @filter-by="filterByEvent" :idxTagsProp="tagsSelected" />
   </v-dialog>
 </template>
 
@@ -65,11 +77,22 @@ export default {
       expanded: false,
       searchInput: "",
       loaded: false,
+      orderByList: [
+        { title: 'Ascending Date', value: "dataIni" },
+        { title: 'Descending Date', value: "-dataIni" },
+        { title: 'Ascending Name', value: "nom" },
+        { title: 'Descending Name', value: "-nom" },
+      ],
+      orderBySelected: 1,
+      loadingOrder: false,
+      ordered: false,
       searchMade: false,
       searching: false,
       filtersDialog: false,
       filtered: false,
       filtering: false,
+      selectedFilters: [],
+      tagsSelected: [],
     };
   },
   props: {
@@ -128,17 +151,24 @@ export default {
           console.error(error);
         });
     },
-    getEvents(filterTags) {
-      let params = "ordering=-dataIni";
-      if (this.filtered && filterTags.length > 0) {
-        params = "";
-        filterTags.forEach((fTag, index) => {
-          params += ("tag=" + fTag.id);
-          if (index < filterTags.length - 1) params += "&";
-        })
-        this.filtering=true;
+    sortBy(index) {
+      const selected = this.orderByList[index].value;
+      if (selected !== this.orderByList[this.orderBySelected].value) {
+        this.orderBySelected = index;
+        this.ordered = true;
+        this.getEvents();
       }
-      fetch("https://cultucat.hemanuelpc.es/events/?" + params)
+    },
+    getEvents() {
+      let ordering = this.orderByList[this.orderBySelected].value;
+      let params = "";
+      if (this.filtered && this.selectedFilters.length > 0) {
+        this.selectedFilters.forEach((fTag) => {
+          params += ("&tag=" + fTag.id);
+        })
+        this.filtering = true;
+      }
+      fetch("https://cultucat.hemanuelpc.es/events/?ordering=" + ordering + params)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`Error al obtener los eventos: ${response.status}`);
@@ -148,18 +178,25 @@ export default {
         .then((data) => {
           this.items_get = data.results;
           this.loaded = true;
-          this.filtering=false;
+          this.filtering = false;
+          this.loadingOrder = false;
         })
         .catch((error) => {
           console.error(error);
         });
     },
-    filterByEvent(filterTags) {
+    filterByEvent(obj) {
       this.filtered = true;
       this.filtersDialog = false;
-      console.log(filterTags);
-      this.getEvents(filterTags);
-    }
+      this.selectedFilters = obj.filterTags;
+      this.tagsSelected = obj.idxTags;
+      console.log(this.selectedFilters)
+      this.getEvents();
+    },
+    resetView() {
+      this.items_get = items;
+      this.tagsSelected = [];
+    },
   },
   created() {
     if (this.items) {
@@ -184,14 +221,7 @@ export default {
       return this.view === 'admin_users';
     },
     filteredItems() {
-      this.items_get = (this.items && !this.filtered) ? this.items : this.items_get;
-      return this.items_get
-        .sort((a, b) => {
-          if (a.first_name && b.first_name) {
-            return a.first_name.localeCompare(b.first_name);
-          }
-          return 0;
-        });
+      return  (this.items && !this.searchMade && !this.ordered && ) ? this.items : this.items_get;
     },
   },
 };
