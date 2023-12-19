@@ -8,12 +8,16 @@
   </template>
   
   <script>
-  import { mapGetters} from 'vuex';
+  
   export default {
     props:{
         id: {
             type: String,
             default: '1'
+        },
+        user: {
+            type: Object,
+            default: null
         }
     },
     data() {
@@ -21,36 +25,50 @@
         userId:null,
         url:"",
         urlAdd: "",
+        urlFriend: "",
         iconName:"mdi-heart-plus-outline",
         response: null,
+        profile:{},
       }
     },
     created() {
       this.url = "https://cultucat.hemanuelpc.es";
-      this.userId = this.user.user.id;
+      this.userId = this.user.id;
       this.urlAdd = `${this.url}/users/${this.userId}/send_friend_request/`;
-      this.checkFriend()
+      this.urlFriend = `${this.url}/users/${this.id}/`;
+      this.checkFriend();
       
-    },
-    computed: {
-        ...mapGetters(['user']),
     },
     methods: {
         friendExists(id) {
-            return this.user.user.friends.some(user => user.id === id);
+            return this.user.friends.some(user => String(user.id) === String(id));
         },
         pendingFriendExists(id) {
-            return this.user.user.pending_friend_requests.some(user => user.id === id);
+            return this.profile.pending_friend_requests.some(request => String(request.to_user.id) === String(id));
         },
         checkFriend() {
+        fetch(this.urlFriend)
+            .then((response) => {
+            if (response.ok) {
+                return response.json(); // Asegúrate de que la respuesta es un objeto JSON
+            } else {
+                throw new Error('Error en la petición');
+            }
+            })
+            .then((data) => {
+            this.profile = data;
             if (this.friendExists(this.id)){
                 this.iconName="mdi-heart";
-            }
-            else{
+            } else {
                 if (this.pendingFriendExists(this.id)) {
-                   this.iconName="mdi-clock-plus-outline"; 
+                this.iconName="mdi-clock-plus-outline"; 
                 }      
             }
+            })
+            .catch((error) => {
+            // Maneja errores aquí
+            console.error("Error al encontrar amigo", error);
+            });
         },
         addFriend() {
             if (this.iconName == "mdi-heart-plus-outline") {
@@ -73,7 +91,6 @@
                     this.response= data;
                     this.urlAdd = data.next;
                     this.iconName="mdi-clock-plus-outline";
-                    console.log(this.user.user);
                 })
                 .catch((error) => {
                     console.error("Error:", error);

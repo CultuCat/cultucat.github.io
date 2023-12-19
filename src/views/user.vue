@@ -32,7 +32,7 @@
             </template>
 
             <template v-slot:text>
-              <div style="float: right;"><addFriend :id="profile.id" /></div>
+              <div v-if="profile.id !== user.user.id && myUser" style="float: right;"><addFriend :user="myUser" :id="String(profile.id)" /></div>
               <v-card-text class="mx-16">{{ profile.bio }}</v-card-text>
             </template>
 
@@ -97,7 +97,7 @@
         @cancel-delete="deleteCancel"
       />
       <!-- ----------------------- dialog para ver amigos ------------------------ -->
-      <userDialog :dialog="dialogFriends" :isFriends="true" :userId="userId" @closeDialog="dialogFriends = false" />
+      <userDialog :dialog="dialogFriends" :isFriends="true" :isProfile="true" :userId="userId" @closeDialog="dialogFriends = false" />
       <!-- ----------------------- dialog para ver ranking ----------------------- -->
       <userDialog :dialog="dialogRanking" :isRanking="true" @closeDialog="dialogRanking = false" />
       <!-- ----------------------------------------------------------------------- -->
@@ -131,6 +131,7 @@ export default {
       deleteLoading: false,
       userId: null,
       friendRequests:null,
+      myUser:null,
     };
   },
   components: {
@@ -152,7 +153,7 @@ export default {
       .then((response) => {
         if(response.status == 200){
           this.profile = response.data;
-
+          this.getUser();
         // Ahora, puedes realizar las operaciones necesarias con la respuesta de manera asincrónica
         this.agregarSlideGroup(
           this.profile_favs,
@@ -229,12 +230,12 @@ export default {
     deleteCancel() {
       this.reset();
     },
-    getUsers() {
+    getUser() {
       axios
-      .get("https://cultucat.hemanuelpc.es/users/")
+      .get("https://cultucat.hemanuelpc.es/users/"+this.user.user.id+"/")
       .then((response) => {
         if (response.status === 200) {
-          return response.data;
+          this.myUser = response.data;
         }
       })
       .catch((error) => {

@@ -18,6 +18,21 @@
         </v-toolbar-items>
       </v-toolbar>
       <v-card-text style="height: 600px">
+        <v-list v-if="requests.length > 0 && isProfile">
+          <v-list-item v-for="(item, index) in requests" :key="item.id">
+            <v-row align="center">
+              <v-col cols="8">
+                <userPreview :item="item.from_user" :index="index" :isRanking="isRanking" />
+              </v-col>
+              <v-col cols="2" class="d-flex justify-center align-center">
+                <v-btn icon = "mdi-check" color="#ff6961" @click="manageRequest(item.id,true)" class="circle-icon"/> 
+              </v-col>
+              <v-col cols="2" class="d-flex justify-center align-center">
+                <v-btn icon = "mdi-close" color="#ff6961" @click="manageRequest(item.id,false)" class="circle-icon"/> 
+              </v-col>
+            </v-row>
+          </v-list-item>
+        </v-list>
         <v-list v-if="users.length > 0">
           <v-list-item v-for="(item, index) in users" :key="item.id">
             <userPreview :item="item" :index="index" :isRanking="isRanking" />
@@ -40,6 +55,7 @@ export default {
     return {
       isLoading: false,
       users: [],
+      requests:[],
     };
   },
   components: {
@@ -55,6 +71,10 @@ export default {
       default: false,
     },
     isFriends: {
+      type: Boolean,
+      default: false,
+    },
+    isProfile: {
       type: Boolean,
       default: false,
     },
@@ -97,7 +117,7 @@ export default {
     },
     getFriends() {
       this.isLoading = true;
-      fetch(`https://cultucat.hemanuelpc.es/users/${this.userId}`, {
+      fetch(`https://cultucat.hemanuelpc.es/users/${this.userId}/`, {
         method: "GET"
       })
         .then((response) => {
@@ -110,11 +130,49 @@ export default {
         .then((data) => {
           this.isLoading = false;
           this.users = data.friends;
+          this.requests = data.pending_friend_requests;
         })
         .catch((error) => {
           console.error(error);
         });
     },
+    manageRequest(id, action) {
+      fetch(`https://cultucat.hemanuelpc.es/users/${this.userId}/accept_friend_request/`, {
+          method: "POST",
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              "id": id,
+              "is_accepted": action
+          }),
+      })
+      .then((response) => {
+          if (!response.ok) {
+          throw new Error("No se pudo obtener el archivo JSON");
+          }
+          return response.json();
+      })
+      .then((data) => {
+          this.getFriends();
+      })
+      .catch((error) => {
+          console.error("Error:", error);
+      })
+      .finally(() => {
+          //this.isLoading = false; // Restablecer isLoading después de la solicitud, ya sea exitosa o con error
+      });
+    },
+    
   },
 };
 </script>
+
+<style scoped>
+.circle-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: none;
+}
+</style>

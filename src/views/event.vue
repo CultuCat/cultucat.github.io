@@ -62,7 +62,7 @@
                       </v-toolbar-items>
                     </v-toolbar>
                     <v-card-text style="height: 600px">
-                      <ListOfItems v-if="eventInfo.assistants.length > 0" :items="eventInfo.assistants" />
+                      <ListOfItems v-if="eventInfo.assistants.length > 0" :items="eventInfo.assistants" :isAssistants=true />
                       <span v-else style="display: flex; justify-content: center;">No hi ha usuaris amb entrada per aquest
                         esdeveniment</span>
                     </v-card-text>
@@ -200,8 +200,8 @@ export default {
       })
       .catch((error) => {
         console.error("Error:", error);
-      });
-    fetch("https://cultucat.hemanuelpc.es/tickets/?event=" + this.$route.params.event_id)
+      });``
+    fetch(`https://cultucat.hemanuelpc.es/events/${ this.$route.params.event_id}/`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("No se pudo obtener el archivo JSON");
@@ -209,7 +209,7 @@ export default {
         return response.json();
       })
       .then((data) => {
-        this.eventInfo.assistants = data;
+        this.eventInfo.assistants = data.assistents;
       })
       .catch((error) => {
         console.error("Error:", error);
