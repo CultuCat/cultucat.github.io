@@ -1,15 +1,18 @@
 <template>
-  <v-col>
+  <v-row justify="center">
+    <v-col class="mb-0 pb-0">
+      <h1 style="color: #ff6961" class="mt-5 ml-5">Event</h1>
+    </v-col>
+  </v-row>
+  <v-row>
     <template v-if="eventInfo.nom">
-      <!-- =============================== TITULO ================================ -->
-      <h1 style="color: #ff6961" class="my-5 ml-5 mb-0">Event</h1>
       <!-- ============================== CONTENIDO ============================== -->
       <v-container class="d-flex justify-center align-center">
-        <v-col cols="12" md="11" sm="8">
-
-          <v-card rounded="lg" style="position: relative">
-            <v-btn @click="handleButtonLink" icon style="position: absolute; top: 10px; right: 10px" rounded="lg">
+        <v-card rounded="lg">
+          <v-col cols="12">
+            <v-btn @click="handleButtonLink" style="position: absolute; top: 10px; right: 10px" rounded="lg">
               <v-icon>mdi-link</v-icon>
+              <span style="margin-left: 5px;">Enllaç</span>
             </v-btn>
             <v-row class="d-flex ma-2 fill-height">
               <v-img class="ma-5" :src="eventInfo.imatges_list[0]" :max-height="250" :max-width="250" aspect-ratio="1/1"
@@ -20,18 +23,18 @@
                   <v-card-subtitle>{{ transformDate(eventInfo.dataIni) }}</v-card-subtitle>
                   <v-card-subtitle>{{ eventInfo.espai }}</v-card-subtitle>
 
-                  <!-- No nos pasan tags -->
-                  <!-- <v-chip-group class="mx-2">
-                  <v-chip v-for="tag in tags" :key="tag" class="mx-1">{{ tag }}</v-chip>
-                </v-chip-group> -->
+                  <v-chip-group class="mx-2">
+                    <v-chip v-for="tag in eventInfo.tags" :key="tag.id" class="mx-1" style="background-color: #87CEEC;">
+                      {{ tag.nom }}
+                    </v-chip>
+                  </v-chip-group>
 
                   <v-card class="mt-14" rounded="lg" color="#ff6961" style="max-width: 220px">
                     <div class="d-flex justify-center align-center" v-if="eventInfo.preu">
                       <div class="mr-2">
-                        {{isNaN(eventInfo.preu) ? eventInfo.preu : eventInfo.preu + '€'}}
+                        {{ isNumber(eventInfo.preu) ? `Preu: ${eventInfo.preu} €` : eventInfo.preu }}
                       </div>
-                      <v-btn v-if="canIBuy" class="ma-2" @click="dialogBuy = true">Buy</v-btn>
-                      <v-btn v-else class="ma-2" disabled>Buy</v-btn>
+                      <v-btn class="ma-2" @click="dialogBuy = true" :disabled="!canIBuy">Buy</v-btn>
                       <!-- ------------------------- dialog para comprar ------------------------- -->
                       <v-dialog v-model="dialogBuy" scrollable max-width="800px">
                         <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" :discounts="discounts"
@@ -49,7 +52,7 @@
               <v-col class="d-flex flex-column fill-height ma-5 mt-15">
                 <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true">See assistants</v-btn>
                 <!-- --------------------- dialog para ver asistentes ---------------------- -->
-                <v-dialog v-model="dialog" scrollable max-width="800px">
+                <v-dialog v-model="dialog" scrollable max-width="600px">
                   <v-card>
                     <v-toolbar color="#ff6961" dark>
                       <v-icon size="35" class="ml-6">mdi-account-group</v-icon>
@@ -92,11 +95,11 @@
                 </template>
               </v-col>
             </v-row>
-          </v-card>
-        </v-col>
+          </v-col>
+        </v-card>
       </v-container>
     </template>
-  </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -121,6 +124,7 @@ export default {
         id: null,
         nom: null,
         descripcio: null,
+        tags: [],
         dataIni: null,
         espai: null,
         preu: null,
@@ -150,7 +154,7 @@ export default {
     },
     ...mapGetters(["user"]),
     canIBuy() {
-      return isNaN(this.eventInfo.preu) ? false : true;
+      return this.eventInfo.preu !== 'No disponible';
     }
   },
   created() {
@@ -165,6 +169,7 @@ export default {
         this.eventInfo.id = data.id;
         this.eventInfo.nom = data.nom;
         this.eventInfo.descripcio = data.descripcio;
+        this.eventInfo.tags = data.tags;
         this.eventInfo.dataIni = data.dataIni;
         this.eventInfo.espai = data.espai.nom;
         this.eventInfo.preu = data.preu;
@@ -224,12 +229,18 @@ export default {
     handleButtonMaps() {
       window.open(this.mapsURL, "_blank");
     },
+    isNumber(value) {
+      if (!value) return value;
+      value = value.replace(',', '.');
+      return !isNaN(Number(value)) && !isNaN(parseFloat(value));
+    },
     transformDate(date) {
       const dateObj = new Date(date);
       const formatOptions = {
         weekday: "short",
         month: "long",
         day: "numeric",
+        year: "numeric", // Agregando el año
       };
       const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
       return formatter.format(dateObj);
