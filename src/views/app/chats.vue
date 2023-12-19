@@ -135,13 +135,15 @@ export default {
       },
     async sendMessage() {
       try {
+        const txt = this.newMessage;
+        this.newMessage = '';
           const response = await fetch(this.url+'/messages/', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
               user_from: this.uId,
               user_to: this.uIdR,
-              text: this.newMessage
+              text: txt
             })
           });
   
@@ -149,7 +151,7 @@ export default {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
   
-          this.newMessage = ''; // Clear the message input after successful submission
+           // Clear the message input after successful submission
         } catch (error) {
           console.error('Error submitting message:', error);
         }
