@@ -3,20 +3,39 @@
     <v-container class="d-flex justify-center align-center">
       <v-col cols="12">
         <template v-if="loaded">
-          <div v-if="items_get.length === 0" style="text-align: center;">
-            <v-chip class="mr-2"> Sorry, no results found. </v-chip>
-          </div>
-          <v-card v-else elevation="4">
+          <v-card elevation="4">
             <v-card-item class="my-4">
-              <template v-slot:prepend v-if="items_get[0]?.dataIni">
+              <template v-slot:prepend v-if="view === 'events'">
                 <v-btn rounded="xl" prepend-icon="mdi-filter-outline">Filters</v-btn>
+                <v-menu location="end">
+                  <template v-slot:activator="{ props }">
+                    <v-btn dark v-bind="props" icon="mdi-swap-vertical" size="35" class="ml-4" :loading="loadingOrder">
+                    </v-btn>
+                  </template>
+                  <v-list v-model="orderBySelected">
+                    <v-list-item v-for="(item, index) in orderByList" :key="index" :value="index" @click="sortBy(index)">
+                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </template>
-              <v-text-field v-model="searchInput" placeholder="Search" prepend-inner-icon="mdi-magnify custom-cursor"
-                class="expanding-search mx-3 my-1" :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch"
-                clearable rounded="xl" variant="solo" density="compact" hide-details></v-text-field>
+              <v-text-field v-model="searchInput" placeholder="Search"
+                :prepend-inner-icon="!expanded ? 'mdi-magnify custom-cursor' : null" class="expanding-search mx-3 my-1"
+                :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch" clearable rounded="xl" variant="solo"
+                density="compact" hide-details @keyup.enter="search"
+                @click:clear="items_get = items">
+                <template v-slot:append-inner v-if="expanded">
+                  <v-btn :loading="searching" @click="search" variant="plain" rounded="xl" :ripple="false">
+                    <v-icon>mdi-magnify</v-icon>
+                  </v-btn>
+                </template>
+              </v-text-field>
 
               <template v-slot:append v-if="view === 'admin_events'">
                 <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ Create Event</v-btn>
+              </template>
+              <template v-slot:append v-else>
+                <v-btn rounded="xl"  variant="plain" icon="mdi-restart" @click="items_get = items"></v-btn>
               </template>
             </v-card-item>
 
@@ -33,10 +52,10 @@
                   </v-col>
                 </v-row>
               </v-list-item>
-              <div v-if="filteredItems.length === 0" style="text-align: center" class="my-10">
+            </v-list>
+            <div v-else style="text-align: center" class="my-10">
                 <v-chip> Sorry, no results found for your search. </v-chip>
               </div>
-            </v-list>
           </v-card>
         </template>
       </v-col>
@@ -64,6 +83,17 @@ export default {
       searchInput: "",
       loaded: false,
       myUser:null,
+      orderByList:[
+        {title: 'Ascending Date', value: "dataIni"},
+        {title: 'Descending Date', value: "-dataIni"},
+        {title: 'Ascending Name', value: "nom"},
+        {title: 'Descending Name', value: "-nom"},
+      ],
+      orderBySelected: 1,
+      loadingOrder: false,
+      ordered: false,
+      searchMade: false,
+      searching: false,
     };
   },
   props: {
@@ -87,6 +117,28 @@ export default {
     },
     handleBtnClick(route) {
       this.$router.push(route);
+    },
+    search() {
+      if (this.searchInput) {
+        const searchQuery = this.searchInput.toLowerCase();
+        this.searching = true;
+        fetch("https://cultucat.hemanuelpc.es/events/?query=" + searchQuery)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`Error al obtener los usuarios: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            this.items_get = data.results;
+            this.loaded = true;
+            this.searchMade = true;
+            this.searching = false;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     },
     getUsers() {
       fetch("https://cultucat.hemanuelpc.es/users/")
@@ -120,8 +172,22 @@ export default {
         console.error("Error al obtener el perfil del usuario:", error);
       });
     },
-    getEvents() {
-      fetch("https://cultucat.hemanuelpc.es/events/?ordering=-dataIni")
+    sortBy(index){
+      const selected = this.orderByList[index].value;
+      if(selected !== this.orderByList[this.orderBySelected].value){
+        this.orderBySelected = index;
+        this.ordered  = true;
+        this.getEvents(selected);
+      }
+    },
+    getEvents(param) {
+      let ordering = "-dataIni";
+      if (param){
+        ordering = param;
+        this.loadingOrder = true;
+      }
+      const url = `https://cultucat.hemanuelpc.es/events/?ordering=${ordering}`;
+      fetch(url)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`Error al obtener los eventos: ${response.status}`);
@@ -131,6 +197,7 @@ export default {
         .then((data) => {
           this.items_get = data.results;
           this.loaded = true;
+          this.loadingOrder = false;
         })
         .catch((error) => {
           console.error(error);
@@ -164,29 +231,7 @@ export default {
       return this.view === 'admin_users';
     },
     filteredItems() {
-      this.items_get = this.items ? this.items : this.items_get;
-      return this.items_get
-        .filter((item) => {
-          if (!this.searchInput) return true;
-          const searchInput = this.searchInput.toLowerCase();
-
-          for (const key in item) {
-            if (
-              item[key] &&
-              item[key].toString().toLowerCase().includes(searchInput)
-            ) {
-              return true;
-            }
-          }
-
-          return false;
-        })
-        .sort((a, b) => {
-          if (a.first_name && b.first_name) {
-            return a.first_name.localeCompare(b.first_name);
-          }
-          return 0;
-        });
+      return  (this.items && !this.searchMade && !this.ordered) ? this.items : this.items_get;
     },
   },
 };
