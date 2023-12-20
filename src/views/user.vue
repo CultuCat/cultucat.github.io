@@ -38,13 +38,16 @@
             </template>
 
             <template v-slot:text>
-              <div v-if="profile.id !== user.user.id && myUser" style="float: right;"><addFriend :user="myUser" :id="String(profile.id)" /></div>
               <v-card-text class="mx-16">{{ profile.bio }}</v-card-text>
             </template>
 
               <template v-slot:append v-if="userId == user.user.id">
                 <v-btn variant="text" icon="mdi-pencil" @click="handleIconClick('/users/' + userId + '/edit')"></v-btn>
               </template>
+              <template v-slot:append v-else>
+                <div v-if="profile.id !== user.user.id && myUser" style="float: right;"><addFriend :user="myUser" :id="String(profile.id)" /></div>
+              </template>
+
               <!-- ========================== TABS Y CONTENIDO =========================== -->
               <v-col>
                 <v-card>
