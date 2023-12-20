@@ -205,9 +205,7 @@ export default {
   },
   methods: {
     handleIconClick(route) {
-      console.log(this.user);
-      console.log(this.friendRequests)
-      //this.$router.push(route);
+      this.$router.push(route);
     },
     deleteItem({ index, chipName, chipCat, id }) {
       this.itemToDelete = { chipName, chipCat };
