@@ -14,41 +14,12 @@
                 <h2 class="text-h6 mb-2">
                     Tags
                 </h2>
-
                 <v-chip-group v-model="tagsSelected" column multiple>
                     <v-chip v-for="tag in tags" filter variant="outlined">
                         {{ tag.nom.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()) }}
                     </v-chip>
                 </v-chip-group>
             </v-card-text>
-
-            <!--<v-card-text>
-            <h2 class="text-h6 mb-2">
-                Spaces
-            </h2>
-
-                <v-chip-group v-model="neighborhoods" column multiple>
-                    <v-chip filter variant="outlined">
-                        Snowy Rock Place
-                    </v-chip>
-                    <v-chip filter variant="outlined">
-                        Honeylane Circle
-                    </v-chip>
-                    <v-chip filter variant="outlined">
-                        Donna Drive
-                    </v-chip>
-                    <v-chip filter variant="outlined">
-                        Elaine Street
-                    </v-chip>
-                    <v-chip filter variant="outlined">
-                        Court Street
-                    </v-chip>
-                    <v-chip filter variant="outlined">
-                        Kennedy Park
-                    </v-chip>
-                </v-chip-group>
-            </v-card-text> -->
-
             <v-btn class="position-relative ma-4" @click="filterBy" color="#87CEEC">
                 Filter
             </v-btn>

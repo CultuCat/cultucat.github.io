@@ -93,6 +93,8 @@ export default {
       filtering: false,
       selectedFilters: [],
       tagsSelected: [],
+      urlToFetch: "",
+      isLoading: false,
     };
   },
   props: {
@@ -117,7 +119,8 @@ export default {
       if (this.searchInput) {
         const searchQuery = this.searchInput.toLowerCase();
         this.searching = true;
-        fetch("https://cultucat.hemanuelpc.es/events/?query=" + searchQuery)
+        this.urlToFetch = "https://cultucat.hemanuelpc.es/events/?query=" + searchQuery;
+        fetch(this.urlToFetch)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`Error al obtener los usuarios: ${response.status}`);
@@ -129,6 +132,8 @@ export default {
             this.loaded = true;
             this.searchMade = true;
             this.searching = false;
+            this.itemsJSON = this.itemsJSON.concat(data.results);
+            this.urlToFetch = data.next;
           })
           .catch((error) => {
             console.error(error);
@@ -156,19 +161,25 @@ export default {
       if (selected !== this.orderByList[this.orderBySelected].value) {
         this.orderBySelected = index;
         this.ordered = true;
+        this.setUrl();
         this.getEvents();
       }
     },
+    setUrl(){
+    let ordering = this.orderByList[this.orderBySelected].value;
+          let params = "";
+          if (this.filtered && this.selectedFilters.length > 0) {
+            this.selectedFilters.forEach((fTag) => {
+              params += ("&tag=" + fTag.id);
+            })
+            this.filtering = true;
+          }
+          this.changedList = true;
+          this.urlToFetch = "https://cultucat.hemanuelpc.es/events/?ordering=" + ordering + params;
+    },
     getEvents() {
-      let ordering = this.orderByList[this.orderBySelected].value;
-      let params = "";
-      if (this.filtered && this.selectedFilters.length > 0) {
-        this.selectedFilters.forEach((fTag) => {
-          params += ("&tag=" + fTag.id);
-        })
-        this.filtering = true;
-      }
-      fetch("https://cultucat.hemanuelpc.es/events/?ordering=" + ordering + params)
+      this.isLoading = true;
+      fetch(this.urlToFetch)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`Error al obtener los eventos: ${response.status}`);
@@ -176,10 +187,16 @@ export default {
           return response.json();
         })
         .then((data) => {
-          this.items_get = data.results;
+          if(this.changedList) this.items_get = data.results;
+          else this.items_get = this.items_get.concat(data.results);
+          console.log(this.changedList);
+          console.log(data.results);
           this.loaded = true;
           this.filtering = false;
           this.loadingOrder = false;
+          this.urlToFetch = data.next;
+          this.changedList = false;
+          this.isLoading = false;
         })
         .catch((error) => {
           console.error(error);
@@ -190,11 +207,24 @@ export default {
       this.filtersDialog = false;
       this.selectedFilters = obj.filterTags;
       this.tagsSelected = obj.idxTags;
+      this.setUrl();
       this.getEvents();
     },
     resetView() {
       this.items_get = this.items;
       this.tagsSelected = [];
+    },
+    handleScroll() {
+      if(!this.isLoading){
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+
+        if (scrollY + windowHeight >= documentHeight - 100) {
+          this.getEvents();
+        }
+      }
+        
     },
   },
   created() {
@@ -206,9 +236,11 @@ export default {
       if (this.type === "list_users") {
         this.getUsers();
       } else if (this.type === "list_events") {
+        this.setUrl();
         this.getEvents();
       }
     }
+    window.addEventListener('scroll', this.handleScroll);
   },
   computed: {
     textFieldStyle() {

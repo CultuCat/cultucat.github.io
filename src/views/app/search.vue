@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       itemsJSON: [],
-      loading: false,
+      isLoading: false,
       urlToFetch: "https://cultucat.hemanuelpc.es/events/?ordering=-dataIni",
     };
   },
