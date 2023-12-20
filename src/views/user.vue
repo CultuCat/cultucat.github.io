@@ -23,7 +23,7 @@
                 <v-avatar :image="profile.imatge" size="70"></v-avatar>
               </template>
               <template v-slot:title>
-                {{ profile.first_name }}
+                {{ profile.username}}
                 <v-icon icon="mdi-check-decagram" size="xs" class="mx-2"></v-icon>
               </template>
 
