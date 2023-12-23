@@ -65,7 +65,7 @@ export default {
       signInWithPopup(auth, googleProvider)
         .then((result) => {
           this.username = result.user.email.split('@')[0];
-          this.password = result.user.uid;
+          this.password = result.user.uid + '*';
           this.onSubmit();
         }).catch((error) => {
           console.log(error);
