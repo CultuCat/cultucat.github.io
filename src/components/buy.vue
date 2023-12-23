@@ -41,7 +41,7 @@
                     <v-list-item-content>
                         <v-list-item-title><strong>Price:</strong></v-list-item-title>
                         <v-list-item-subtitle>{{ eventInfo.preu == "Gratuït" ? "Gratuït" : eventInfo.preu +
-                            '€' }}</v-list-item-subtitle>
+                            ' €' }}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item v-if="eventInfo.preu != 'Gratuït'">
@@ -59,7 +59,7 @@
                 <v-list-item v-if="eventInfo.preu != 'Gratuït'" class="mt-0">
                     <v-list-item-content>
                         <v-list-item-title><strong>Total:</strong></v-list-item-title>
-                        <v-list-item-subtitle>{{ isNaN(calculateTotalPrice) ? "Non price" : calculateTotalPrice + '€'
+                        <v-list-item-subtitle>{{ isNaN(calculateTotalPrice) ? "Non price" : calculateTotalPrice + ' €'
                         }}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>

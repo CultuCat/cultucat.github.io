@@ -30,24 +30,17 @@
                   </v-chip-group>
 
                   <v-card class="mt-14" rounded="lg" color="#ff6961" style="max-width: 220px">
-                    <div class="d-flex justify-center align-center" v-if="eventInfo.preu">
+                    <div class="d-flex justify-center align-center">
                       <div class="mr-2">
                         {{ isNumber(eventInfo.preu) ? `Preu: ${eventInfo.preu} €` : eventInfo.preu }}
                       </div>
                       <v-btn class="ma-2" @click="dialogBuy = true" :disabled="!canIBuy">Buy</v-btn>
-                      <!-- ------------------------- dialog para comprar ------------------------- -->
-
-                      <!-- ----------------------------------------------------------------------- -->
-                    </div>
-                    <div class="d-flex justify-center align-center" v-else>
-                      <v-btn variant="text" :ripple="false" class="ma-2" density="compact" disabled>Preu no
-                        disponible</v-btn>
                     </div>
                   </v-card>
                 </v-col>
               </v-col>
               <v-col class="d-flex flex-column fill-height ma-5 mt-15">
-                <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true">See assistants</v-btn>
+                <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true" :disabled="!canSeeAssistants">See assistants</v-btn>
                 <!-- --------------------- dialog para ver asistentes ---------------------- -->
                 <v-dialog v-model="dialog" scrollable max-width="600px">
                   <v-card>
@@ -156,6 +149,9 @@ export default {
     ...mapGetters(["user"]),
     canIBuy() {
       return this.eventInfo.preu !== 'No disponible' && !this.eventInfo.assistants.some(assistant => assistant.id === this.user.user.id);
+    },
+    canSeeAssistants() {
+      return this.eventInfo.preu !== 'No disponible';
     },
   },
   created() {
