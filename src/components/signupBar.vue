@@ -18,7 +18,7 @@
           variant="outlined"></v-text-field>
         <v-text-field v-model="password" class="mb-2" :rules="passwordRules" :type="'password'" label="Password"
           density="compact" variant="outlined"></v-text-field>
-        <v-text-field v-model="password2" :rules="passwordRulesRules" :type="'password'" label="Repeat Password"
+        <v-text-field v-model="password2" :rules="passwordRules" :type="'password'" label="Repeat Password"
           density="compact" variant="outlined"></v-text-field>
 
         <v-card v-if="usernameError" class="text-medium-emphasis text-caption mb-6" color="red" variant="tonal">
@@ -40,7 +40,6 @@
           </v-card-text>
         </v-card>
         <br v-else>
-
         <v-btn :loading="isLoading" block color="#ff6961" type="submit" variant="elevated">
           Sign up
         </v-btn>
@@ -67,13 +66,21 @@ export default {
       email: null,
       password: null,
       password2: null,
+      image: null,
       emailRules: [
         v => !!v || 'El correo electrónico es obligatorio',
         v => /^(\S+@\S+\.\S+){1,5}$/.test(v) || 'El formato del correo electrónico no es válido',
       ],
       nameRules: [v => !!v || 'El nombre es obligatorio'],
       userRules: [v => !!v || 'El username es obligatorio'],
-      passwordRules: [v => !!v || 'La contraseña es obligatoria'],
+      passwordRules: [
+        v => !!v || 'La contraseña es obligatoria',
+        v => (v && v.length >= 8) || 'La contraseña debe tener al menos 8 caracteres',
+        v => /[0-9]/.test(v) || 'La contraseña debe contener al menos un número',
+        v => /[A-Z]/.test(v) || 'La contraseña debe contener al menos una letra mayúscula',
+        v => /[a-z]/.test(v) || 'La contraseña debe contener al menos una letra minúscula',
+        v => /[!@#$%^&*(),.?":{}|<>+-]/.test(v) || 'La contraseña debe contener al menos un carácter especial'
+      ],
       usernameError: false,
       emailError: false,
       passwordError: false,
@@ -91,12 +98,13 @@ export default {
           this.name = result.user.displayName;
           this.username = result.user.email.split('@')[0];
           this.email = result.user.email;
-          this.password = result.user.uid;
-          this.password2 = result.user.uid;
+          this.password = result.user.uid + '*';
+          this.password2 = result.user.uid  + '*';
           this.googleUser = true;
+          this.image = result.user.photoURL;
           this.onSubmit();
         }).catch((error) => {
-          console.log(error);
+          console.error("Error:", error);
         });
     },
     onSubmit() {
@@ -118,6 +126,7 @@ export default {
             email: this.email,
             password: this.password,
             isGoogleUser: this.googleUser,
+            imatge_url: this.image,
           }),
         })
           .then((response) => {
