@@ -161,7 +161,5 @@ export default {
             }
         },
     },
-    created() {
-    }
 };
 </script>

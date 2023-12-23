@@ -1,58 +1,55 @@
 <template>
-  <v-col>
-    <v-container class="d-flex justify-center align-center">
-      <v-col cols="12">
-        <template v-if="loaded">
-          <v-card elevation="4">
-            <v-card-item class="my-4">
-              <template v-slot:prepend v-if="view === 'events'">
-                <v-btn rounded="xl" prepend-icon="mdi-filter-outline" @click="filtersDialog = true"
-                  :loading="filtering">Filters</v-btn>
-                <v-menu location="end">
-                  <template v-slot:activator="{ props }">
-                    <v-btn dark v-bind="props" icon="mdi-swap-vertical" size="35" class="ml-4" :loading="loadingOrder">
-                    </v-btn>
-                  </template>
-                  <v-list v-model="orderBySelected">
-                    <v-list-item v-for="(item, index) in orderByList" :key="index" :value="index" @click="sortBy(index)">
-                      <v-list-item-title>{{ item.title }} <v-icon v-if="index==orderBySelected">mdi-check</v-icon></v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
+  <v-col cols="12">
+    <template v-if="loaded">
+      <v-card elevation="4" rounded="lg">
+        <v-card-item class="my-4">
+          <template v-slot:prepend v-if="view === 'events'">
+            <v-btn rounded="xl" prepend-icon="mdi-filter-outline" @click="filtersDialog = true"
+              :loading="filtering">Filters</v-btn>
+            <v-menu location="end">
+              <template v-slot:activator="{ props }">
+                <v-btn dark v-bind="props" icon="mdi-swap-vertical" size="35" class="ml-4" :loading="loadingOrder">
+                </v-btn>
               </template>
-              <v-text-field v-model="searchInput" placeholder="Search"
-                :prepend-inner-icon="!expanded ? 'mdi-magnify custom-cursor' : null" class="expanding-search mx-3 my-1"
-                :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch" clearable rounded="xl" variant="solo"
-                density="compact" hide-details @keyup.enter="search" @click:clear="items_get = items">
-                <template v-slot:append-inner v-if="expanded">
-                  <v-btn :loading="searching" @click="search" variant="plain" rounded="xl" :ripple="false">
-                    <v-icon>mdi-magnify</v-icon>
-                  </v-btn>
-                </template>
-              </v-text-field>
+              <v-list v-model="orderBySelected">
+                <v-list-item v-for="(item, index) in orderByList" :key="index" :value="index" @click="sortBy(index)">
+                  <v-list-item-title>{{ item.title }} <v-icon
+                      v-if="index == orderBySelected">mdi-check</v-icon></v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+          <v-text-field v-model="searchInput" placeholder="Search"
+            :prepend-inner-icon="!expanded ? 'mdi-magnify custom-cursor' : null" class="expanding-search mx-3 my-1"
+            :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch" clearable rounded="xl" variant="solo"
+            density="compact" hide-details @keyup.enter="search" @click:clear="items_get = items">
+            <template v-slot:append-inner v-if="expanded">
+              <v-btn :loading="searching" @click="search" variant="plain" rounded="xl" :ripple="false">
+                <v-icon>mdi-magnify</v-icon>
+              </v-btn>
+            </template>
+          </v-text-field>
 
-              <template v-slot:append v-if="view === 'admin_events'">
-                <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ Create Event</v-btn>
-              </template>
-              <template v-slot:append v-else>
-                <v-btn rounded="xl" variant="plain" icon="mdi-restart" @click="resetView"></v-btn>
-              </template>
-            </v-card-item>
+          <template v-slot:append v-if="view === 'admin_events'">
+            <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ Create Event</v-btn>
+          </template>
+          <template v-slot:append v-else>
+            <v-btn rounded="xl" variant="plain" icon="mdi-restart" @click="resetView"></v-btn>
+          </template>
+        </v-card-item>
 
-            <v-divider class="my-4"></v-divider>
-            <v-list v-if="items_get.length > 0">
-              <v-list-item v-for="(item, index) in filteredItems" :key="item">
-                <eventPreview v-if="item.espai" :item="item" />
-                <userPreview v-else :item="item" :index="index" :isAdmin="isAdmin" @update="getUsers" />
-              </v-list-item>
-            </v-list>
-            <div v-else style="text-align: center" class="my-10">
-              <v-chip> Sorry, no results found for your search. </v-chip>
-            </div>
-          </v-card>
-        </template>
-      </v-col>
-    </v-container>
+        <v-divider class="my-4"></v-divider>
+        <v-list v-if="items_get.length > 0">
+          <v-list-item v-for="(item, index) in filteredItems" :key="item">
+            <eventPreview v-if="item.espai" :item="item" />
+            <userPreview v-else :item="item" :index="index" :isAdmin="isAdmin" @update="getUsers" />
+          </v-list-item>
+        </v-list>
+        <div v-else style="text-align: center" class="my-10">
+          <v-chip> Sorry, no results found for your search. </v-chip>
+        </div>
+      </v-card>
+    </template>
   </v-col>
   <v-dialog v-model="filtersDialog">
     <eventsFilters @quit-filters-dialog="filtersDialog = false" @filter-by="filterByEvent" :idxTagsProp="tagsSelected" />
@@ -83,7 +80,7 @@ export default {
         { title: 'Ascending Name', value: "nom" },
         { title: 'Descending Name', value: "-nom" },
       ],
-      orderBySelected: 1,
+      orderBySelected: 0,
       loadingOrder: false,
       ordered: false,
       searchMade: false,
@@ -165,17 +162,17 @@ export default {
         this.getEvents();
       }
     },
-    setUrl(){
-    let ordering = this.orderByList[this.orderBySelected].value;
-          let params = "";
-          if (this.filtered && this.selectedFilters.length > 0) {
-            this.selectedFilters.forEach((fTag) => {
-              params += ("&tag=" + fTag.id);
-            })
-            this.filtering = true;
-          }
-          this.changedList = true;
-          this.urlToFetch = "https://cultucat.hemanuelpc.es/events/?ordering=" + ordering + params;
+    setUrl() {
+      let ordering = this.orderByList[this.orderBySelected].value;
+      let params = "";
+      if (this.filtered && this.selectedFilters.length > 0) {
+        this.selectedFilters.forEach((fTag) => {
+          params += ("&tag=" + fTag.id);
+        })
+        this.filtering = true;
+      }
+      this.changedList = true;
+      this.urlToFetch = "https://cultucat.hemanuelpc.es/events/?ordering=" + ordering + params;
     },
     getEvents() {
       this.isLoading = true;
@@ -187,10 +184,8 @@ export default {
           return response.json();
         })
         .then((data) => {
-          if(this.changedList) this.items_get = data.results;
+          if (this.changedList) this.items_get = data.results;
           else this.items_get = this.items_get.concat(data.results);
-          console.log(this.changedList);
-          console.log(data.results);
           this.loaded = true;
           this.filtering = false;
           this.loadingOrder = false;
@@ -215,7 +210,7 @@ export default {
       this.tagsSelected = [];
     },
     handleScroll() {
-      if(!this.isLoading){
+      if (!this.isLoading) {
         const scrollY = window.scrollY;
         const windowHeight = window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
@@ -224,7 +219,6 @@ export default {
           this.getEvents();
         }
       }
-        
     },
   },
   created() {
@@ -252,7 +246,7 @@ export default {
       return this.view === 'admin_users';
     },
     filteredItems() {
-      return  (this.items && !this.searchMade && !this.ordered && !this.filtered) ? this.items : this.items_get;
+      return (this.items && !this.searchMade && !this.ordered && !this.filtered) ? this.items : this.items_get;
     },
   },
 };

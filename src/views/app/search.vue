@@ -1,7 +1,7 @@
 <template>
   <template v-if="itemsJSON.length > 0">
   <v-col>
-    <h1 style="color: #ff6961" class="my-5 ml-5">Search</h1>
+    <h1 style="color: #ff6961" class="mt-5 ml-5">Search</h1>
       <ListOfItems :items="itemsJSON" view="events"/>
   </v-col>
   </template>
@@ -17,7 +17,7 @@ export default {
     return {
       itemsJSON: [],
       isLoading: false,
-      urlToFetch: "https://cultucat.hemanuelpc.es/events/?ordering=-dataIni",
+      urlToFetch: "https://cultucat.hemanuelpc.es/events/?ordering=dataIni",
     };
   },
   created() {
@@ -59,8 +59,6 @@ export default {
         }
       }
     },
-
-
   },
   components: {
     ListOfItems,
