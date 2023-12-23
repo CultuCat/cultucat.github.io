@@ -14,7 +14,7 @@
               backgroundColor: trophyTab ? getBackgroundColor(item.level_achived_user) : '',
               color: trophyTab ? getTextColor(item.level_achived_user) : ''
             }" @mouseenter="showDeleteIcon = index" @mouseleave="showDeleteIcon = -1"
-              @click="showTrophyDialog(index)"
+              @click="trophyTab ? showTrophyDialog(index) : false"
             >
               <v-icon class="mr-1" v-if="trophyTab && item.level_achived_user === 1">
                 mdi-trophy-variant
@@ -86,7 +86,6 @@ export default {
       return textColorMap[nivell] || '#777777'; // Devuelve el color de texto correspondiente o una cadena vacía si no hay coincidencia.
     },
     showTrophyDialog(index){
-      console.log(index +" es index")
       this.$emit("show-trophyDialog", index);
     }
   },
