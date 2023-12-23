@@ -57,8 +57,6 @@
           </v-card>
         </template>
       </v-col>
-    </v-container>
-  </v-col>
   <v-dialog v-model="filtersDialog">
     <eventsFilters @quit-filters-dialog="filtersDialog = false" @filter-by="filterByEvent" :idxTagsProp="tagsSelected" />
   </v-dialog>
