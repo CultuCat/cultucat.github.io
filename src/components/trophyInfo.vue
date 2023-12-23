@@ -49,7 +49,6 @@ export default {
         calculateActionsToNextLevel() {
             if(this.trophy.level_achived_user < 3){
                 this.nextLevelPoints = this.trophy['punts_nivell' + (this.trophy.level_achived_user+1).toString()];
-                console.log(this.nextLevelPoints);
                 this.actionsToNextLevel = this.nextLevelPoints - this.trophy.progress;
             }
 
@@ -102,7 +101,6 @@ export default {
         calculatePercentage() {
             if (this.nextLevelPoints === -1) this.percentage = 100;
             else this.percentage = (this.trophy.progress / this.nextLevelPoints) * 100;
-            console.log(this.nextLevelPoints);
         }
     },
     mounted() {

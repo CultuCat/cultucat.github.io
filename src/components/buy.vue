@@ -153,8 +153,5 @@ export default {
             return finalPrice;
         }
     },
-    created() {
-        console.log(this.discounts);
-    }
 };
 </script>
