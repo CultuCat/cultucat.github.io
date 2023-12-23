@@ -8,17 +8,21 @@
       <v-sheet class="d-flex justify-center align-center">
         <v-slide-group show-arrows v-if="compData.arr.length !== 0" center-active>
           <v-slide-group-item v-for="(item, index) in compData.arr" :key="item">
-            <v-btn class="ma-2" rounded :style="{
-              backgroundColor: trophyTab ? getBackgroundColor(item.nivell) : '',
-              color: trophyTab ? getTextColor(item.nivell) : ''
-            }" @mouseenter="showDeleteIcon = index" @mouseleave="showDeleteIcon = -1">
-              <v-icon class="mr-1" v-if="trophyTab && item.nivell === 1">
+            <v-btn class="ma-2" 
+            rounded :disabled="item.level_achived_user == -1 ? true : false"
+            :style="{
+              backgroundColor: trophyTab ? getBackgroundColor(item.level_achived_user) : '',
+              color: trophyTab ? getTextColor(item.level_achived_user) : ''
+            }" @mouseenter="showDeleteIcon = index" @mouseleave="showDeleteIcon = -1"
+              @click="trophyTab ? showTrophyDialog(index) : false"
+            >
+              <v-icon class="mr-1" v-if="trophyTab && item.level_achived_user === 1">
                 mdi-trophy-variant
               </v-icon>
-              <v-icon class="mr-1" v-else-if="trophyTab && item.nivell === 2">
+              <v-icon class="mr-1" v-else-if="trophyTab && item.level_achived_user === 2">
                 mdi-trophy-outline
               </v-icon>
-              <v-icon class="mr-1" v-else-if="trophyTab && item.nivell === 3">
+              <v-icon class="mr-1" v-else-if="trophyTab && item.level_achived_user === 3">
                 mdi-trophy-award
               </v-icon>
               {{ item.nom }}
@@ -46,6 +50,7 @@
 <!-- =============================== SCRIPTS =============================== -->
 
 <script>
+
 export default {
   data() {
     return {
@@ -68,7 +73,7 @@ export default {
         2: '#C0C0C0', // Plata
         3: '#FFD700', // Oro
       };
-      return colorMap[nivell] || ''; // Devuelve el color correspondiente o una cadena vacía si no hay coincidencia.
+      return colorMap[nivell] || '#E0E0E0'; // Devuelve el color correspondiente o una cadena vacía si no hay coincidencia.
     },
     getTextColor(nivell) {
       const textColorMap = {
@@ -78,8 +83,11 @@ export default {
         // Puedes ajustar los colores según tus preferencias
       };
 
-      return textColorMap[nivell] || ''; // Devuelve el color de texto correspondiente o una cadena vacía si no hay coincidencia.
+      return textColorMap[nivell] || '#777777'; // Devuelve el color de texto correspondiente o una cadena vacía si no hay coincidencia.
     },
+    showTrophyDialog(index){
+      this.$emit("show-trophyDialog", index);
+    }
   },
 };
 </script>

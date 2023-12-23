@@ -14,10 +14,10 @@
             style="position:absolute; top:30px; right:30px;">
             Eliminar Usuario
           </v-btn>
-          <v-form @submit.prevent="submit">
+          <v-form @submit.prevent="submit" enctype="multipart/form-data">
             <!-- ============================ EDITAR AVATAR ============================ -->
             <div>
-              <profileCard :img="formData.imatge" />
+              <profileCard :img="formData.imatge" @update-img="updateImg"/>
             </div>
             <!-- ============================= TEXTFIELDS ============================== -->
             <v-row class="mt-16">
@@ -71,11 +71,13 @@
 import profileCard from "@/components/profileCard.vue";
 import confirmDelete from "@/components/confirmDelete.vue";
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
       formData: { ...this.$store.state.profileData },
+      imatge: this.$store.state.profileData.imatge,
       isEditing: false,
       loading: false,
       timeout: null,
@@ -84,13 +86,31 @@ export default {
       deleteLoading: false,
     };
   },
+  computed: {
+    ...mapGetters(["user"]),
+  },
   methods: {
     async submit() {
       this.loading = true;
       try {
         const ruta = "https://cultucat.hemanuelpc.es/users/" + this.userId + "/";
-        await axios.put(ruta, this.formData);
+        const formData = new FormData();
+        if (this.imatge instanceof File) {
+          formData.append('imatge', this.imatge);
+        }
+        formData.append('first_name', this.formData.first_name);
+        formData.append('bio', this.formData.bio);
+        formData.append('wantsToTalk', this.formData.wantsToTalk);
+        formData.append('isVisible', this.formData.isVisible);
+        formData.append('username', this.formData.username)
+        await axios.put(ruta, formData, {
+          headers: {
+            'Authorization': `Token ${this.user.token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        } );
         this.$store.commit('setProfileData', this.formData);
+        this.$store.commit('setUserImg', this.formData.imatge);
         this.$router.push("/users/" + this.userId);
       } catch (error) {
         console.error("Error al enviar datos:", error);
@@ -132,8 +152,11 @@ export default {
       this.idxToDelete = null;
       this.itemToDelete = null;
     },
+    updateImg(file) {
+        this.formData.imatge = URL.createObjectURL(file);
+        this.imatge = file;
+    },
   },
-  mounted() { },
   components: {
     profileCard,
     confirmDelete,

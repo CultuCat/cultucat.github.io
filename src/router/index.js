@@ -37,11 +37,6 @@ const routes = [
     component: () => import('@/views/app/tickets.vue'),
   },
   {
-    path: '/tickets/:ticket_id',
-    name: 'ticket',
-    component: () => import('@/views/app/ticket.vue'),
-  },
-  {
     path: '/chats',
     name: 'chats',
     component: () => import('@/views/app/chats.vue'),
@@ -60,11 +55,6 @@ const routes = [
     path: '/settings',
     name: 'settings',
     component: () => import('@/views/settings.vue'),
-  },
-  {
-    path: '/admin/home',
-    name: 'adminHome',
-    component: () => import('@/views/admin/home.vue'),
   }, 
   {
     path: '/admin/events/create', 
