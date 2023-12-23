@@ -18,7 +18,7 @@
         </v-toolbar-items>
       </v-toolbar>
       <v-card-text style="height: 600px">
-        <v-list v-if="requests.length > 0 && isProfile">
+        <v-list v-if="requests.length > 0 && isProfile && userId == this.user.user.id">
           <v-list-item v-for="(item, index) in requests" :key="item.id">
             <v-row align="center">
               <v-col cols="8">
@@ -48,6 +48,7 @@
 
 <script>
 import userPreview from './userPreview.vue';
+import { mapGetters } from "vuex";
 
 export default {
   name: "userDialog",
@@ -84,6 +85,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(["user"]),
     openDialog() {
       return this.dialog;
     },
