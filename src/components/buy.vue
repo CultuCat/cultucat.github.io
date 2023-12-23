@@ -3,9 +3,6 @@
 <!-- ======================================================================= -->
 
 <template>
-    <v-col>
-        <v-container class="d-flex justify-center align-center">
-            <v-col cols="10">
                 <v-card elevation="4">
                     <v-toolbar color="#ff6961" dark>
                         <v-icon size="35" class="ml-6">mdi-ticket</v-icon>
@@ -17,7 +14,8 @@
                             </v-btn>
                         </v-toolbar-items>
                     </v-toolbar>
-                    <v-list class="ml-6 mt-2">
+                    <v-card-text>
+                        <v-list >
                         <v-list-item>
                             <v-list-item-content>
                                 <v-list-item-title><strong>Event name:</strong></v-list-item-title>
@@ -39,7 +37,7 @@
                             </v-list-item-content>
                         </v-list-item>
 
-                        <v-list-item class="my-6">
+                        <v-list-item>
                             <v-list-item-content>
                                 <v-list-item-title><strong>Price:</strong></v-list-item-title>
                                 <v-list-item-subtitle>{{ eventInfo.preu }}€</v-list-item-subtitle>
@@ -57,24 +55,21 @@
                                 </v-alert>
                             </v-list-item-content>
                         </v-list-item>
-
-                        <v-list-item class="my-6">
-                            <v-list-item-content>
-                                <v-list-item-title><strong>Total:</strong></v-list-item-title>
-                                <v-list-item-subtitle>{{ isNaN(calculateTotalPrice) ? calculateTotalPrice : "Non valid price" }}</v-list-item-subtitle>
-                            </v-list-item-content>
-                        </v-list-item>
+                                <v-list-item class="mt-0">
+                                    <v-list-item-content>
+                                        <v-list-item-title><strong>Total:</strong></v-list-item-title>
+                                        <v-list-item-subtitle>{{ isNaN(calculateTotalPrice) ? "Non price" : calculateTotalPrice + '€' }}</v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                
                     </v-list>
+                    </v-card-text>
                     <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn @click="cancel">Cancel</v-btn>
-                        <v-btn @click="buy(selectedDiscount)" :loading="buyLoading" color="success">Buy</v-btn>
-                    </v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn @click="cancel">Cancel</v-btn>
+                                    <v-btn @click="buy(selectedDiscount)" :loading="buyLoading" color="success">Buy</v-btn>
+                                </v-card-actions>
                 </v-card>
-            </v-col>
-
-        </v-container>
-    </v-col>
 </template>
   
   <!-- =============================== SCRIPTS =============================== -->

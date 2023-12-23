@@ -36,10 +36,7 @@
                       </div>
                       <v-btn class="ma-2" @click="dialogBuy = true" :disabled="!canIBuy">Buy</v-btn>
                       <!-- ------------------------- dialog para comprar ------------------------- -->
-                      <v-dialog v-model="dialogBuy" scrollable max-width="800px">
-                        <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" :discounts="discounts"
-                          @confirmed-buy="buyConfirmed" @cancel-buy="reset" />
-                      </v-dialog>
+
                       <!-- ----------------------------------------------------------------------- -->
                     </div>
                     <div class="d-flex justify-center align-center" v-else>
@@ -100,6 +97,10 @@
       </v-container>
     </template>
   </v-row>
+  <v-dialog v-model="dialogBuy" scrollable max-width="600px">
+    <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" :discounts="discounts" @confirmed-buy="buyConfirmed"
+      @cancel-buy="reset" />
+  </v-dialog>
 </template>
 
 <script>
@@ -154,8 +155,8 @@ export default {
     },
     ...mapGetters(["user"]),
     canIBuy() {
-      return this.eventInfo.preu !== 'No disponible';
-    }
+      return this.eventInfo.preu !== 'No disponible' && !this.eventInfo.assistants.some(assistant => assistant.id === this.user.user.id);
+    },
   },
   created() {
     fetch("https://cultucat.hemanuelpc.es/events/" + this.$route.params.event_id + "/")
@@ -177,6 +178,7 @@ export default {
         this.eventInfo.latitud = data.latitud;
         this.eventInfo.longitud = data.longitud;
         this.eventInfo.link = data.enllacos_list[0];
+        this.eventInfo.assistants = data.assistents;
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -204,19 +206,6 @@ export default {
       })
       .then((data) => {
         this.eventInfo.comments = data;
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-    fetch("https://cultucat.hemanuelpc.es/tickets/?event=" + this.$route.params.event_id)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("No se pudo obtener el archivo JSON");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        this.eventInfo.assistants = data;
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -320,7 +309,7 @@ END:VCALENDAR
         )
         .then((response) => {
           if (response.status === 201) {
-            window.location.pathname = "/home";
+            window.location.reload();
             return response.json;
           }
         })
@@ -335,6 +324,9 @@ END:VCALENDAR
     reset() {
       this.dialogBuy = false;
     },
+    findAssistant(assistent, id) {
+      return assistent.id === id;
+    }
   },
 };
 </script>
