@@ -5,7 +5,7 @@
             <v-divider></v-divider>
             <div class="text-center"><v-icon size="50" class="mt-6">mdi-medal-outline</v-icon></div>
             <div class="text-h4 font-weight-bold text-center mt-6">{{ trophy.nom }}</div>
-            <div class="text-h5 font-weight-bold text-center mt-6">Level: {{ trophy.level_achived_user }}</div>
+            <div class="text-h5 font-weight-bold text-center mt-6">{{ achieved ? 'Level: ' + trophy.level_achived_user : "Trophy not achieved"}}</div>
 
             <v-progress-linear v-model="percentage" height="20" color="green" striped rounded class="my-6  w-75">
                 <strong>{{ Math.ceil(this.percentage) }}%</strong>
@@ -37,6 +37,7 @@ export default {
             logMessage: "",
             toAchieve: "",
             percentage: 0,
+            achieved: false,
         };
     },
     props: {
@@ -47,46 +48,49 @@ export default {
             this.$emit("quit-trophyDialog");
         },
         calculateActionsToNextLevel() {
-            if(this.trophy.level_achived_user < 3){
+            if(this.trophy.level_achived_user == -1){
+                this.nextLevelPoints = this.trophy['punts_nivell1'];
+                this.actionsToNextLevel = this.nextLevelPoints - this.trophy.progress;
+            }
+            else if(this.trophy.level_achived_user < 3){
                 this.nextLevelPoints = this.trophy['punts_nivell' + (this.trophy.level_achived_user+1).toString()];
                 this.actionsToNextLevel = this.nextLevelPoints - this.trophy.progress;
             }
-
         },
         generateMessage() {
             switch (this.trophy.nom) {
-                case "Coleccionista":
+                case "Col·leccionista d'or":
                     this.logMessage = `You have collected ${this.trophy.progress} trophies.`;
                     if (this.trophy.level_achived_user < 3) {
-                        this.toAchieve = `Win ${this.actionsToNextLevel} more trophies to achieve level ${this.trophy.level_achived_user + 1}.`;
+                        this.toAchieve = `Win ${this.actionsToNextLevel} more trophies to achieve level ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
                     }
                     break;
 
-                case "El més amigable":
+                case "Popular":
                     this.logMessage = `You have made ${this.trophy.progress} new friends.`;
                     if (this.trophy.level_achived_user < 3) {
-                        this.toAchieve = `Make ${this.actionsToNextLevel} more friends to achieve level ${this.trophy.level_achived_user + 1}.`;
+                        this.toAchieve = `Make ${this.actionsToNextLevel} more friends to achieve level ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
                     }
                     break;
 
-                case "Més esdeveniments":
+                case "Explorador cultural":
                     this.logMessage = `You have attended ${this.trophy.progress} events.`;
                     if (this.trophy.level_achived_user < 3) {
-                        this.toAchieve = `Assist to ${this.actionsToNextLevel} more events to achieve level ${this.trophy.level_achived_user + 1}.`;
+                        this.toAchieve = `Assist to ${this.actionsToNextLevel} more events to achieve level ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
                     }
                     break;
 
                 case "Reviewer":
                     this.logMessage = `You wrote ${this.trophy.progress} comments.`;
                     if (this.trophy.level_achived_user < 3) {
-                        this.toAchieve = `Write ${this.actionsToNextLevel} more comments to achieve level ${this.trophy.level_achived_user + 1}.`;
+                        this.toAchieve = `Write ${this.actionsToNextLevel} more comments to achieve level ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
                     }
                     break;
 
                 case "Xerraire":
                     this.logMessage = `You sent ${this.trophy.progress} messages.`;
                     if (this.trophy.level_achived_user < 3) {
-                        this.toAchieve = `Send ${this.actionsToNextLevel} more messages to achieve level ${this.trophy.level_achived_user + 1}.`;
+                        this.toAchieve = `Send ${this.actionsToNextLevel} more messages to achieve level ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
                     }
                     break;
 
@@ -107,6 +111,7 @@ export default {
         this.calculateActionsToNextLevel()
         this.calculatePercentage();
         this.generateMessage(this.trophy);
+        this.achieved = this.trophy.level_achived_user != -1;
     }
 };
 </script>
