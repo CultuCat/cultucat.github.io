@@ -155,8 +155,8 @@ export default {
             "Favourite Places",
             this.profile.espais_preferits
           );
-          // ============================= GET TROFEOS =============================
-          const config = {
+          if(this.canIEdit){
+            const config = {
               headers: {
                 'Authorization': `Token ${this.user.token}`,
                 'Content-Type': 'application/json',
@@ -172,17 +172,20 @@ export default {
                   "Trophies",
                   response2.data
                 );
-                this.loadingUser = false;
               }
             })
             .catch((error) => {
               // Maneja errores aquí
               console.error("Error al obtener los trofeos del usuario:", error);
             });
+          }
+          // ============================= GET TROFEOS =============================
+          
           // =========================== COMMIT CHANGES ============================
           this.$store.commit("setProfileData", this.profile);
 
           this.isAdmin = this.profile.is_staff;
+          this.loadingUser = false;
         }
         // Almacena la respuesta en la propiedad profile cuando la solicitud se completa
 
