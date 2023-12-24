@@ -37,7 +37,7 @@
                 <v-card-text class="mx-16">{{ profile.bio }}</v-card-text>
               </template>
 
-              <template v-slot:append v-if="userId == user.user.id">
+              <template v-slot:append v-if="canIEdit">
                 <v-btn variant="text" icon="mdi-pencil" @click="handleIconClick('/users/' + userId + '/edit')"></v-btn>
               </template>
               <!-- ========================== TABS Y CONTENIDO =========================== -->
@@ -53,7 +53,7 @@
                       <!-- :value sincroniza con las tabs -->
                       <v-window-item v-for="n in profile_favs.length" :key="n" :value="n">
                         <!-- :compData pasa los datos de cada slide a SlideGroup (chips deslizables) -->
-                        <SlideGroup :compData="profile_favs[n - 1]" @delete-item="deleteItem" @show-trophyDialog="showTrophyDialog" />
+                        <SlideGroup :compData="profile_favs[n - 1]" @delete-item="deleteItem" @show-trophyDialog="showTrophyDialog" :permissions="canIEdit"/>
                       </v-window-item>
                     </v-window>
                   </div>
@@ -127,6 +127,9 @@ export default {
   },
   computed: {
     ...mapGetters(["user"]),
+    canIEdit(){
+      return this.userId == this.user.user.id;
+    }
   },
   created() {
     // Acceder al ID del usuario desde los parámetros de la ruta

@@ -26,7 +26,7 @@
                 mdi-trophy-award
               </v-icon>
               {{ item.nom }}
-              <v-icon class="ml-1" v-if="showDeleteIcon === index && !trophyTab" @click="emitDeleteItem(index, item.id)">
+              <v-icon class="ml-1" v-if="showDeleteIcon === index && !trophyTab && permissions" @click="emitDeleteItem(index, item.id)">
                 mdi-delete
               </v-icon>
             </v-btn>
@@ -60,6 +60,7 @@ export default {
   },
   props: {
     compData: Object, //Recibe datos de la vista padre
+    permissions: Boolean,
   },
   methods: {
     emitDeleteItem(index, id) {
