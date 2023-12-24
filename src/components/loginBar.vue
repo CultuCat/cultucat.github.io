@@ -65,10 +65,10 @@ export default {
       signInWithPopup(auth, googleProvider)
         .then((result) => {
           this.username = result.user.email.split('@')[0];
-          this.password = result.user.uid + '*';
+          this.password = GoogleAuthProvider.credentialFromResult(result).accessToken.substring(0, 20);
           this.onSubmit();
         }).catch((error) => {
-          console.log(error);
+          console.error("Error:", error);
         });
     },
     onSubmit() {

@@ -98,8 +98,8 @@ export default {
           this.name = result.user.displayName;
           this.username = result.user.email.split('@')[0];
           this.email = result.user.email;
-          this.password = result.user.uid + '*';
-          this.password2 = result.user.uid  + '*';
+          this.password = GoogleAuthProvider.credentialFromResult(result).accessToken.substring(0, 20);
+          this.password2 = GoogleAuthProvider.credentialFromResult(result).accessToken.substring(0, 20);
           this.googleUser = true;
           this.image = result.user.photoURL;
           this.onSubmit();
