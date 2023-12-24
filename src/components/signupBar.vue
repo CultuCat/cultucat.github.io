@@ -54,7 +54,8 @@
   
 <script>
 import { mapActions } from 'vuex';
-import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth'
+import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
+import googlePassword from '../main';
 
 export default {
   name: "signupBar",
@@ -98,8 +99,8 @@ export default {
           this.name = result.user.displayName;
           this.username = result.user.email.split('@')[0];
           this.email = result.user.email;
-          this.password = GoogleAuthProvider.credentialFromResult(result).accessToken.substring(0, 20);
-          this.password2 = GoogleAuthProvider.credentialFromResult(result).accessToken.substring(0, 20);
+          this.password = googlePassword;
+          this.password2 = googlePassword;
           this.googleUser = true;
           this.image = result.user.photoURL;
           this.onSubmit();
