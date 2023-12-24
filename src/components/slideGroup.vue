@@ -25,7 +25,7 @@
               <v-icon class="mr-1" v-else-if="trophyTab && item.level_achived_user === 3">
                 mdi-trophy-award
               </v-icon>
-              {{ item.nom }}
+              {{ item.nom.replace(/-/g, ' ') }}
               <v-icon class="ml-1" v-if="showDeleteIcon === index && !trophyTab" @click="emitDeleteItem(index, item.id)">
                 mdi-delete
               </v-icon>

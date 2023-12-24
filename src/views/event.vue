@@ -40,7 +40,7 @@
                 </v-col>
               </v-col>
               <v-col class="d-flex flex-column fill-height ma-5 mt-15">
-                <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true" :disabled="!canSeeAssistants">See assistants</v-btn>
+                <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true" :disabled="!canSeeAssistants">See assistants ({{ this.eventInfo.assistants.length }})</v-btn>
                 <!-- --------------------- dialog para ver asistentes ---------------------- -->
                 <v-dialog v-model="dialog" scrollable max-width="600px">
                   <v-card>
