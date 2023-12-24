@@ -9,7 +9,7 @@
         <v-slide-group show-arrows v-if="compData.arr.length !== 0" center-active>
           <v-slide-group-item v-for="(item, index) in compData.arr" :key="item">
             <v-btn class="ma-2" 
-            rounded :disabled="item.level_achived_user == -1 ? true : false"
+            rounded
             :style="{
               backgroundColor: trophyTab ? getBackgroundColor(item.level_achived_user) : '',
               color: trophyTab ? getTextColor(item.level_achived_user) : ''
