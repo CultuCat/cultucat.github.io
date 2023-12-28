@@ -9,12 +9,12 @@
         <v-slide-group show-arrows v-if="compData.arr.length !== 0" center-active>
           <v-slide-group-item v-for="(item, index) in compData.arr" :key="item">
             <v-btn class="ma-2" 
-            rounded :disabled="item.level_achived_user == -1 ? true : false"
+            rounded
             :style="{
               backgroundColor: trophyTab ? getBackgroundColor(item.level_achived_user) : '',
               color: trophyTab ? getTextColor(item.level_achived_user) : ''
             }" @mouseenter="showDeleteIcon = index" @mouseleave="showDeleteIcon = -1"
-              @click="showTrophyDialog(index)"
+              @click="trophyTab ? showTrophyDialog(index) : false"
             >
               <v-icon class="mr-1" v-if="trophyTab && item.level_achived_user === 1">
                 mdi-trophy-variant
@@ -25,8 +25,8 @@
               <v-icon class="mr-1" v-else-if="trophyTab && item.level_achived_user === 3">
                 mdi-trophy-award
               </v-icon>
-              {{ item.nom }}
-              <v-icon class="ml-1" v-if="showDeleteIcon === index && !trophyTab" @click="emitDeleteItem(index, item.id)">
+              {{ item.nom.replace(/-/g, ' ') }}
+              <v-icon class="ml-1" v-if="showDeleteIcon === index && !trophyTab && permissions" @click="emitDeleteItem(index, item.id)">
                 mdi-delete
               </v-icon>
             </v-btn>
@@ -60,6 +60,7 @@ export default {
   },
   props: {
     compData: Object, //Recibe datos de la vista padre
+    permissions: Boolean,
   },
   methods: {
     emitDeleteItem(index, id) {
@@ -86,7 +87,6 @@ export default {
       return textColorMap[nivell] || '#777777'; // Devuelve el color de texto correspondiente o una cadena vacía si no hay coincidencia.
     },
     showTrophyDialog(index){
-      console.log(index +" es index")
       this.$emit("show-trophyDialog", index);
     }
   },

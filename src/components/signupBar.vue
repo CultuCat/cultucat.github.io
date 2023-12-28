@@ -3,7 +3,7 @@
   <v-container class="custom-fill-height">
     <v-card-text class="d-flex flex-column justify-center" :style="{ width: '80%', marginTop: '15%', maxWidth: '500px' }">
       <div class="text-h5 text-left">Registra't</div>
-      <v-btn class="mt-5 mb-5" @click="login" :style="{ width: '100%' }">
+      <v-btn class="mt-5 mb-5" @click="signup" :style="{ width: '100%' }">
         <img src="..\assets\google_icon.svg" alt="googlelogo" :style="{ width: '20px', height: '20px' }" />
         <span :style="{ marginLeft: '10%' }">Continue with Google</span>
       </v-btn>
@@ -18,7 +18,7 @@
           variant="outlined"></v-text-field>
         <v-text-field v-model="password" class="mb-2" :rules="passwordRules" :type="'password'" label="Password"
           density="compact" variant="outlined"></v-text-field>
-        <v-text-field v-model="password2" :rules="passwordRulesRules" :type="'password'" label="Repeat Password"
+        <v-text-field v-model="password2" :rules="passwordRules" :type="'password'" label="Repeat Password"
           density="compact" variant="outlined"></v-text-field>
 
         <v-card v-if="usernameError" class="text-medium-emphasis text-caption mb-6" color="red" variant="tonal">
@@ -30,7 +30,7 @@
         <v-card v-else-if="emailError" class="text-medium-emphasis text-caption mb-6" color="red" variant="tonal">
           <v-card-text class="pa-3">
             <v-icon icon="mdi-alert-circle" />
-            <span class="ml-2">Ja existeix una usuari amb aquest email</span>
+            <span class="ml-2">Ja existeix un usuari amb aquest email</span>
           </v-card-text>
         </v-card>
         <v-card v-else-if="passwordError" class="text-medium-emphasis text-caption mb-6" color="red" variant="tonal">
@@ -40,8 +40,7 @@
           </v-card-text>
         </v-card>
         <br v-else>
-
-        <v-btn block color="#ff6961" type="submit" variant="elevated">
+        <v-btn :loading="isLoading" block color="#ff6961" type="submit" variant="elevated">
           Sign up
         </v-btn>
       </v-form>
@@ -54,9 +53,9 @@
 </template>
   
 <script>
-import { googleSdkLoaded } from 'vue3-google-login';
-import axios from 'axios';
 import { mapActions } from 'vuex';
+import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
+import googlePassword from '../main';
 
 export default {
   name: "signupBar",
@@ -68,94 +67,49 @@ export default {
       email: null,
       password: null,
       password2: null,
+      image: null,
       emailRules: [
         v => !!v || 'El correo electrónico es obligatorio',
         v => /^(\S+@\S+\.\S+){1,5}$/.test(v) || 'El formato del correo electrónico no es válido',
       ],
       nameRules: [v => !!v || 'El nombre es obligatorio'],
       userRules: [v => !!v || 'El username es obligatorio'],
-      passwordRules: [v => !!v || 'La contraseña es obligatoria'],
+      passwordRules: [
+        v => !!v || 'La contraseña es obligatoria',
+        v => (v && v.length >= 8) || 'La contraseña debe tener al menos 8 caracteres',
+        v => /[0-9]/.test(v) || 'La contraseña debe contener al menos un número',
+        v => /[A-Z]/.test(v) || 'La contraseña debe contener al menos una letra mayúscula',
+        v => /[a-z]/.test(v) || 'La contraseña debe contener al menos una letra minúscula',
+        v => /[!@#$%^&*(),.?":{}|<>+-]/.test(v) || 'La contraseña debe contener al menos un carácter especial'
+      ],
       usernameError: false,
       emailError: false,
       passwordError: false,
+      googleUser: false,
+      isLoading: false,
     };
   },
   methods: {
     ...mapActions(['loginUser']),
-    login() {
-      googleSdkLoaded(google => {
-        google.accounts.oauth2
-          .initCodeClient({
-            client_id:
-              "948818461396-91c1v4hbv49tmdn69c0uk6298806l0aj.apps.googleusercontent.com",
-            scope: "email profile openid",
-            redirect_uri: "https://cultucat.netlify.app/home",
-            callback: response => {
-              if (response.code) {
-                console.log(response.code);
-                this.sendCodeToBackend(response.code);
-              }
-            }
-          })
-          .requestCode();
-      });
-    },
-    async sendCodeToBackend(code) {
-      try {
-        const response = await axios.post(
-          "https://oauth2.googleapis.com/token",
-          {
-            code: code,
-            client_id:
-              "948818461396-91c1v4hbv49tmdn69c0uk6298806l0aj.apps.googleusercontent.com",
-            client_secret: "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",
-            redirect_uri: "https://cultucat.netlify.app/home",
-            grant_type: "authorization_code",
-          }
-        );
-        // const params = new URLSearchParams();
-        // params.append("code", code);
-        // params.append("client_id", "948818461396-91c1v4hbv49tmdn69c0uk6298806l0aj.apps.googleusercontent.com");
-        // params.append("client_secret", "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");
-        // params.append("redirect_uri", "http://localhost:3000/home");
-        // params.append("grant_type", "authorization_code");
-
-        // const response = await fetch("https://oauth2.googleapis.com/token", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/x-www-form-urlencoded",
-        //   },
-        //   body: params,
-        // });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error("Error:", errorData);
-        } else {
-          const data = await response.json();
-          console.log("Data:", data);
-        }
-
-        const accessToken = response.access_token;
-        console.log(accessToken);
-
-
-        // const user = await fetch("127.0.0.1:3000", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: accessToken,
-        // });
-
-        // const data = await response.json();
-        // Redirect to the homepage ("/")
-        //this.$router.push("/rex");
-      } catch (error) {
-        console.error("Token exchange failed:", error.response.data);
-      }
+    signup() {
+      const googleProvider = new GoogleAuthProvider();
+      const auth = getAuth();
+      signInWithPopup(auth, googleProvider)
+        .then((result) => {
+          this.name = result.user.displayName;
+          this.username = result.user.email.split('@')[0];
+          this.email = result.user.email;
+          this.password = googlePassword;
+          this.password2 = googlePassword;
+          this.googleUser = true;
+          this.image = result.user.photoURL;
+          this.onSubmit();
+        }).catch((error) => {
+          console.error("Error:", error);
+        });
     },
     onSubmit() {
+      this.isLoading = true;
       this.usernameError = false;
       this.emailError = false;
       if (this.password != this.password2) {
@@ -172,6 +126,8 @@ export default {
             username: this.username,
             email: this.email,
             password: this.password,
+            isGoogleUser: this.googleUser,
+            imatge_url: this.image,
           }),
         })
           .then((response) => {
@@ -191,6 +147,9 @@ export default {
           })
           .catch((error) => {
             console.error("Error:", error);
+          })
+          .finally(() => {
+            this.isLoading = false;
           });
       }
     }
