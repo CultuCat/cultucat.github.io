@@ -307,9 +307,4 @@ export default {
   text-decoration: underline;
   cursor: pointer;
 }
-
-.underline-on-hover:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
 </style>
