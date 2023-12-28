@@ -308,7 +308,7 @@ export default {
   cursor: pointer;
 }
 
-<style scoped>.underline-on-hover:hover {
+.underline-on-hover:hover {
   text-decoration: underline;
   cursor: pointer;
 }
