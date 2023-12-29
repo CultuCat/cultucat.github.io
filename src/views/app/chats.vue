@@ -68,7 +68,6 @@
   </v-row>
 </template>
 
-
 <script>
 import { mapGetters } from "vuex";
 import Pusher from 'pusher-js';
@@ -103,7 +102,7 @@ export default {
   methods: {
     async initializePusher() {
       Pusher.logToConsole = true;
-      var pusher = new Pusher('023f0639c639ffe33066', {
+      let pusher = new Pusher('023f0639c639ffe33066', {
         cluster: 'eu'
       });
       const channel = pusher.subscribe('chat');
