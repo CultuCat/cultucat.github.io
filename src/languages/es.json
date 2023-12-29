@@ -1,0 +1,16 @@
+{
+    "NAV_BAR": {
+        "HOME": "Inicio",
+        "SEARCH": "Busca",
+        "MAPA": "Mapa",
+        "TICKETS": "Tiquets",
+        "CHATS": "Chats",
+        "USER_PROFILE": "Perfil",
+        "USER_SETTINGS": "Configuración",
+        "USER_LOGOUT": "Cerrar Sesión",
+        "ADMIN_EVENTS": "Eventos",
+        "ADMIN_USERS": "Usuarios",
+        "ADMIN": "Portal Administrador",
+        "APP": "Volver a la aplicación"
+    }
+}

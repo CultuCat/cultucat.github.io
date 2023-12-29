@@ -1,0 +1,16 @@
+{
+    "NAV_BAR": {
+        "HOME": "Home",
+        "SEARCH": "Search",
+        "MAPA": "Map",
+        "TICKETS": "Tickets",
+        "CHATS": "Chats",
+        "USER_PROFILE": "Profile",
+        "USER_SETTINGS": "Configuration",
+        "USER_LOGOUT": "Logout",
+        "ADMIN_EVENTS": "Event",
+        "ADMIN_USERS": "Users",
+        "ADMIN": "Go to administration",
+        "APP": "Go back to application"
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "NAV_BAR": {
+        "HOME": "Inici",
+        "SEARCH": "Cerca",
+        "MAPA": "Mapa",
+        "TICKETS": "Tiquets",
+        "CHATS": "Xats",
+        "USER_PROFILE": "Perfil",
+        "USER_SETTINGS": "Configuració",
+        "USER_LOGOUT": "Tancar Sessió",
+        "ADMIN_EVENTS": "Esdeveniments",
+        "ADMIN_USERS": "Usuaris",
+        "ADMIN": "Portal Administrador",
+        "APP": "Torna a l'aplicació"
+    }
+}
