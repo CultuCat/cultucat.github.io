@@ -62,7 +62,7 @@
         "Nom_asc": "Nom ascendent",
         "Nom_desc": "Nom descendent",
         "Events": "Esdeveniments",
-        "Event": "Event",
+        "Event": "Esdeveniment",
         "Enlace": "Enllaç",
         "Veure_assistents": "Veure assistents",
         "Assistents": "Assistents",
@@ -112,6 +112,13 @@
         "Setmana": "Aquesta setmana",
         "Gratis": "Gratuït",
         "Popular": "Popular"
+    },
+    "ADMIN": {
+        "Crear_event": "Creació d'un esdeveniment",
+        "Nom_empty": "El nom no pot estar buit",
+        "Descripcio_max": "Descripció màx = 560 caràcters",
+        "Crea": "Crea",
+        "Users": "Usuaris"
     }
 
 }
