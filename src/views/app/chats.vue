@@ -4,25 +4,25 @@
       <h1 class="mt-5 ml-5" style="color: #ff6961">Xat</h1>
     </v-col>
   </v-row>
-  <v-row v-if="haveFriends">
+  <v-row>
     <v-container>
       <v-card class="card" :loading="loading">
-        <v-row>
+        <v-row v-if="!haveFriends && !loading">
+          <v-col cols="12" class="text-center">
+            <v-icon size="100">mdi-account-multiple</v-icon>
+            <h1>No tienes amigos</h1>
+            <h1>Ve a hacer algunos!</h1>
+          </v-col>
+        </v-row>
+        <v-row v-else>
           <!-- Lista de usuarios -->
-          <v-col cols="3" justify-center>
-            <v-card class="my-3 ml-3" elevation="4" rounded="lg">
-              <v-list-item v-for="user in friends" :key="user.id">
-                <v-card-item @click="handleClick(user)" class="clickable">
-                  <template v-slot:prepend>
-                    <v-avatar :image="user.imatge || user.avatar" size="40" class="ml-2 mr-5 my-2"></v-avatar>
-                    <strong>{{ user.first_name || user.name }}</strong>
-                  </template>
-                  <template v-slot:append>
-                    <v-icon>mdi-chevron-right</v-icon>
-                  </template>
-                </v-card-item>
-              </v-list-item>
-            </v-card>
+          <v-col cols="3" class="pr-0" justify-center>
+            <v-list-item v-for="user in friends" :key="user.id" class="px-3 py-2 clickable" @click="handleClick(user)">
+              <template v-slot:prepend>
+                <v-avatar :image="user.imatge || user.avatar" size="40" class="mr-5 my-2" />
+                <strong>{{ user.first_name || user.name }}</strong>
+              </template>
+            </v-list-item>
           </v-col>
           <div class="divider"></div>
           <!-- Mensajes y campo de entrada -->
@@ -48,26 +48,23 @@
               </v-card>
             </div>
             <div>
-              <v-textarea class="mr-3" auto-grow rows="1" row-height="20" v-model="newMessage" label="Escribe un mensaje" no-resize />
+              <v-textarea class="mr-3" auto-grow rows="1" row-height="20" v-model="newMessage" label="Escribe un mensaje"
+                no-resize />
             </div>
             <div>
               <v-btn @click="sendMessage">Enviar</v-btn>
             </div>
           </v-col>
+          <v-col v-else class="justify-center align-center">
+            <v-responsive class="align-center text-center fill-height">
+              <v-img height="150" src="@/assets/logo.png" />
+              <p class="text-h4 font-weight-bold my-2">CultuCat messages</p>
+              <div class="py-14" />
+            </v-responsive>
+          </v-col>
         </v-row>
       </v-card>
     </v-container>
-  </v-row>
-  <v-row v-else>
-    <v-col cols="12">
-        <v-row justify="center">
-          <v-col cols="12" class="text-center">
-            <v-icon size="100">mdi-account-multiple</v-icon>
-            <h1>No tienes amigos</h1>
-            <h1>Ve a hacer algunos!</h1>
-          </v-col>
-        </v-row>
-    </v-col>
   </v-row>
 </template>
 
@@ -97,7 +94,7 @@ export default {
   computed: {
     ...mapGetters(["user"]),
   },
-  async created() {
+  created() {
     this.uId = this.user.user.id;
     this.url = "https://cultucat.hemanuelpc.es";
     this.urlFriends = `${this.url}/users/${this.uId}/`;
