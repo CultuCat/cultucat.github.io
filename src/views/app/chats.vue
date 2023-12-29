@@ -161,6 +161,7 @@ export default {
       this.uIdR = user.id;
       this.fetchMessages();
       this.friendClicked = true;
+      this.newMessage = '';
       // Lógica para abrir el chat con el usuario
     },
     async fetchFriends() {
