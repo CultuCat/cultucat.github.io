@@ -53,22 +53,22 @@ export default {
       dialogPopular: false,
       buttons: [
         {
-          label: $t('HOME.Avui'),
+          label: this.$t('HOME.Avui'),
           icon: "mdi-calendar-today",
           dialog: this.dialogToday,
         },
         {
-          label: $t('HOME.Setmana'),
+          label: this.$t('HOME.Setmana'),
           icon: "mdi-calendar-week",
           dialog: this.dialogWeek,
         },
         {
-          label: $t('HOME.Gratis'),
+          label: this.$t('HOME.Gratis'),
           icon: "mdi-currency-usd-off",
           dialog: this.dialogFree,
         },
         {
-          label: $t('HOME.Popular'),
+          label: this.$t('HOME.Popular'),
           icon: "mdi-trending-up",
           dialog: this.dialogPopular,
         }

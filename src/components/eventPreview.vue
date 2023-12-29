@@ -16,7 +16,7 @@
           <v-card-text>
             {{ acortarTexto(item.descripcio) }}
             <br /><br />
-            <strong>{{ isNumber(item.preu) ? $t('EVENT.Preu')`: ${item.preu} €` : item.preu }}</strong>
+            <strong>{{ isNumber(item.preu) ? `Preu: ${item.preu} €` : item.preu }}</strong>
           </v-card-text>
         </v-col>
       </template>
