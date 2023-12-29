@@ -1,15 +1,18 @@
 <template>
-  <v-col>
+  <v-row justify="center">
+    <v-col class="mb-0 pb-0">
+      <h1 style="color: #ff6961" class="mt-5 ml-5">Event</h1>
+    </v-col>
+  </v-row>
+  <v-row>
     <template v-if="eventInfo.nom">
-      <!-- =============================== TITULO ================================ -->
-      <h1 style="color: #ff6961" class="my-5 ml-5 mb-0">Event</h1>
       <!-- ============================== CONTENIDO ============================== -->
       <v-container class="d-flex justify-center align-center">
-        <v-col cols="12" md="11" sm="8">
-
-          <v-card rounded="lg" style="position: relative">
-            <v-btn @click="handleButtonLink" icon style="position: absolute; top: 10px; right: 10px" rounded="lg">
+        <v-card rounded="lg">
+          <v-col cols="12">
+            <v-btn @click="handleButtonLink" style="position: absolute; top: 10px; right: 10px" rounded="lg">
               <v-icon>mdi-link</v-icon>
+              <span style="margin-left: 5px;">Enllaç</span>
             </v-btn>
             <v-row class="d-flex ma-2 fill-height">
               <v-img class="ma-5" :src="eventInfo.imatges_list[0]" :max-height="250" :max-width="250" aspect-ratio="1/1"
@@ -20,36 +23,27 @@
                   <v-card-subtitle>{{ transformDate(eventInfo.dataIni) }}</v-card-subtitle>
                   <v-card-subtitle>{{ eventInfo.espai }}</v-card-subtitle>
 
-                  <!-- No nos pasan tags -->
-                  <!-- <v-chip-group class="mx-2">
-                  <v-chip v-for="tag in tags" :key="tag" class="mx-1">{{ tag }}</v-chip>
-                </v-chip-group> -->
+                  <v-chip-group class="mx-2">
+                    <v-chip v-for="tag in eventInfo.tags" :key="tag.id" class="mx-1" style="background-color: #87CEEC;">
+                      {{ tag.nom }}
+                    </v-chip>
+                  </v-chip-group>
 
                   <v-card class="mt-14" rounded="lg" color="#ff6961" style="max-width: 220px">
-                    <div class="d-flex justify-center align-center" v-if="eventInfo.preu">
+                    <div class="d-flex justify-center align-center">
                       <div class="mr-2">
-                        {{ extraerTextoPreu(eventInfo.preu) }}
+                        {{ isNumber(eventInfo.preu) ? `Preu: ${eventInfo.preu} €` : eventInfo.preu }}
                       </div>
-                      <v-btn v-if="canIBuy" class="ma-2" @click="dialogBuy = true">Buy</v-btn>
-                      <v-btn v-else class="ma-2" disabled>Buy</v-btn>
-                      <!-- ------------------------- dialog para comprar ------------------------- -->
-                      <v-dialog v-model="dialogBuy" scrollable max-width="800px">
-                        <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" :discounts="discounts"
-                          @confirmed-buy="buyConfirmed" @cancel-buy="reset" />
-                      </v-dialog>
-                      <!-- ----------------------------------------------------------------------- -->
-                    </div>
-                    <div class="d-flex justify-center align-center" v-else>
-                      <v-btn variant="text" :ripple="false" class="ma-2" density="compact" disabled>Preu no
-                        disponible</v-btn>
+                      <v-btn class="ma-2" @click="dialogBuy = true" :disabled="!canIBuy">Buy</v-btn>
                     </div>
                   </v-card>
                 </v-col>
               </v-col>
               <v-col class="d-flex flex-column fill-height ma-5 mt-15">
-                <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true">See assistants</v-btn>
+                <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true" :disabled="!canSeeAssistants">See assistants
+                  ({{ this.eventInfo.assistants.length }})</v-btn>
                 <!-- --------------------- dialog para ver asistentes ---------------------- -->
-                <v-dialog v-model="dialog" scrollable max-width="800px">
+                <v-dialog v-model="dialog" scrollable max-width="600px">
                   <v-card>
                     <v-toolbar color="#ff6961" dark>
                       <v-icon size="35" class="ml-6">mdi-account-group</v-icon>
@@ -62,7 +56,8 @@
                       </v-toolbar-items>
                     </v-toolbar>
                     <v-card-text style="height: 600px">
-                      <ListOfItems v-if="eventInfo.assistants.length > 0" :items="eventInfo.assistants" />
+                      <ListOfItems v-if="eventInfo.assistants.length > 0" :items="eventInfo.assistants"
+                        :isAssistants=true />
                       <span v-else style="display: flex; justify-content: center;">No hi ha usuaris amb entrada per aquest
                         esdeveniment</span>
                     </v-card-text>
@@ -92,11 +87,15 @@
                 </template>
               </v-col>
             </v-row>
-          </v-card>
-        </v-col>
+          </v-col>
+        </v-card>
       </v-container>
     </template>
-  </v-col>
+  </v-row>
+  <v-dialog v-model="dialogBuy" scrollable max-width="600px">
+    <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" :discounts="discounts" @confirmed-buy="buyConfirmed"
+      @cancel-buy="reset" />
+  </v-dialog>
 </template>
 
 <script>
@@ -121,6 +120,7 @@ export default {
         id: null,
         nom: null,
         descripcio: null,
+        tags: [],
         dataIni: null,
         espai: null,
         preu: null,
@@ -136,7 +136,6 @@ export default {
       dialog: false,
       dialogBuy: false,
       buyLoading: false,
-      canIBuy: true,
       discounts: [],
     };
   },
@@ -150,6 +149,12 @@ export default {
       );
     },
     ...mapGetters(["user"]),
+    canIBuy() {
+      return this.eventInfo.preu !== 'No disponible' && !this.eventInfo.assistants.some(assistant => assistant.id === this.user.user.id);
+    },
+    canSeeAssistants() {
+      return this.eventInfo.preu !== 'No disponible';
+    },
   },
   created() {
     fetch("https://cultucat.hemanuelpc.es/events/" + this.$route.params.event_id + "/")
@@ -163,6 +168,7 @@ export default {
         this.eventInfo.id = data.id;
         this.eventInfo.nom = data.nom;
         this.eventInfo.descripcio = data.descripcio;
+        this.eventInfo.tags = data.tags;
         this.eventInfo.dataIni = data.dataIni;
         this.eventInfo.espai = data.espai.nom;
         this.eventInfo.preu = data.preu;
@@ -170,6 +176,7 @@ export default {
         this.eventInfo.latitud = data.latitud;
         this.eventInfo.longitud = data.longitud;
         this.eventInfo.link = data.enllacos_list[0];
+        this.eventInfo.assistants = data.assistents;
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -201,7 +208,7 @@ export default {
       .catch((error) => {
         console.error("Error:", error);
       });
-    fetch("https://cultucat.hemanuelpc.es/tickets/?event=" + this.$route.params.event_id)
+    fetch(`https://cultucat.hemanuelpc.es/events/${this.$route.params.event_id}/`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("No se pudo obtener el archivo JSON");
@@ -209,12 +216,11 @@ export default {
         return response.json();
       })
       .then((data) => {
-        this.eventInfo.assistants = data;
+        this.eventInfo.assistants = data.assistents;
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-      this.getCuriosity();
   },
   methods: {
     handleButtonLink() {
@@ -223,21 +229,21 @@ export default {
     handleButtonMaps() {
       window.open(this.mapsURL, "_blank");
     },
+    isNumber(value) {
+      if (!value) return value;
+      value = value.replace(',', '.');
+      return !isNaN(Number(value)) && !isNaN(parseFloat(value));
+    },
     transformDate(date) {
       const dateObj = new Date(date);
       const formatOptions = {
         weekday: "short",
         month: "long",
         day: "numeric",
+        year: "numeric", // Agregando el año
       };
       const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
       return formatter.format(dateObj);
-    },
-    extraerTextoPreu(texto) {
-      // Utilizamos una expresión regular para buscar la parte deseada del texto
-      const match = texto.match(/(\d[^€]*)€/);
-      if (!match) this.canIBuy = false;
-      return match ? match[0] : texto;
     },
     agregarEventoAlCalendario() {
       const evento = {
@@ -294,24 +300,6 @@ END:VCALENDAR
         console.error('Error fetching comments:', error);
       }
     },
-    getCuriosity() {
-      fetch('http://nattech.fib.upc.edu:40520/api/questions/municipi/barcelona?type=random', {
-        method: 'GET',
-      })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("No se pudo obtener el archivo JSON");
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log(data);
-          this.curiosity = data;
-        })
-        .catch(error => {
-          console.error("Error:", error);
-        });
-    },
     buyConfirmed(isLoading, discountUsed) {
       this.buyLoading = isLoading;
       const params = JSON.stringify({
@@ -332,7 +320,7 @@ END:VCALENDAR
         )
         .then((response) => {
           if (response.status === 201) {
-            window.location.pathname = "/home";
+            window.location.reload();
             return response.json;
           }
         })
@@ -347,6 +335,9 @@ END:VCALENDAR
     reset() {
       this.dialogBuy = false;
     },
+    findAssistant(assistent, id) {
+      return assistent.id === id;
+    }
   },
 };
 </script>
