@@ -4,7 +4,7 @@
       <h1 class="mt-5 ml-5" style="color: #ff6961">Xat</h1>
     </v-col>
   </v-row>
-  <v-row>
+  <v-row v-if="haveFriends">
     <v-container>
       <v-card class="card" :loading="loading">
         <v-row>
@@ -26,7 +26,7 @@
           </v-col>
           <div class="divider"></div>
           <!-- Mensajes y campo de entrada -->
-          <v-col cols="8.5" class="d-flex flex-column chat-col">
+          <v-col v-if="friendClicked" cols="8.5" class="d-flex flex-column chat-col">
             <v-card class="my-3 pa-2 mr-3" color="#ff6961" rounded="lg">
               <v-avatar :image="uImageR" size="40" class="ml-2 mr-5 my-2"></v-avatar>
               <strong style="color: white">{{ uNameR }}</strong>
@@ -58,6 +58,17 @@
       </v-card>
     </v-container>
   </v-row>
+  <v-row v-else>
+    <v-col cols="12">
+        <v-row justify="center">
+          <v-col cols="12" class="text-center">
+            <v-icon size="100">mdi-account-multiple</v-icon>
+            <h1>No tienes amigos</h1>
+            <h1>Ve a hacer algunos!</h1>
+          </v-col>
+        </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 
@@ -79,6 +90,8 @@ export default {
       uImageR: "",
       loading: true,
       messageLoading: false,
+      friendClicked: false,
+      haveFriends: false,
     };
   },
   computed: {
@@ -151,6 +164,7 @@ export default {
       this.uNameR = user.first_name;
       this.uIdR = user.id;
       this.fetchMessages();
+      this.friendClicked = true;
       // Lógica para abrir el chat con el usuario
     },
     async fetchFriends() {
@@ -166,6 +180,7 @@ export default {
           this.uImageR = this.friends[0].imatge;
           this.uIdR = this.friends[0].id;
           this.uNameR = this.friends[0].first_name;
+          this.haveFriends = true;
           this.initializePusher();
           this.fetchMessages();
         })
