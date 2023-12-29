@@ -6,82 +6,96 @@
   <template v-if="profile.username != undefined">
     <v-col>
       <h1 style="color: #ff6961" class="mt-5 ml-5">Profile</h1>
-
-      <v-container class="d-flex justify-center align-center">
-        <v-col cols="12">
-          <template v-if="loadingUser == true">
-            <v-card :loading="loadingUser">
-              <v-card-text>Loading...</v-card-text>
-            </v-card>
-          </template>
-          <template v-else>
-            <!-- ========================== AVATAR Y SETTINGS ========================== -->
-            <v-card>
-              <!-- ============================= SLOTS V-CARD ============================== -->
-
-              <template v-slot:prepend>
-                <v-avatar :image="profile.imatge" size="70"></v-avatar>
-              </template>
-
-              <template v-slot:title>
-                {{ profile.first_name }}
-                <v-icon icon="mdi-check-decagram" size="xs" class="mx-2"></v-icon>
-              </template>
-
-              <template v-slot:subtitle>
-                <pre
-                  class="text-none text-subtitle-1"><strong>Score: {{ profile.puntuacio }}       <v-btn prepend-icon="mdi-account-multiple" elevation="4" rounded="xl" class="mb-1 text-none text-subtitle-1" size="small" @click="dialogFriends = true">Friends: {{ profile.friends?.length }}</v-btn></strong></pre>
-              </template>
-
-              <template v-slot:text>
-                <v-card-text class="mx-16">{{ profile.bio }}</v-card-text>
-              </template>
-
-              <template v-slot:append v-if="canIEdit">
-                <v-btn variant="text" icon="mdi-pencil" @click="handleIconClick('/users/' + userId + '/edit')"></v-btn>
-              </template>
-              <!-- ========================== TABS Y CONTENIDO =========================== -->
-              <v-col>
-                <v-card>
-                  <v-tabs v-model="tab" bg-color="#ff6961" fixed-tabs>
-                    <v-tab v-for="i in profile_favs.length" :key="i" :value="i">
-                      {{ profile_favs[i - 1].title }}
-                    </v-tab>
-                  </v-tabs>
-                  <div class="content-container">
-                    <v-window v-model="tab">
-                      <!-- :value sincroniza con las tabs -->
-                      <v-window-item v-for="n in profile_favs.length" :key="n" :value="n">
-                        <!-- :compData pasa los datos de cada slide a SlideGroup (chips deslizables) -->
-                        <SlideGroup :compData="profile_favs[n - 1]" @delete-item="deleteItem" @show-trophyDialog="showTrophyDialog" :permissions="canIEdit"/>
-                      </v-window-item>
-                    </v-window>
-                  </div>
-                </v-card>
-              </v-col>
-              <v-row justify="center">
-                <v-col cols="4" md="4" sm="8">
-                  <v-btn block rounded="xl" class="my-12" color="#FF6961" size="large" elevation="4"
-                    append-icon="mdi-star-circle-outline" @click="dialogRanking = true">
-                    Ranking
-                  </v-btn>
+      <v-col cols="12">
+        <template v-if="loadingUser == true">
+          <v-card rounded="lg" :loading="loadingUser">
+            <v-card-text>Loading...</v-card-text>
+          </v-card>
+        </template>
+        <template v-else>
+          <!-- ========================== AVATAR Y SETTINGS ========================== -->
+          <v-card rounded="lg">
+            <!-- ============================= V-CARD ============================== -->
+            <v-container>
+              <v-row>
+                <v-col cols="auto" class="d-flex align-center">
+                  <v-avatar :image="profile.imatge" size="120"></v-avatar>
+                </v-col>
+                <v-col cols="auto">
+                  <v-row>
+                    <v-col cols="auto">
+                      <p class="text-h5 font-weight-bold">{{ profile.first_name }}</p>
+                      <p class="text-h6 font-weight-regular">{{ profile.username }}</p>
+                    </v-col>
+                  </v-row>
+                  <v-row class="d-flex align-center" style="color: #797979;">
+                    <div class="d-flex align-center mx-2">
+                      <v-icon class="mdi mdi-star-circle" />
+                      <strong class="mx-1">Score: {{ profile.puntuacio }}</strong>
+                    </div>
+                    <div class="d-flex align-center mx-2" @click="dialogFriends = true">
+                      <v-icon class="mdi mdi-account-multiple" />
+                      <strong class="underline-on-hover mx-1">Friends: {{ profile.friends?.length }}</strong>
+                    </div>
+                  </v-row>
+                </v-col>
+                <v-col class="mx-3">
+                  <strong>Bio:</strong>
+                  <p class="text-body-2">{{ profile.bio }}</p>
+                </v-col>
+                <v-col cols="auto">
+                  <v-btn v-if="canIEdit" variant="text" icon="mdi-pencil"
+                    @click="handleIconClick('/users/' + userId + '/edit')" />
+                  <template v-else>
+                    <div v-if="profile.id !== user.user.id && myUser" style="float: right;">
+                      <addFriend :user="myUser" :id="String(profile.id)" />
+                    </div>
+                  </template>
                 </v-col>
               </v-row>
-            </v-card>
-          </template>
-
-        </v-col>
-      </v-container>
+            </v-container>
+            <!-- ========================== TABS Y CONTENIDO =========================== -->
+            <v-col>
+              <v-card>
+                <v-tabs v-model="tab" bg-color="#ff6961" fixed-tabs>
+                  <v-tab v-for="i in profile_favs.length" :key="i" :value="i">
+                    {{ profile_favs[i - 1].title }}
+                  </v-tab>
+                </v-tabs>
+                <div class="content-container">
+                  <v-window v-model="tab">
+                    <!-- :value sincroniza con las tabs -->
+                    <v-window-item v-for="n in profile_favs.length" :key="n" :value="n">
+                      <!-- :compData pasa los datos de cada slide a SlideGroup (chips deslizables) -->
+                      <SlideGroup :compData="profile_favs[n - 1]" @delete-item="deleteItem"
+                        @show-trophyDialog="showTrophyDialog" :permissions="canIEdit" />
+                    </v-window-item>
+                  </v-window>
+                </div>
+              </v-card>
+            </v-col>
+            <v-row justify="center">
+              <v-col cols="4" md="4" sm="8">
+                <v-btn block rounded="xl" class="my-12" color="#FF6961" size="large" elevation="4"
+                  append-icon="mdi-star-circle-outline" @click="dialogRanking = true">
+                  Ranking
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card>
+        </template>
+      </v-col>
       <!-- ---------------- Dialog para confirmacion de eliminar ----------------- -->
       <confirmDelete v-if="dialogDelete" :itemToDelete="itemToDelete" :deleteLoading="deleteLoading"
         @confirmed-delete="deleteConfirmed" @cancel-delete="deleteCancel" />
       <!-- ----------------------- dialog para ver amigos ------------------------ -->
-      <userDialog :dialog="dialogFriends" :isFriends="true" :userId="userId" @closeDialog="dialogFriends = false" />
+      <userDialog :dialog="dialogFriends" :isFriends="true" :isProfile="true" :userId="userId"
+        @closeDialog="dialogFriends = false" />
       <!-- ----------------------- dialog para ver ranking ----------------------- -->
       <userDialog :dialog="dialogRanking" :isRanking="true" @closeDialog="dialogRanking = false" />
       <!-- ----------------------------------------------------------------------- -->
       <v-dialog v-model="trophyDialog">
-        <trophyInfo @quit-trophyDialog="quitTrophyDialog" :trophy="trophySelected"/>
+        <trophyInfo @quit-trophyDialog="quitTrophyDialog" :trophy="trophySelected" />
       </v-dialog>
     </v-col>
   </template>
@@ -94,6 +108,7 @@ import SlideGroup from "@/components/slideGroup.vue";
 import ListOfItems from "@/components/listOfItems.vue";
 import trophyInfo from "@/components/trophyInfo.vue";
 import userDialog from "@/components/userDialog.vue";
+import addFriend from "@/components/addFriend.vue";
 import { mapGetters } from "vuex";
 import axios from "axios";
 </script>
@@ -113,6 +128,8 @@ export default {
       idToDelete: null,
       deleteLoading: false,
       userId: null,
+      friendRequests: null,
+      myUser: null,
       loadingUser: false,
       trophyDialog: false,
       trophySelected: null,
@@ -124,10 +141,11 @@ export default {
     ListOfItems,
     trophyInfo,
     userDialog,
+    addFriend,
   },
   computed: {
     ...mapGetters(["user"]),
-    canIEdit(){
+    canIEdit() {
       return this.userId == this.user.user.id;
     }
   },
@@ -142,6 +160,7 @@ export default {
       .then((response) => {
         if (response.status == 200) {
           this.profile = response.data;
+          this.getUser();
           // Ahora, puedes realizar las operaciones necesarias con la respuesta de manera asincrónica
           this.agregarSlideGroup(
             this.profile_favs,
@@ -155,32 +174,32 @@ export default {
             "Favourite Places",
             this.profile.espais_preferits
           );
-          if(this.canIEdit){
+          if (this.canIEdit) {
             const config = {
               headers: {
                 'Authorization': `Token ${this.user.token}`,
                 'Content-Type': 'application/json',
               }
             }
-          axios
-            .get("https://cultucat.hemanuelpc.es/trophies/", config)
-            .then((response2) => {
-              if (response2.status == 200) {
-                this.agregarSlideGroup(
-                  this.profile_favs,
-                  3,
-                  "Trophies",
-                  response2.data
-                );
-              }
-            })
-            .catch((error) => {
-              // Maneja errores aquí
-              console.error("Error al obtener los trofeos del usuario:", error);
-            });
+            axios
+              .get("https://cultucat.hemanuelpc.es/trophies/", config)
+              .then((response2) => {
+                if (response2.status == 200) {
+                  this.agregarSlideGroup(
+                    this.profile_favs,
+                    3,
+                    "Trophies",
+                    response2.data
+                  );
+                }
+              })
+              .catch((error) => {
+                // Maneja errores aquí
+                console.error("Error al obtener los trofeos del usuario:", error);
+              });
           }
           // ============================= GET TROFEOS =============================
-          
+
           // =========================== COMMIT CHANGES ============================
           this.$store.commit("setProfileData", this.profile);
 
@@ -238,19 +257,20 @@ export default {
     deleteCancel() {
       this.reset();
     },
-    quitTrophyDialog(){
+
+    quitTrophyDialog() {
       this.trophyDialog = false;
     },
-    showTrophyDialog(index){
+    showTrophyDialog(index) {
       this.trophyDialog = true;
       this.trophySelected = this.profile_favs[2].arr[index];
     },
-    getUsers() {
+    getUser() {
       axios
-        .get("https://cultucat.hemanuelpc.es/users/")
+        .get("https://cultucat.hemanuelpc.es/users/" + this.user.user.id + "/")
         .then((response) => {
           if (response.status === 200) {
-            return response.data;
+            this.myUser = response.data;
           }
         })
         .catch((error) => {
@@ -281,5 +301,10 @@ export default {
   margin: 30px 0;
   /* Agrega espacio superior y inferior*/
   text-align: center;
+}
+
+.underline-on-hover:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>
