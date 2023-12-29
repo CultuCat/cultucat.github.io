@@ -5,14 +5,14 @@
             <v-divider></v-divider>
             <div class="text-center"><v-icon size="50" class="mt-6">mdi-medal-outline</v-icon></div>
             <div class="text-h4 font-weight-bold text-center mt-6">{{ trophy.nom }}</div>
-            <div class="text-h5 font-weight-bold text-center mt-6">{{ achieved ? 'Level: ' + trophy.level_achived_user : "Trophy not achieved"}}</div>
+            <div class="text-h5 font-weight-bold text-center mt-6">{{ achieved ? $t('TROFEUS.Nivell') + trophy.level_achived_user : $t('TROFEUS.No_aconseguit')}}</div>
 
             <v-progress-linear v-model="percentage" height="20" color="green" striped rounded class="my-6  w-75">
                 <strong>{{ Math.ceil(this.percentage) }}%</strong>
             </v-progress-linear>
 
             <div class="py-8 pl-6 text-start">
-                <p><strong>Description:</strong> {{ trophy.descripcio }}.</p>
+                <p><strong>{{$t('TROFEUS.Descripcio')}}:</strong> {{ trophy.descripcio }}.</p>
                 <p class="mt-6"><strong>{{ logMessage }}</strong></p>
                 <p><strong>{{ toAchieve }}</strong></p>
             </div>
@@ -20,7 +20,7 @@
             <div class="pa-4 text-end">
                 <v-btn class="text-none" color="medium-emphasis" min-width="92" rounded variant="outlined"
                     @click="quitDialog">
-                    Close
+                    {{$t('close')}}
                 </v-btn>
             </div>
         </v-card>

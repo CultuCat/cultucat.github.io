@@ -31,7 +31,7 @@
           </v-text-field>
 
           <template v-slot:append v-if="view === 'admin_events'">
-            <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ Create Event</v-btn>
+            <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ {{$t('EVENT.Crear')}}</v-btn>
           </template>
           <template v-slot:append v-else>
             <v-btn rounded="xl" variant="plain" icon="mdi-restart" @click="resetView"></v-btn>
@@ -46,7 +46,7 @@
           </v-list-item>
         </v-list>
         <div v-else style="text-align: center" class="my-10">
-          <v-chip> Sorry, no results found for your search. </v-chip>
+          <v-chip> {{$t('EVENT.No_found')}} </v-chip>
         </div>
       </v-card>
     </template>
@@ -75,10 +75,10 @@ export default {
       searchInput: "",
       loaded: false,
       orderByList: [
-        { title: 'Ascending Date', value: "dataIni" },
-        { title: 'Descending Date', value: "-dataIni" },
-        { title: 'Ascending Name', value: "nom" },
-        { title: 'Descending Name', value: "-nom" },
+        { title: $t('EVENT.Data_asc'), value: "dataIni" },
+        { title: $t('EVENT.Data_desc'), value: "-dataIni" },
+        { title: $t('EVENT.Nom_asc'), value: "nom" },
+        { title: $t('EVENT.Nom_desc'), value: "-nom" },
       ],
       orderBySelected: 0,
       loadingOrder: false,

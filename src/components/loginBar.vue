@@ -2,10 +2,10 @@
   <v-img class="ma-5" src="../assets/full_logo.png" width="250" style="position:absolute;"></v-img>
   <v-container class="custom-fill-height">
     <v-card-text class="d-flex flex-column justify-center" :style="{ width: '80%', marginTop: '12%', maxWidth: '500px' }">
-      <div class="text-h5 text-left">Entra</div>
+      <div class="text-h5 text-left">{{ $t('LOGIN.Entra') }}</div>
       <v-btn class="mt-5 mb-5" @click="login" :style="{ width: '100%' }">
         <img src="..\assets\google_icon.svg" alt="googlelogo" :style="{ width: '20px', height: '20px' }" />
-        <span :style="{ marginLeft: '10%' }">Continue with Google</span>
+        <span :style="{ marginLeft: '10%' }">{{ $t('LOGIN.Google') }}</span>
       </v-btn>
       <v-divider />
       <br>
@@ -17,13 +17,13 @@
         <v-card v-if="error" class="text-medium-emphasis text-caption mb-6" color="red" variant="tonal">
           <v-card-text class="pa-3">
             <v-icon icon="mdi-alert-circle" />
-            <span class="ml-2">Incorrect username or password</span>
+            <span class="ml-2">{{ $t('LOGIN.User_incorrecte') }}</span>
           </v-card-text>
         </v-card>
         <v-card v-else-if="block" class="text-medium-emphasis text-caption mb-6" color="red" variant="tonal">
           <v-card-text class="pa-3">
             <v-icon icon="mdi-alert-circle" />
-            <span class="ml-2">Blocked account</span>
+            <span class="ml-2">{{ $t('LOGIN.Compte_bloquejat') }}</span>
           </v-card-text>
         </v-card>
         <br v-else>
@@ -53,8 +53,8 @@ export default {
       password: null,
       error: false,
       block: false,
-      userRules: [v => !!v || 'El username es obligatorio'],
-      passwordRules: [v => !!v || 'La contraseña es obligatoria'],
+      userRules: [v => !!v || $t('LOGIN.contra_obligatori')],
+      passwordRules: [v => !!v || $t('LOGIN.username_obligatori')],
       isLoading: false,
     };
   },

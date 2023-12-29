@@ -3,7 +3,7 @@
     <v-responsive class="align-center text-center fill-height">
       <v-img height="300" src="@/assets/logo.png" />
 
-      <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
+      <div class="text-body-2 font-weight-light mb-n1">{{ $t('Welcome') }}</div>
 
       <h1 class="text-h2 font-weight-bold">Vuetify</h1>
 

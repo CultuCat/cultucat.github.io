@@ -5,13 +5,13 @@
 <template>
   <template v-if="profile.username != undefined">
     <v-col>
-      <h1 style="color: #ff6961" class="mt-5 ml-5">Profile</h1>
+      <h1 style="color: #ff6961" class="mt-5 ml-5">{{ $t('USER.PROFILE') }}</h1>
 
       <v-container class="d-flex justify-center align-center">
         <v-col cols="12">
           <template v-if="loadingUser == true">
             <v-card :loading="loadingUser">
-              <v-card-text>Loading...</v-card-text>
+              <v-card-text>{{ $t('loading') }}</v-card-text>
             </v-card>
           </template>
           <template v-else>
@@ -30,7 +30,7 @@
 
               <template v-slot:subtitle>
                 <pre
-                  class="text-none text-subtitle-1"><strong>Score: {{ profile.puntuacio }}       <v-btn prepend-icon="mdi-account-multiple" elevation="4" rounded="xl" class="mb-1 text-none text-subtitle-1" size="small" @click="dialogFriends = true">Friends: {{ profile.friends?.length }}</v-btn></strong></pre>
+                  class="text-none text-subtitle-1"><strong>{{ $t('USER.PUNTUACIO') }}: {{ profile.puntuacio }} <v-btn prepend-icon="mdi-account-multiple" elevation="4" rounded="xl" class="mb-1 text-none text-subtitle-1" size="small" @click="dialogFriends = true">{{ $t('USER.AMICS') }}: {{ profile.friends?.length }}</v-btn></strong></pre>
               </template>
 
               <template v-slot:text>
@@ -63,7 +63,7 @@
                 <v-col cols="4" md="4" sm="8">
                   <v-btn block rounded="xl" class="my-12" color="#FF6961" size="large" elevation="4"
                     append-icon="mdi-star-circle-outline" @click="dialogRanking = true">
-                    Ranking
+                    {{ $t('USER.RANKING') }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -146,13 +146,13 @@ export default {
           this.agregarSlideGroup(
             this.profile_favs,
             1,
-            "Favourite Tags",
+            this.$t('USER.TAGS'),
             this.profile.tags_preferits
           );
           this.agregarSlideGroup(
             this.profile_favs,
             2,
-            "Favourite Places",
+            this.$t('USER.PLACES'),
             this.profile.espais_preferits
           );
           if(this.canIEdit){
@@ -169,7 +169,7 @@ export default {
                 this.agregarSlideGroup(
                   this.profile_favs,
                   3,
-                  "Trophies",
+                  this.$t('USER.TROFEUS'),
                   response2.data
                 );
               }

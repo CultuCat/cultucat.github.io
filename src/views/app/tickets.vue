@@ -1,11 +1,11 @@
 <template>
   <v-col>
-    <h1 style="color: #ff6961" class="my-5 ml-5 mb-0">Tickets</h1>
+    <h1 style="color: #ff6961" class="my-5 ml-5 mb-0">{{$t('TICKETS.tickets')}}</h1>
     <v-container class="d-flex justify-center align-center">
       <v-col cols="12" md="11" sm="8">
         <v-card rounded="lg" :loading="loading">
           <template v-if="loading == true">
-            <v-card-text>Carregant...</v-card-text>
+            <v-card-text>{{$t('loading')}}</v-card-text>
           </template>
           <template v-else>
             <template v-if="tickets.length > 0">
@@ -17,10 +17,10 @@
                       <ticket-popup ref="popUp" :id="this.id" :title="this.title"></ticket-popup>
                     
                 </template>
-                <v-card-text v-else>No tens entrades per propers esdeveniments</v-card-text>
+                <v-card-text v-else>{{$t('TICKETS.no_ticket_proper')}}</v-card-text>
               </template>
             </template>
-            <v-card-text v-else>No tens entrades a esdeveniments</v-card-text>
+            <v-card-text v-else>{{$t('TICKETS.no_ticket')}}</v-card-text>
           </template>
         </v-card>
       </v-col>

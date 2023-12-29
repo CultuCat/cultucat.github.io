@@ -1,4 +1,6 @@
 {
+    "loading": "loading...",
+    "cancel": "Cancel",
     "NAV_BAR": {
         "HOME": "Home",
         "SEARCH": "Search",
@@ -12,5 +14,32 @@
         "ADMIN_USERS": "Users",
         "ADMIN": "Go to administration",
         "APP": "Go back to application"
+    },
+    "USER": {
+        "PROFILE": "Profile",
+        "PUNTUACIO": "Score",
+        "AMICS": "Friends",
+        "RANKING": "Ranking",
+        "TAGS": "Favourite Tags",
+        "PLACES": "Favourite Places",
+        "TROFEUS": "Trophies",
+        "No_Results": "No results found",
+        "Bloquejar": "Are you sure you want to block this user?",
+        "Block": "Block",
+        "Desbloquejar": "Are you sure you want to unblock this user?",
+        "Unblock": "Unblock"
+    },
+    "EVENT": {
+        "Preu_NoDisponible": "Price not available",
+        "Resum_compra": "Purchase summary",
+        "Name": "Event name",
+        "Data": "Date",
+        "Lloc": "Place",
+        "Preu": "Price",
+        "Descompte": "Discount",
+        "No_descompte": "No discounts available",
+        "Total": "Total",
+        "Buy": "Buy",
+        "Comentari": "Send Comment"
     }
 }

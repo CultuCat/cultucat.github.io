@@ -1,4 +1,6 @@
 {
+    "loading": "loading...",
+    "cancel": "Cancelar",
     "NAV_BAR": {
         "HOME": "Inicio",
         "SEARCH": "Busca",
@@ -12,5 +14,32 @@
         "ADMIN_USERS": "Usuarios",
         "ADMIN": "Portal Administrador",
         "APP": "Volver a la aplicación"
+    },
+    "USER": {
+        "PROFILE": "Perfil",
+        "PUNTUACIO": "Puntuación",
+        "AMICS": "Amigos",
+        "RANKING": "Ranking",
+        "TAGS": "Tags Favorits",
+        "PLACES": "Sitios Favoritos",
+        "TROFEUS": "Trofeos",
+        "No_Results": "No se han encontrado resultados",
+        "Bloquejar": "¿Estás seguro que quieres bloquear este usuario?",
+        "Block": "Bloquear",
+        "Desbloquejar": "¿Estás seguro de que quieres desbloquear este usuario?",
+        "Unblock": "Desbloquear"
+    },
+    "EVENT": {
+        "Preu_NoDisponible": "Precio no disponible",
+        "Resum_compra": "Resumen de la compra",
+        "Name": "Nombre del evento",
+        "Data": "Data",
+        "Lloc": "Sitio",
+        "Preu": "Precio",
+        "Descompte": "Descuento",
+        "No_descompte": "No hay descuentos disponibles",
+        "Total": "Total",
+        "Buy": "Comprar",
+        "Comentari": "Enviar comentario"
     }
 }
