@@ -13,7 +13,6 @@ import { createApp } from 'vue'
 // Plugins
 import { registerPlugins } from '@/plugins'
 
-
 import VueGoogleMaps from '@fawmi/vue-google-maps';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -27,6 +26,8 @@ const firebaseConfig = {
   appId: "1:605730650277:web:fdb90b860fa362429cf54c",
   measurementId: "G-7BTEFZEYED"
 };
+
+export default "$W4#yLz2*QsFv@6uG8hJ1pA5nDx@9oP3r";
 
 const appf = initializeApp(firebaseConfig);
 getAnalytics(appf);
