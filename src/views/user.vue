@@ -4,100 +4,95 @@
 
 <template>
   <template v-if="profile.username != undefined">
-    <v-col>
-      <h1 style="color: #ff6961" class="mt-5 ml-5">Profile</h1>
-      <v-col cols="12">
-        <template v-if="loadingUser == true">
-          <v-card rounded="lg" :loading="loadingUser">
-            <v-card-text>Loading...</v-card-text>
-          </v-card>
-        </template>
-        <template v-else>
-          <!-- ========================== AVATAR Y SETTINGS ========================== -->
-          <v-card rounded="lg">
-            <!-- ============================= V-CARD ============================== -->
-            <v-container>
-              <v-row>
-                <v-col cols="auto" class="d-flex align-center">
-                  <v-avatar :image="profile.imatge" size="120"></v-avatar>
-                </v-col>
-                <v-col cols="auto">
-                  <v-row>
-                    <v-col cols="auto">
-                      <p class="text-h5 font-weight-bold">{{ profile.first_name }}</p>
-                      <p class="text-h6 font-weight-regular">{{ profile.username }}</p>
-                    </v-col>
-                  </v-row>
-                  <v-row class="d-flex align-center" style="color: #797979;">
-                    <div class="d-flex align-center mx-2">
-                      <v-icon class="mdi mdi-star-circle" />
-                      <strong class="mx-1">Score: {{ profile.puntuacio }}</strong>
-                    </div>
-                    <div class="d-flex align-center mx-2" @click="dialogFriends = true">
-                      <v-icon class="mdi mdi-account-multiple" />
-                      <strong class="underline-on-hover mx-1">Friends: {{ profile.friends?.length }}</strong>
-                    </div>
-                  </v-row>
-                </v-col>
-                <v-col class="mx-3">
-                  <strong>Bio:</strong>
-                  <p class="text-body-2">{{ profile.bio }}</p>
-                </v-col>
-                <v-col cols="auto">
-                  <v-btn v-if="canIEdit" variant="text" icon="mdi-pencil"
-                    @click="handleIconClick('/users/' + userId + '/edit')" />
-                  <template v-else>
-                    <div v-if="profile.id !== user.user.id && myUser" style="float: right;">
-                      <addFriend :user="myUser" :id="String(profile.id)" />
-                    </div>
-                  </template>
-                </v-col>
-              </v-row>
-            </v-container>
-            <!-- ========================== TABS Y CONTENIDO =========================== -->
-            <v-col>
-              <v-card>
-                <v-tabs v-model="tab" bg-color="#ff6961" fixed-tabs>
-                  <v-tab v-for="i in profile_favs.length" :key="i" :value="i">
-                    {{ profile_favs[i - 1].title }}
-                  </v-tab>
-                </v-tabs>
-                <div class="content-container">
-                  <v-window v-model="tab">
-                    <!-- :value sincroniza con las tabs -->
-                    <v-window-item v-for="n in profile_favs.length" :key="n" :value="n">
-                      <!-- :compData pasa los datos de cada slide a SlideGroup (chips deslizables) -->
-                      <SlideGroup :compData="profile_favs[n - 1]" @delete-item="deleteItem"
-                        @show-trophyDialog="showTrophyDialog" :permissions="canIEdit" />
-                    </v-window-item>
-                  </v-window>
-                </div>
-              </v-card>
-            </v-col>
-            <v-row justify="center">
-              <v-col cols="4" md="4" sm="8">
-                <v-btn block rounded="xl" class="my-12" color="#FF6961" size="large" elevation="4"
-                  append-icon="mdi-star-circle-outline" @click="dialogRanking = true">
-                  Ranking
-                </v-btn>
+    <h1 style="color: #ff6961" class="mt-4 ml-5">Profile</h1>
+    <template v-if="loadingUser == true">
+      <v-card class="mx-5 mt-4 card" rounded="lg" :loading="loadingUser" elevation="4">
+        <v-card-text>Loading...</v-card-text>
+      </v-card>
+    </template>
+    <template v-else>
+      <!-- ========================== AVATAR Y SETTINGS ========================== -->
+      <v-card class="mx-5 mt-4 card" rounded="lg" elevation="4">
+        <!-- ============================= V-CARD ============================== -->
+        <v-row class="ma-2 mb-0">
+          <v-col cols="auto" class="d-flex align-center">
+            <v-avatar :image="profile.imatge" size="135" />
+          </v-col>
+          <v-col>
+            <v-row>
+              <v-col cols="auto">
+                <p class="text-h5 font-weight-bold">{{ profile.first_name }}</p>
+                <p class="text-h6 font-weight-regular">{{ profile.username }}</p>
               </v-col>
             </v-row>
-          </v-card>
-        </template>
-      </v-col>
-      <!-- ---------------- Dialog para confirmacion de eliminar ----------------- -->
-      <confirmDelete v-if="dialogDelete" :itemToDelete="itemToDelete" :deleteLoading="deleteLoading"
-        @confirmed-delete="deleteConfirmed" @cancel-delete="deleteCancel" />
-      <!-- ----------------------- dialog para ver amigos ------------------------ -->
-      <userDialog :dialog="dialogFriends" :isFriends="true" :isProfile="true" :userId="userId"
-        @closeDialog="dialogFriends = false" />
-      <!-- ----------------------- dialog para ver ranking ----------------------- -->
-      <userDialog :dialog="dialogRanking" :isRanking="true" @closeDialog="dialogRanking = false" />
-      <!-- ----------------------------------------------------------------------- -->
-      <v-dialog v-model="trophyDialog">
-        <trophyInfo @quit-trophyDialog="quitTrophyDialog" :trophy="trophySelected" />
-      </v-dialog>
-    </v-col>
+            <v-row class="d-flex align-center" style="color: #797979;">
+              <div class="d-flex align-center mx-2">
+                <v-icon class="mdi mdi-star-circle" />
+                <strong class="mx-1">Score: {{ profile.puntuacio }}</strong>
+              </div>
+              <div class="d-flex align-center mx-2" @click="dialogFriends = true">
+                <v-icon class="mdi mdi-account-multiple" />
+                <strong class="underline-on-hover mx-1">Friends: {{ profile.friends?.length }}</strong>
+              </div>
+            </v-row>
+            <v-row>
+              <p class="text-body-2 mx-3 mt-3">{{ profile.bio }}</p>
+            </v-row>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn v-if="canIEdit" variant="text" icon="mdi-pencil"
+              @click="handleIconClick('/users/' + userId + '/edit')" />
+            <template v-else>
+              <div v-if="profile.id !== user.user.id && myUser" style="float: right;">
+                <addFriend :user="myUser" :id="String(profile.id)" />
+              </div>
+            </template>
+          </v-col>
+        </v-row>
+        <!-- ========================== TABS Y CONTENIDO =========================== -->
+        <v-row>
+          <v-col>
+            <v-card class="mx-5">
+              <v-tabs v-model="tab" bg-color="#ff6961" fixed-tabs>
+                <v-tab v-for="i in profile_favs.length" :key="i" :value="i">
+                  {{ profile_favs[i - 1].title }}
+                </v-tab>
+              </v-tabs>
+              <div class="content-container">
+                <v-window v-model="tab">
+                  <!-- :value sincroniza con las tabs -->
+                  <v-window-item v-for="n in profile_favs.length" :key="n" :value="n">
+                    <!-- :compData pasa los datos de cada slide a SlideGroup (chips deslizables) -->
+                    <SlideGroup :compData="profile_favs[n - 1]" @delete-item="deleteItem"
+                      @show-trophyDialog="showTrophyDialog" :permissions="canIEdit" />
+                  </v-window-item>
+                </v-window>
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-col cols="4" md="4" sm="8">
+            <v-btn block rounded="xl" class="my-8" color="#FF6961" size="large" elevation="4"
+              append-icon="mdi-star-circle-outline" @click="dialogRanking = true">
+              Ranking
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card>
+    </template>
+    <!-- ---------------- Dialog para confirmacion de eliminar ----------------- -->
+    <confirmDelete v-if="dialogDelete" :itemToDelete="itemToDelete" :deleteLoading="deleteLoading"
+      @confirmed-delete="deleteConfirmed" @cancel-delete="deleteCancel" />
+    <!-- ----------------------- dialog para ver amigos ------------------------ -->
+    <userDialog :dialog="dialogFriends" :isFriends="true" :isProfile="true" :userId="userId"
+      @closeDialog="dialogFriends = false" />
+    <!-- ----------------------- dialog para ver ranking ----------------------- -->
+    <userDialog :dialog="dialogRanking" :isRanking="true" @closeDialog="dialogRanking = false" />
+    <!-- ----------------------------------------------------------------------- -->
+    <v-dialog v-model="trophyDialog">
+      <trophyInfo @quit-trophyDialog="quitTrophyDialog" :trophy="trophySelected" />
+    </v-dialog>
   </template>
 </template>
 
@@ -297,6 +292,10 @@ export default {
 <!-- =============================== ESTILOS =============================== -->
 
 <style scoped>
+.card {
+  min-height: calc(100vh - 95px);
+}
+
 .content-container {
   margin: 30px 0;
   /* Agrega espacio superior y inferior*/
