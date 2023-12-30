@@ -9,7 +9,7 @@
       <v-card class="card" :loading="loading">
         <v-row v-if="loading">
           <v-col cols="12" class="text-center mt-2">
-            <p>Loading...</p>
+            <p>{{$t('loading')}}</p>
           </v-col>
         </v-row>
         <v-row v-else-if="!haveFriends && !loading">
