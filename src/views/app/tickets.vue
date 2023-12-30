@@ -1,31 +1,24 @@
 <template>
-  <v-col>
-    <h1 style="color: #ff6961" class="my-5 ml-5 mb-0">Tickets</h1>
-    <v-container class="d-flex justify-center align-center">
-      <v-col cols="12" md="11" sm="8">
-        <v-card rounded="lg" :loading="loading">
-          <template v-if="loading == true">
-            <v-card-text>Carregant...</v-card-text>
+  <h1 style="color: #ff6961" class="mt-4 ml-5">Tickets</h1>
+  <v-card class="mx-5 mt-4 card" rounded="lg" :loading="loading" elevation="4">
+    <template v-if="loading == true">
+      <v-card-text>Carregant...</v-card-text>
+    </template>
+    <template v-else>
+      <template v-if="tickets.length > 0">
+        <v-switch class="switch" v-model="showAllTickets" label="See all events" color="primary"></v-switch>
+        <template class="d-flex tickets">
+          <template v-if="filteredTickets.length > 0">
+            <ticket-card class="ma-5" v-for="ticket in filteredTickets" :key="ticket.id" @click="openPopup(ticket)"
+              :ticket="ticket" />
+            <ticket-popup ref="popUp" :ticket="ticket" />
           </template>
-          <template v-else>
-            <template v-if="tickets.length > 0">
-              <v-switch class="switch" v-model="showAllTickets" label="See all events" color="primary"></v-switch>
-              <template class="d-flex tickets">
-                <template v-if="filteredTickets.length > 0">
-                  <ticket-card class="ma-5" v-for="ticket in filteredTickets" :key="ticket.id" @click="openPopup(ticket)"
-                    :ticket="ticket"></ticket-card>
-                      <ticket-popup ref="popUp" :id="this.id" :title="this.title"></ticket-popup>
-                    
-                </template>
-                <v-card-text v-else>No tens entrades per propers esdeveniments</v-card-text>
-              </template>
-            </template>
-            <v-card-text v-else>No tens entrades a esdeveniments</v-card-text>
-          </template>
-        </v-card>
-      </v-col>
-    </v-container>
-  </v-col>
+          <v-card-text v-else>No tens entrades per propers esdeveniments</v-card-text>
+        </template>
+      </template>
+      <v-card-text v-else>No tens entrades a esdeveniments</v-card-text>
+    </template>
+  </v-card>
 </template>
 
 <script>
@@ -42,12 +35,10 @@ export default {
   data() {
     return {
       dialog: false,
-      id: null,
-      title: null,
+      ticket: null,
       tickets: [],
       showAllTickets: false,
       loading: false,
-      defaultQr: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Rickrolling_QR_code.png?20200615212723'
     }
   },
   computed: {
@@ -57,7 +48,7 @@ export default {
         return this.tickets;
       } else {
         const today = new Date();
-        return this.tickets.filter(ticket => new Date(ticket.data) >= today);
+        return this.tickets.filter(ticket => new Date(ticket.dataFi) >= today);
       }
     }
   },
@@ -80,16 +71,17 @@ export default {
   },
   methods: {
     openPopup(ticket) {
-      this.id = ticket.id.toString();
-      this.title = ticket.nomEvent;
+      this.ticket = ticket;
       this.$refs.popUp.openPopup();
-
     },
   },
 }
 </script>
 
 <style scoped>
+.card {
+  min-height: calc(100vh - 95px);
+}
 .switch {
   position: absolute;
   top: 20px;
