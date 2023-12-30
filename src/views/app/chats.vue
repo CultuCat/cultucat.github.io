@@ -7,7 +7,12 @@
   <v-row>
     <v-container>
       <v-card class="card" :loading="loading">
-        <v-row v-if="!haveFriends && !loading">
+        <v-row v-if="loading">
+          <v-col cols="12" class="text-center mt-2">
+            <p>Loading...</p>
+          </v-col>
+        </v-row>
+        <v-row v-else-if="!haveFriends && !loading">
           <v-col cols="12" class="text-center">
             <v-icon size="100">mdi-account-multiple</v-icon>
             <h1>No tienes amigos</h1>
@@ -185,7 +190,7 @@ export default {
           console.error("Error:", error);
         })
         .finally(() => {
-
+          this.loading = false;
         });
     },
   },
