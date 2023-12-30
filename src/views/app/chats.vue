@@ -194,7 +194,7 @@ export default {
 }
 
 .card {
-  min-height: calc(100vh - 95px);
+  height: calc(100vh - 95px);
 }
 
 .divider {
