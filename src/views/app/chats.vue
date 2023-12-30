@@ -1,7 +1,12 @@
 <template>
   <h1 class="mt-4 ml-5" style="color: #ff6961">Xat</h1>
   <v-card class="mx-5 mt-4 card" rounded="lg" :loading="loading" elevation="4">
-    <v-row v-if="!haveFriends && !loading">
+    <v-row v-if="loading">
+      <v-col cols="12" class="text-center mt-2">
+        <p>Loading...</p>
+      </v-col>
+    </v-row>
+    <v-row v-else-if="!haveFriends && !loading">
       <v-col cols="12" class="text-center">
         <v-icon size="100">mdi-account-multiple</v-icon>
         <h1>No tienes amigos</h1>
@@ -152,6 +157,7 @@ export default {
       this.uIdR = user.id;
       this.fetchMessages();
       this.friendClicked = true;
+      this.newMessage = '';
       // Lógica para abrir el chat con el usuario
     },
     async fetchFriends() {
@@ -175,7 +181,7 @@ export default {
           console.error("Error:", error);
         })
         .finally(() => {
-
+          this.loading = false;
         });
     },
   },
