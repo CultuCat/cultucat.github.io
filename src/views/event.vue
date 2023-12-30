@@ -7,17 +7,19 @@
   <v-row>
     <template v-if="eventInfo.nom">
       <!-- ============================== CONTENIDO ============================== -->
-      <v-container class="d-flex justify-center align-center">
+      <v-container class="justify-center align-center">
         <v-card rounded="lg">
           <v-col cols="12">
             <v-btn @click="handleButtonLink" style="position: absolute; top: 10px; right: 10px" rounded="lg">
               <v-icon>mdi-link</v-icon>
               <span style="margin-left: 5px;">{{$t('EVENT.Enlace')}}</span>
             </v-btn>
-            <v-row class="d-flex ma-2 fill-height">
-              <v-img class="ma-5" :src="eventInfo.imatges_list[0]" :max-height="250" :max-width="250" aspect-ratio="1/1"
-                cover style="border-radius: 15px" />
-              <v-col class="d-flex fill-height">
+            <v-row justify="center">
+              <v-col cols="3.5">
+                <v-img class="ma-5" :src="eventInfo.imatges_list[0]" :max-height="250" :max-width="250" aspect-ratio="1"
+                  cover style="border-radius: 15px" />
+              </v-col>
+              <v-col cols="5" class="d-flex fill-height">
                 <v-col>
                   <v-card-title>{{ eventInfo.nom }}</v-card-title>
                   <v-card-subtitle>{{ transformDate(eventInfo.dataIni) }}</v-card-subtitle>
@@ -28,8 +30,8 @@
                       {{ tag.nom }}
                     </v-chip>
                   </v-chip-group>
-
-                  <v-card class="mt-14" rounded="lg" color="#ff6961" style="max-width: 220px">
+                  <v-spacer class="my-16"/>
+                  <v-card class="mt-2" rounded="lg" color="#ff6961" style="max-width: 220px">
                     <div class="d-flex justify-center align-center">
                       <div class="mr-2">
                         {{ isNumber(eventInfo.preu) ? `Preu: ${eventInfo.preu} €` : eventInfo.preu }}
@@ -41,6 +43,7 @@
               </v-col>
               <v-col class="d-flex flex-column fill-height ma-5 mt-15">
                 <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true" :disabled="!canSeeAssistants">{{$t('EVENT.Veure_assistents')}} ({{ this.eventInfo.assistants.length }})</v-btn>
+
                 <!-- --------------------- dialog para ver asistentes ---------------------- -->
                 <v-dialog v-model="dialog" scrollable max-width="600px">
                   <v-card>
@@ -48,6 +51,7 @@
                       <v-icon size="35" class="ml-6">mdi-account-group</v-icon>
                       <v-toolbar-title class="ml-6">{{$t('EVENT.Assistents')}}</v-toolbar-title>
                       <v-spacer></v-spacer>
+
                       <v-toolbar-items>
                         <v-btn icon dark variant="plain" @click="dialog = false">
                           <v-icon>mdi-close</v-icon>
@@ -55,7 +59,9 @@
                       </v-toolbar-items>
                     </v-toolbar>
                     <v-card-text style="height: 600px">
-                      <ListOfItems v-if="eventInfo.assistants.length > 0" :items="eventInfo.assistants" />
+
+                      <ListOfItems v-if="eventInfo.assistants.length > 0" :items="eventInfo.assistants"
+                        :isAssistants=true />
                       <span v-else style="display: flex; justify-content: center;">{{$t('EVENT.No_usuaris')}}</span>
                     </v-card-text>
                   </v-card>
@@ -65,19 +71,25 @@
                 <v-btn @click="handleButtonMaps" class="ma-2 pa-2" rounded="lg">{{$t('EVENT.localitzacio')}}</v-btn>
               </v-col>
             </v-row>
-            <v-row class="d-flex ma-2">
+            <v-row class="d-flex ma-2" justify="center">
               <v-col class="ma-5" style="width: 80%">
                 <h2>{{$t('EVENT.Descripcio')}}</h2>
                 <div style="text-align: justify">
                   {{ eventInfo.descripcio }}
                 </div>
                 <v-divider class="my-2" />
-                <h2>{{$t('EVENT.know')}}</h2>
-                <div style="text-align: justify">
-                  {{ eventInfo.curiosity }}
-                </div>
-                <v-divider class="my-2" />
-                <h2>{{$t('EVENT.Comment')}}</h2>
+
+                <template v-if="eventInfo.curiosity">
+                  <h2>Do you know?</h2>
+                  <div style="text-align: justify">
+                    {{ eventInfo.curiosity.question.content }}
+                  </div>
+                  <div style="text-align: justify">
+                    {{ eventInfo.curiosity.question.correct_answer }}
+                  </div>
+                  <v-divider class="my-2" />
+                </template>
+                <h2>Comment</h2>
                 <commentForm @comment-posted="fetchComments"></commentForm>
                 <template v-for="comment in eventInfo.comments.results" :key="comment.id">
                   <comment :commentProp="comment"></comment>
@@ -126,8 +138,7 @@ export default {
         longitud: null,
         link: null,
         comments: [],
-        curiosity:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac sapien quis libero ullamcorper varius. In ut turpis id quam auctor porta. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam auctor bibendum justo, a rhoncus turpis hendrerit ac. Maecenas id tellus sed dolor tempus congue. Nunc at diam vel massa mattis elementum ac a dolor. Nulla facilisi. Sed in lacinia nunc. Quisque vel justo euismod, feugiat arcu ac, efficitur ipsum. Sed vulputate mi id odio consequat, sit amet varius neque rhoncus. Integer eu sollicitudin libero.",
+        curiosity: null,
         assistants: [],
       },
       dialog: false,
@@ -174,6 +185,7 @@ export default {
         this.eventInfo.longitud = data.longitud;
         this.eventInfo.link = data.enllacos_list[0];
         this.eventInfo.assistants = data.assistents;
+        this.eventInfo.curiosity = data.pregunta;
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -201,6 +213,19 @@ export default {
       })
       .then((data) => {
         this.eventInfo.comments = data;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    fetch(`https://cultucat.hemanuelpc.es/events/${this.$route.params.event_id}/`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("No se pudo obtener el archivo JSON");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        this.eventInfo.assistants = data.assistents;
       })
       .catch((error) => {
         console.error("Error:", error);

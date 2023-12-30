@@ -37,20 +37,26 @@
             <v-btn rounded="xl" variant="plain" icon="mdi-restart" @click="resetView"></v-btn>
           </template>
         </v-card-item>
-
-        <v-divider class="my-4"></v-divider>
-        <v-list v-if="items_get.length > 0">
-          <v-list-item v-for="(item, index) in filteredItems" :key="item">
-            <eventPreview v-if="item.espai" :item="item" />
-            <userPreview v-else :item="item" :index="index" :isAdmin="isAdmin" @update="getUsers" />
-          </v-list-item>
-        </v-list>
-        <div v-else style="text-align: center" class="my-10">
-          <v-chip> {{$t('EVENT.No_found')}} </v-chip>
-        </div>
-      </v-card>
-    </template>
-  </v-col>
+            <v-divider class="my-4"></v-divider>
+            <v-list v-if="items_get.length > 0">
+              <v-list-item v-for="(item, index) in filteredItems" :key="item">
+                <v-row>
+                  <v-col>
+                    <eventPreview v-if="item.espai" :item="item" />
+                    <userPreview v-else :item="item" :index="index" :isAdmin="isAdmin" @update="getUsers" />
+                  </v-col>
+                  <v-col cols="auto" class="d-flex align-center" v-if="isAssistants && myUser && String(item.id)!==String(this.user.user.id)">
+                    <addFriend :user="myUser" :id="String(item.id)" />
+                  </v-col>
+                </v-row>
+              </v-list-item>
+            </v-list>
+            <div v-else style="text-align: center" class="my-10">
+                <v-chip> Sorry, no results found for your search. </v-chip>
+              </div>
+          </v-card>
+        </template>
+      </v-col>
   <v-dialog v-model="filtersDialog">
     <eventsFilters @quit-filters-dialog="filtersDialog = false" @filter-by="filterByEvent" :idxTagsProp="tagsSelected" />
   </v-dialog>
@@ -59,6 +65,8 @@
 <script>
 import eventPreview from "@/components/eventPreview.vue";
 import userPreview from "@/components/userPreview.vue";
+import addFriend from "@/components/addFriend.vue";
+import { mapGetters } from "vuex";
 import eventsFilters from "@/components/eventsFilters.vue";
 
 export default {
@@ -66,6 +74,7 @@ export default {
   components: {
     eventPreview,
     userPreview,
+    addFriend,
     eventsFilters,
   },
   data() {
@@ -74,11 +83,12 @@ export default {
       expanded: false,
       searchInput: "",
       loaded: false,
-      orderByList: [
-        { title: this.$t('EVENT.Data_asc'), value: "dataIni" },
-        { title: this.$t('EVENT.Data_desc'), value: "-dataIni" },
-        { title: this.$t('EVENT.Nom_asc'), value: "nom" },
-        { title: this.$t('EVENT.Nom_desc'), value: "-nom" },
+      myUser:null,
+      orderByList:[
+        {title: 'Ascending Date', value: "dataIni"},
+        {title: 'Descending Date', value: "-dataIni"},
+        {title: 'Ascending Name', value: "nom"},
+        {title: 'Descending Name', value: "-nom"},
       ],
       orderBySelected: 0,
       loadingOrder: false,
@@ -100,7 +110,11 @@ export default {
     },
     type: String,
     userId: Number,
-    view: String
+    view: String,
+    isAssistants: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     expandSearch() {
@@ -153,7 +167,23 @@ export default {
           console.error(error);
         });
     },
-    sortBy(index) {
+    getUser() {
+      fetch("https://cultucat.hemanuelpc.es/users/"+this.user.user.id+"/")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error al obtener el usuario: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+          this.myUser = data;
+      })
+      .catch((error) => {
+        // Maneja errores aquí
+        console.error("Error al obtener el perfil del usuario:", error);
+      });
+    },
+    sortBy(index){
       const selected = this.orderByList[index].value;
       if (selected !== this.orderByList[this.orderBySelected].value) {
         this.orderBySelected = index;
@@ -222,6 +252,9 @@ export default {
     },
   },
   created() {
+    if(this.isAssistants){
+      this.getUser();
+    }
     if (this.items) {
       this.items_get = this.items;
       this.loaded = true;
@@ -237,6 +270,7 @@ export default {
     window.addEventListener('scroll', this.handleScroll);
   },
   computed: {
+    ...mapGetters(["user"]),
     textFieldStyle() {
       return {
         maxWidth: this.expanded ? "300px" : "45px",
