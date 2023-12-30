@@ -62,15 +62,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.pop-up {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  padding: 32px 16px 120px;
-  width: 100%;
-  height: 100vh;
-  display: grid;
-  place-items: center;
-}
 </style>
