@@ -37,20 +37,6 @@
         </v-list>
       </v-list-group>
     </v-list>
-
-    <v-divider></v-divider>
-
-    <v-list dense nav>
-      <v-list-group :prepend-icon="languages.icon">
-        <template v-slot:activator="{ props }">
-          <v-list-item v-bind="props" :title=currentLanguageTitle()></v-list-item>
-        </template> 
-
-        <v-list-item density="compact" v-for="language in languages.values.filter(language => language.value !== this.$i18next.language)"
-           :key="language.value" :title="language.text" @click="$i18next.changeLanguage(language.value)">
-        </v-list-item>
-      </v-list-group>
-    </v-list>
   </v-navigation-drawer>
 </template>
     
@@ -116,15 +102,6 @@ export default {
         avatar: null,
         children: [],
       },
-      languages: {
-        title: null,
-        icon: "mdi-web",
-        values: [
-          { text: 'ENG', value: 'en' },
-          { text: 'ESP', value: 'es' },
-          { text: 'CAT', value: 'ca' }
-        ]
-      },
     };
   },
   computed: {
@@ -145,7 +122,6 @@ export default {
     this.profile.avatar = this.user.user.imatge;
     this.isAdmin = this.user.user.is_staff;
     this.setChildren();
-    this.languages.title = "CAT";
   },
   methods: {
     ...mapActions(['logoutUser']),
@@ -199,10 +175,6 @@ export default {
       else if(route === "/login") this.logoutUser();
       else window.location.pathname = route;
     },
-    currentLanguageTitle() {
-      const currentLanguage = this.languages.values.find(lang => lang.value === this.$i18next.language);
-      return currentLanguage ? currentLanguage.text : 'CAT';
-    }
   },
 };
 </script>

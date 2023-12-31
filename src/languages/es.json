@@ -119,5 +119,9 @@
         "Descripcio_max": "Máx descripción = 560 caracteres",
         "Crea": "Crear",
         "Users": "Usuarios"
+    },
+    "CONFIG": {
+        "Config": "Configuración",
+        "Idioma": "Idiomas"
     }
 }
