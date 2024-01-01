@@ -22,7 +22,7 @@
               <v-col cols="5" class="d-flex fill-height">
                 <v-col>
                   <v-card-title>{{ eventInfo.nom }}</v-card-title>
-                  <v-card-subtitle>{{ transformDate(eventInfo.dataIni) }}</v-card-subtitle>
+                  <v-card-subtitle>{{ transformDate(eventInfo.dataIni) }} - {{ transformDate(eventInfo.dataFi) }}</v-card-subtitle>
                   <v-card-subtitle>{{ eventInfo.espai }}</v-card-subtitle>
 
                   <v-chip-group class="mx-2">
@@ -129,6 +129,7 @@ export default {
         descripcio: null,
         tags: [],
         dataIni: null,
+        dataFi: null,
         espai: null,
         preu: null,
         imatges_list: null,
@@ -176,6 +177,7 @@ export default {
         this.eventInfo.descripcio = data.descripcio;
         this.eventInfo.tags = data.tags;
         this.eventInfo.dataIni = data.dataIni;
+        this.eventInfo.dataFi = data.dataFi;
         this.eventInfo.espai = data.espai.nom;
         this.eventInfo.preu = data.preu;
         this.eventInfo.imatges_list = data.imatges_list;

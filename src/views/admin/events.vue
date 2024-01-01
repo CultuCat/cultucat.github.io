@@ -23,7 +23,7 @@ export default {
     return {
       itemsJSON: [],
       loading: false,
-      urlToFetch: "https://cultucat.hemanuelpc.es/events/?ordering=-dataIni",
+      urlToFetch: "https://cultucat.hemanuelpc.es/events/?ordering=dataIni",
     };
   },
   created() {
