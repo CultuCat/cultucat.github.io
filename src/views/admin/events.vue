@@ -4,10 +4,10 @@
 
 <template>
   <template v-if="itemsJSON.length > 0">
-  <v-col>
-    <h1 style="color: #ff6961" class="my-5 ml-5">Events</h1>
-      <ListOfItems :items="itemsJSON" view="admin_events"/>
-  </v-col>
+    <v-col>
+      <h1 style="color: #ff6961" class="mt-4 ml-5">Events</h1>
+      <ListOfItems :items="itemsJSON" view="admin_events" />
+    </v-col>
   </template>
 </template>
 
@@ -37,22 +37,22 @@ export default {
     fetchData() {
       this.isLoading = true;
       fetch(this.urlToFetch)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("No se pudo obtener el archivo JSON");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        this.itemsJSON = this.itemsJSON.concat(data.results);
-        this.urlToFetch = data.next;
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      })
-      .finally(() => {
-        this.isLoading = false; // Restablecer isLoading después de la solicitud, ya sea exitosa o con error
-      });
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("No se pudo obtener el archivo JSON");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          this.itemsJSON = this.itemsJSON.concat(data.results);
+          this.urlToFetch = data.next;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        })
+        .finally(() => {
+          this.isLoading = false; // Restablecer isLoading después de la solicitud, ya sea exitosa o con error
+        });
     },
     handleScroll() {
       if (!this.isLoading) {

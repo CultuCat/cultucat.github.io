@@ -2,7 +2,7 @@
   <v-col cols="12">
     <template v-if="loaded">
       <v-card elevation="4" rounded="lg">
-        <v-card-item class="my-4">
+        <v-card-item class="my-4" v-if="view === 'events' || view === 'admin_events'">
           <template v-slot:prepend v-if="view === 'events'">
             <v-btn rounded="xl" prepend-icon="mdi-filter-outline" @click="filtersDialog = true"
               :loading="filtering">Filters</v-btn>
@@ -37,26 +37,27 @@
             <v-btn rounded="xl" variant="plain" icon="mdi-restart" @click="resetView"></v-btn>
           </template>
         </v-card-item>
-            <v-divider class="my-4"></v-divider>
-            <v-list v-if="items_get.length > 0">
-              <v-list-item v-for="(item, index) in filteredItems" :key="item">
-                <v-row>
-                  <v-col>
-                    <eventPreview v-if="item.espai" :item="item" />
-                    <userPreview v-else :item="item" :index="index" :isAdmin="isAdmin" @update="getUsers" />
-                  </v-col>
-                  <v-col cols="auto" class="d-flex align-center" v-if="isAssistants && myUser && String(item.id)!==String(this.user.user.id)">
-                    <addFriend :user="myUser" :id="String(item.id)" />
-                  </v-col>
-                </v-row>
-              </v-list-item>
-            </v-list>
-            <div v-else style="text-align: center" class="my-10">
-                <v-chip> Sorry, no results found for your search. </v-chip>
-              </div>
-          </v-card>
-        </template>
-      </v-col>
+        <v-divider class="my-4" v-if="view === 'events' || view === 'admin_events'" />
+        <v-list v-if="items_get.length > 0">
+          <v-list-item v-for="(item, index) in filteredItems" :key="item">
+            <v-row>
+              <v-col>
+                <eventPreview v-if="item.espai" :item="item" />
+                <userPreview v-else :item="item" :index="index" :isAdmin="isAdmin" @update="getUsers" />
+              </v-col>
+              <v-col cols="auto" class="d-flex align-center"
+                v-if="isAssistants && myUser && String(item.id) !== String(this.user.user.id)">
+                <addFriend :user="myUser" :id="String(item.id)" />
+              </v-col>
+            </v-row>
+          </v-list-item>
+        </v-list>
+        <div v-else style="text-align: center" class="my-10">
+          <v-chip> Sorry, no results found for your search. </v-chip>
+        </div>
+      </v-card>
+    </template>
+  </v-col>
   <v-dialog v-model="filtersDialog">
     <eventsFilters @quit-filters-dialog="filtersDialog = false" @filter-by="filterByEvent" :idxTagsProp="tagsSelected" />
   </v-dialog>
@@ -83,12 +84,12 @@ export default {
       expanded: false,
       searchInput: "",
       loaded: false,
-      myUser:null,
-      orderByList:[
-        {title: 'Ascending Date', value: "dataIni"},
-        {title: 'Descending Date', value: "-dataIni"},
-        {title: 'Ascending Name', value: "nom"},
-        {title: 'Descending Name', value: "-nom"},
+      myUser: null,
+      orderByList: [
+        { title: 'Ascending Date', value: "dataIni" },
+        { title: 'Descending Date', value: "-dataIni" },
+        { title: 'Ascending Name', value: "nom" },
+        { title: 'Descending Name', value: "-nom" },
       ],
       orderBySelected: 0,
       loadingOrder: false,
@@ -168,22 +169,22 @@ export default {
         });
     },
     getUser() {
-      fetch("https://cultucat.hemanuelpc.es/users/"+this.user.user.id+"/")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error al obtener el usuario: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
+      fetch("https://cultucat.hemanuelpc.es/users/" + this.user.user.id + "/")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Error al obtener el usuario: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
           this.myUser = data;
-      })
-      .catch((error) => {
-        // Maneja errores aquí
-        console.error("Error al obtener el perfil del usuario:", error);
-      });
+        })
+        .catch((error) => {
+          // Maneja errores aquí
+          console.error("Error al obtener el perfil del usuario:", error);
+        });
     },
-    sortBy(index){
+    sortBy(index) {
       const selected = this.orderByList[index].value;
       if (selected !== this.orderByList[this.orderBySelected].value) {
         this.orderBySelected = index;
@@ -252,7 +253,7 @@ export default {
     },
   },
   created() {
-    if(this.isAssistants){
+    if (this.isAssistants) {
       this.getUser();
     }
     if (this.items) {
