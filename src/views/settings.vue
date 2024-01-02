@@ -11,7 +11,7 @@
 
           <v-list-item density="compact"
             v-for="language in languages.values.filter(language => language.value !== this.$i18next.language)"
-            :key="language.value" :title="language.text" @click="$i18next.changeLanguage(language.value)">
+            :key="language.value" :title="language.text" @click="changeLanguagePut(language.value)">
           </v-list-item>
         </v-list-group>
       </v-list>
