@@ -4,22 +4,23 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import ca from './ca'
 import en from './en'
 import es from './es'
+import store from '../store'
 
 export const languageResources = {
     en: { translation: en },
-    ca: { translation: ca },
+    cat: { translation: ca },
     es: { translation: es },
 };
 
+const initialLanguage = store.getters.user.user.language;
+
+
+
 i18next
-  // detect user language
-  // learn more: https://github.com/i18next/i18next-browser-languageDetector
-  .use(LanguageDetector)
-  // init i18next
-  // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     debug: true,
-    fallbackLng: 'ca',
+    fallbackLng: 'cat',
+    lng: initialLanguage,
     resources: languageResources,
   });
 
