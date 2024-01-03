@@ -51,31 +51,31 @@ export default {
       isAdmin: null,
       items: [
         {
-          title: "Home",
+          title: this.$t('NAV_BAR.HOME'),
           icon: "mdi-home-outline",
           fillIcon: "mdi-home",
           to: "/home",
         },
         {
-          title: "Search",
+          title: this.$t('NAV_BAR.SEARCH'),
           icon: "mdi-magnify",
           fillIcon: "mdi-magnify",
           to: "/search",
         },
         {
-          title: "Map",
+          title: this.$t('NAV_BAR.MAPA'),
           icon: "mdi-map-outline",
           fillIcon: "mdi-map",
           to: "/map",
         },
         {
-          title: "Tickets",
+          title: this.$t('NAV_BAR.TICKETS'),
           icon: "mdi-ticket-outline",
           fillIcon: "mdi-ticket",
           to: "/tickets",
         },
         {
-          title: "Chats",
+          title: this.$t('NAV_BAR.CHATS'),
           icon: "mdi-message-outline",
           fillIcon: "mdi-message",
           to: "/chats",
@@ -83,13 +83,13 @@ export default {
       ],
       adminItems: [
         {
-          title: "Events",
+          title: this.$t('NAV_BAR.ADMIN_EVENTS'),
           icon: "mdi-calendar-text-outline",
           fillIcon: "mdi-calendar-text",
           to: "/admin/events",
         },
         {
-          title: "Users",
+          title: this.$t('NAV_BAR.ADMIN_USERS'),
           icon: "mdi-account-multiple-outline",
           fillIcon: "mdi-account-multiple",
           to: "/admin/users",
@@ -128,7 +128,7 @@ export default {
     setChildren() {
       this.profile.children = [
         {
-          title: "Profile",
+          title: this.$t('NAV_BAR.USER_PROFILE'),
           icon: "mdi-account-outline",
           fillIcon: "mdi-account",
           to: `/users/${this.user.user.id}`,
@@ -138,7 +138,7 @@ export default {
         if (this.adminView) {
           this.profile.children.push(
             {
-              title: "Back to app",
+              title: this.$t('NAV_BAR.APP'),
               icon: "mdi-arrow-left",
               to: "/home",
             }
@@ -147,7 +147,7 @@ export default {
         else {
           this.profile.children.push(
             {
-              title: "Go to admin",
+              title: this.$t('NAV_BAR.ADMIN'),
               icon: "mdi-shield-crown-outline",
               to: "/admin/events",
             }
@@ -156,12 +156,12 @@ export default {
       }
       this.profile.children.push(
         {
-          title: "Settings",
+          title: this.$t('NAV_BAR.USER_SETTINGS'),
           icon: "mdi-cog-outline",
           to: "/settings",
         },
         {
-          title: "Logout",
+          title: this.$t('NAV_BAR.USER_LOGOUT'),
           icon: "mdi-logout",
           to: "/login",
 
@@ -174,7 +174,7 @@ export default {
       }
       else if(route === "/login") this.logoutUser();
       else window.location.pathname = route;
-    }
+    },
   },
 };
 </script>

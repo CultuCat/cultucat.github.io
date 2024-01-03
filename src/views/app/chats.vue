@@ -1,76 +1,67 @@
 <template>
-  <v-row justify="center">
-    <v-col class="mb-0 pb-0">
-      <h1 class="mt-5 ml-5" style="color: #ff6961">Xat</h1>
-    </v-col>
-  </v-row>
-  <v-row>
-    <v-container>
-      <v-card class="card" :loading="loading">
-        <v-row v-if="loading">
-          <v-col cols="12" class="text-center mt-2">
-            <p>Loading...</p>
-          </v-col>
-        </v-row>
-        <v-row v-else-if="!haveFriends && !loading">
-          <v-col cols="12" class="text-center">
-            <v-icon size="100">mdi-account-multiple</v-icon>
-            <h1>No tienes amigos</h1>
-            <h1>Ve a hacer algunos!</h1>
-          </v-col>
-        </v-row>
-        <v-row v-else>
-          <!-- Lista de usuarios -->
-          <v-col cols="3" class="pr-0" justify-center>
-            <v-list-item v-for="user in friends" :key="user.id" class="px-3 py-2 clickable" @click="handleClick(user)">
-              <template v-slot:prepend>
-                <v-avatar :image="user.imatge || user.avatar" size="40" class="mr-5 my-2" />
-                <strong>{{ user.first_name || user.name }}</strong>
-              </template>
-            </v-list-item>
-          </v-col>
-          <div class="divider"></div>
-          <!-- Mensajes y campo de entrada -->
-          <v-col v-if="friendClicked" cols="8.5" class="d-flex flex-column chat-col">
-            <v-card class="my-3 pa-2 mr-3" color="#ff6961" rounded="lg">
-              <v-avatar :image="uImageR" size="40" class="ml-2 mr-5 my-2"></v-avatar>
-              <strong style="color: white">{{ uNameR }}</strong>
-            </v-card>
-            <div class="flex-grow-1 d-flex flex-column overflow-auto" ref="messageContainer">
-              <v-card class="flex-grow-1 overflow-auto">
-                <v-card-text v-if="!messageLoading">
-                  <div v-for="(message, index) in messages" :key="index"
-                    :class="{ 'message-container-left': message.user_from !== uId, 'message-container-right': message.user_from === uId }">
-                    <div
-                      :class="{ 'message-left': message.user_from !== uId, 'message-right': message.user_from === uId }">
-                      <strong>{{ message.text }}</strong>
-                    </div>
-                  </div>
-                </v-card-text>
-                <div v-else class="text-center">
-                  <v-progress-circular :size="25" color="red" indeterminate />
+  <h1 class="mt-4 ml-5" style="color: #ff6961">Xat</h1>
+  <v-card class="mx-5 mt-4 card" rounded="lg" :loading="loading" elevation="4">
+    <v-row v-if="loading">
+      <v-col cols="12" class="text-center mt-2">
+        <p>{{$t('loading')}}</p>
+      </v-col>
+    </v-row>
+    <v-row v-else-if="!haveFriends && !loading">
+      <v-col cols="12" class="text-center">
+        <v-icon size="100">mdi-account-multiple</v-icon>
+        <h1>No tienes amigos</h1>
+        <h1>Ve a hacer algunos!</h1>
+      </v-col>
+    </v-row>
+    <v-row v-else>
+      <!-- Lista de usuarios -->
+      <v-col cols="3" class="pr-0" justify-center>
+        <v-list-item v-for="user in friends" :key="user.id" class="px-3 py-2 clickable" @click="handleClick(user)">
+          <template v-slot:prepend>
+            <v-avatar :image="user.imatge || user.avatar" size="40" class="mr-5 my-2" />
+            <strong>{{ user.first_name || user.name }}</strong>
+          </template>
+        </v-list-item>
+      </v-col>
+      <div class="divider"></div>
+      <!-- Mensajes y campo de entrada -->
+      <v-col v-if="friendClicked" cols="8.5" class="d-flex flex-column chat-col">
+        <v-card class="my-3 pa-2 mr-3" color="#ff6961" rounded="lg">
+          <v-avatar :image="uImageR" size="40" class="ml-2 mr-5 my-2"></v-avatar>
+          <strong style="color: white">{{ uNameR }}</strong>
+        </v-card>
+        <div class="flex-grow-1 d-flex flex-column overflow-auto" ref="messageContainer">
+          <v-card class="flex-grow-1 overflow-auto">
+            <v-card-text v-if="!messageLoading">
+              <div v-for="(message, index) in messages" :key="index"
+                :class="{ 'message-container-left': message.user_from !== uId, 'message-container-right': message.user_from === uId }">
+                <div :class="{ 'message-left': message.user_from !== uId, 'message-right': message.user_from === uId }">
+                  <strong>{{ message.text }}</strong>
                 </div>
-              </v-card>
+              </div>
+            </v-card-text>
+            <div v-else class="text-center">
+              <v-progress-circular :size="25" color="red" indeterminate />
             </div>
-            <div>
-              <v-textarea class="mr-3" auto-grow rows="1" row-height="20" v-model="newMessage" label="Escribe un mensaje"
-                no-resize />
-            </div>
-            <div>
-              <v-btn @click="sendMessage">Enviar</v-btn>
-            </div>
-          </v-col>
-          <v-col v-else class="justify-center align-center">
-            <v-responsive class="align-center text-center fill-height">
-              <v-img height="150" src="@/assets/logo.png" />
-              <p class="text-h4 font-weight-bold my-2">CultuCat messages</p>
-              <div class="py-14" />
-            </v-responsive>
-          </v-col>
-        </v-row>
-      </v-card>
-    </v-container>
-  </v-row>
+          </v-card>
+        </div>
+        <div>
+          <v-textarea class="mr-3" auto-grow rows="1" row-height="20" v-model="newMessage" label="Escribe un mensaje"
+            no-resize />
+        </div>
+        <div>
+          <v-btn @click="sendMessage">Enviar</v-btn>
+        </div>
+      </v-col>
+      <v-col v-else class="justify-center align-center">
+        <v-responsive class="align-center text-center fill-height">
+          <v-img height="150" src="@/assets/logo.png" />
+          <p class="text-h4 font-weight-bold my-2">CultuCat messages</p>
+          <div class="py-14" />
+        </v-responsive>
+      </v-col>
+    </v-row>
+  </v-card>
 </template>
 
 <script>
@@ -203,7 +194,7 @@ export default {
 }
 
 .card {
-  height: calc(100vh - 100px);
+  height: calc(100vh - 95px);
 }
 
 .divider {

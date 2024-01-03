@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-col class="mb-0 pb-0">
-      <h1 style="color: #ff6961" class="mt-5 ml-5">Benvingut, {{ user.user.first_name }}</h1>
+      <h1 style="color: #ff6961" class="mt-5 ml-5">{{$t('HOME.Benvingut')}}, {{ user.user.first_name }}</h1>
     </v-col>
   </v-row>
   <v-row>
@@ -53,22 +53,22 @@ export default {
       dialogPopular: false,
       buttons: [
         {
-          label: "Avui",
+          label: this.$t('HOME.Avui'),
           icon: "mdi-calendar-today",
           dialog: this.dialogToday,
         },
         {
-          label: "Aquesta setmana",
+          label: this.$t('HOME.Setmana'),
           icon: "mdi-calendar-week",
           dialog: this.dialogWeek,
         },
         {
-          label: "Gratuït",
+          label: this.$t('HOME.Gratis'),
           icon: "mdi-currency-usd-off",
           dialog: this.dialogFree,
         },
         {
-          label: "Popular",
+          label: this.$t('HOME.Popular'),
           icon: "mdi-trending-up",
           dialog: this.dialogPopular,
         }

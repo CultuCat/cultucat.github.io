@@ -6,7 +6,7 @@
           <h1>{{ title }}</h1>
         </v-row>
         <v-row class="mb-2" justify="center">
-          <p>This is your ticket for the event.</p>
+          <p>{{$t('TICKETS.ticket')}}</p>
         </v-row>
         <v-row class="mb-2" justify="center">
           <img :src="image" alt="Popup Image" />
@@ -19,7 +19,7 @@
             variant="elevated"
             @click="closePopup"
           >
-            Close
+          {{$t('close')}}
           </v-btn>
         </v-row>
       </v-col>

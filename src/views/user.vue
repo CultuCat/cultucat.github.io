@@ -165,13 +165,13 @@ export default {
           this.agregarSlideGroup(
             this.profile_favs,
             1,
-            "Favourite Tags",
+            this.$t('USER.TAGS'),
             this.profile.tags_preferits
           );
           this.agregarSlideGroup(
             this.profile_favs,
             2,
-            "Favourite Places",
+            this.$t('USER.PLACES'),
             this.profile.espais_preferits
           );
           if (this.canIEdit) {
@@ -181,22 +181,23 @@ export default {
                 'Content-Type': 'application/json',
               }
             }
-            axios
-              .get("https://cultucat.hemanuelpc.es/trophies/", config)
-              .then((response2) => {
-                if (response2.status == 200) {
-                  this.agregarSlideGroup(
-                    this.profile_favs,
-                    3,
-                    "Trophies",
-                    response2.data
-                  );
-                }
-              })
-              .catch((error) => {
-                // Maneja errores aquí
-                console.error("Error al obtener los trofeos del usuario:", error);
-              });
+          axios
+            .get("https://cultucat.hemanuelpc.es/trophies/", config)
+            .then((response2) => {
+              if (response2.status == 200) {
+                this.agregarSlideGroup(
+                  this.profile_favs,
+                  3,
+                  this.$t('USER.TROFEUS'),
+                  response2.data
+                );
+              }
+            })
+            .catch((error) => {
+              // Maneja errores aquí
+              console.error("Error al obtener los trofeos del usuario:", error);
+            });
+
           }
           // ============================= GET TROFEOS =============================
 

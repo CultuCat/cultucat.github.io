@@ -18,7 +18,7 @@
           </v-list-item>
         </v-list>
         <div v-else-if="!isLoading" style="text-align: center" class="my-10">
-          <v-chip> Sorry, no results found. </v-chip>
+          <v-chip>{{ $t('USER.No_Results') }} </v-chip>
         </div>
       </v-card-text>
     </v-card>

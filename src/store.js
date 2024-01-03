@@ -20,6 +20,11 @@ export default createStore({
     setProfileData(state, data) {
       state.profileData = data;
     },
+    setUserLanguage(state, language) {
+      if (state.user && state.user.user) {
+        state.user.user.language = language;
+      }
+    },
   },
   actions: {
     loginUser({ commit }, user) {
@@ -27,6 +32,9 @@ export default createStore({
     },
     logoutUser({ commit }) {
       commit("clearUser");
+    },
+    setUserLanguage({ commit }, language) {
+      commit("setUserLanguage", language);
     },
   },
   getters: {

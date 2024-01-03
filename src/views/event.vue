@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-col class="mb-0 pb-0">
-      <h1 style="color: #ff6961" class="mt-5 ml-5">Event</h1>
+      <h1 style="color: #ff6961" class="mt-5 ml-5">{{$t('EVENT.Event')}}</h1>
     </v-col>
   </v-row>
   <v-row>
@@ -12,7 +12,7 @@
           <v-col cols="12">
             <v-btn @click="handleButtonLink" style="position: absolute; top: 10px; right: 10px" rounded="lg">
               <v-icon>mdi-link</v-icon>
-              <span style="margin-left: 5px;">Enllaç</span>
+              <span style="margin-left: 5px;">{{$t('EVENT.Enlace')}}</span>
             </v-btn>
             <v-row justify="center">
               <v-col cols="3.5">
@@ -36,21 +36,22 @@
                       <div class="mr-2">
                         {{ isNumber(eventInfo.preu) ? `Preu: ${eventInfo.preu} €` : eventInfo.preu }}
                       </div>
-                      <v-btn class="ma-2" @click="dialogBuy = true" :disabled="!canIBuy">Buy</v-btn>
+                      <v-btn class="ma-2" @click="dialogBuy = true" :disabled="!canIBuy">{{$t('EVENT.Buy')}}</v-btn>
                     </div>
                   </v-card>
                 </v-col>
               </v-col>
               <v-col class="d-flex flex-column fill-height ma-5 mt-15">
-                <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true" :disabled="!canSeeAssistants">See assistants
-                  ({{ this.eventInfo.assistants.length }})</v-btn>
+                <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true" :disabled="!canSeeAssistants">{{$t('EVENT.Veure_assistents')}} ({{ this.eventInfo.assistants.length }})</v-btn>
+
                 <!-- --------------------- dialog para ver asistentes ---------------------- -->
                 <v-dialog v-model="dialog" scrollable max-width="600px">
                   <v-card>
                     <v-toolbar color="#ff6961" dark>
                       <v-icon size="35" class="ml-6">mdi-account-group</v-icon>
-                      <v-toolbar-title class="ml-6">Assistants</v-toolbar-title>
-                      <v-spacer />
+                      <v-toolbar-title class="ml-6">{{$t('EVENT.Assistents')}}</v-toolbar-title>
+                      <v-spacer></v-spacer>
+
                       <v-toolbar-items>
                         <v-btn icon dark variant="plain" @click="dialog = false">
                           <v-icon>mdi-close</v-icon>
@@ -58,25 +59,26 @@
                       </v-toolbar-items>
                     </v-toolbar>
                     <v-card-text style="height: 600px">
+
                       <ListOfItems v-if="eventInfo.assistants.length > 0" :items="eventInfo.assistants"
                         :isAssistants=true />
-                      <span v-else style="display: flex; justify-content: center;">No hi ha usuaris amb entrada per aquest
-                        esdeveniment</span>
+                      <span v-else style="display: flex; justify-content: center;">{{$t('EVENT.No_usuaris')}}</span>
                     </v-card-text>
                   </v-card>
                 </v-dialog>
                 <!-- ----------------------------------------------------------------------- -->
-                <v-btn @click="agregarEventoAlCalendario" class="ma-2 pa-2" rounded="lg">Add to calendar</v-btn>
-                <v-btn @click="handleButtonMaps" class="ma-2 pa-2" rounded="lg">See location</v-btn>
+                <v-btn @click="agregarEventoAlCalendario" class="ma-2 pa-2" rounded="lg">{{$t('EVENT.Calendari')}}</v-btn>
+                <v-btn @click="handleButtonMaps" class="ma-2 pa-2" rounded="lg">{{$t('EVENT.localitzacio')}}</v-btn>
               </v-col>
             </v-row>
             <v-row class="d-flex ma-2" justify="center">
               <v-col class="ma-5" style="width: 80%">
-                <h2>Description</h2>
+                <h2>{{$t('EVENT.Descripcio')}}</h2>
                 <div style="text-align: justify">
                   {{ eventInfo.descripcio }}
                 </div>
                 <v-divider class="my-2" />
+
                 <template v-if="eventInfo.curiosity">
                   <h2>Do you know?</h2>
                   <div style="text-align: justify">

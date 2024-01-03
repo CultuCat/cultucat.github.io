@@ -5,14 +5,14 @@
 <template>
   <v-col>
     <!-- =============================== TITULO ================================ -->
-    <h1 style="color: #ff6961" class="my-5 ml-5">Edit Profile</h1>
+    <h1 style="color: #ff6961" class="my-5 ml-5">{{$t('USER.Editar')}}</h1>
     <!-- ============================== CONTENIDO ============================== -->
     <v-container class="d-flex justify-center align-center">
       <v-col cols="12" md="10" sm="8">
         <v-card class="pa-12" variant="elevated">
           <v-btn @click="deleteUser" color="error" dark prepend-icon="mdi-account-remove"
             style="position:absolute; top:30px; right:30px;">
-            Eliminar Usuario
+            {{$t('USER.Eliminar_user')}}
           </v-btn>
           <v-form @submit.prevent="submit" enctype="multipart/form-data">
             <!-- ============================ EDITAR AVATAR ============================ -->
