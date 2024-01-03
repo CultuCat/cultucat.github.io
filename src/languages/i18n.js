@@ -12,7 +12,7 @@ export const languageResources = {
     es: { translation: es },
 };
 
-const initialLanguage = store.getters.user ? store.getters.user.language : 'cat';
+const initialLanguage = store.getters.user ? store.getters.user.user.language : 'cat';
 
 
 i18next

@@ -21,6 +21,7 @@
 
 <script setup>
 import { mapGetters } from "vuex";
+import store from '../store'
 </script>
 
 <script>
@@ -67,8 +68,10 @@ export default {
         const errorlang = await response.json();
         throw new Error(`Error in save language request: ${JSON.stringify(errorlang)}`);
         }
+        const errorlang = await response.json();
+        console.log(`Language updated successfully: ${JSON.stringify(errorlang)}`);
 
-        console.log('Language updated successfully');
+        this.$store.dispatch("setUserLanguage", languageValue); 
 
       } catch (error) {
         console.error('Error updating user language:', error);
