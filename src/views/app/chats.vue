@@ -1,5 +1,5 @@
 <template>
-  <h1 class="mt-4 ml-5" style="color: #ff6961">{{ $t('CHAT.chat') }}</h1>
+  <h1 class="mt-4 ml-5" style="color: #ff6961">{{ $t('CHAT.Chat') }}</h1>
   <v-card class="mx-5 mt-4 card" rounded="lg" :loading="loading" elevation="4">
     <v-row v-if="loading">
       <v-col cols="12" class="text-center mt-2">
@@ -88,6 +88,9 @@ export default {
   },
   computed: {
     ...mapGetters(["user"]),
+    filteredFriends() {
+      return this.friends.filter((item) => item.isVisible && !item.isBlocked && item.wantsToTalk)
+    },
   },
   created() {
     this.uId = this.user.user.id;
