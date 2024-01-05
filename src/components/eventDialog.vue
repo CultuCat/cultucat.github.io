@@ -92,13 +92,13 @@ export default {
         });
     },
     getPath() {
-      if (this.label === 'Avui')
+      if (this.label === this.$t('HOME.Avui'))
         this.path = 'today';
-      else if (this.label === 'Aquesta setmana')
+      else if (this.label === this.$t('HOME.Setmana'))
         this.path = 'this_week';
-      else if (this.label === 'Gratuït')
+      else if (this.label === this.$t('HOME.Gratis'))
         this.path = 'free';
-      else if (this.label === 'Popular')
+      else if (this.label === this.$t('HOME.Popular'))
         this.path = 'popular';
     },
   },
