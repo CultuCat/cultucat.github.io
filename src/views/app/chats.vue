@@ -1,5 +1,5 @@
 <template>
-  <h1 class="mt-4 ml-5" style="color: #ff6961">{{ $t('CHAT.chat') }}</h1>
+  <h1 class="mt-4 ml-5" style="color: #ff6961">{{ $t('CHAT.Chat') }}</h1>
   <v-card class="mx-5 mt-4 card" rounded="lg" :loading="loading" elevation="4">
     <v-row v-if="loading">
       <v-col cols="12" class="text-center mt-2">
@@ -26,24 +26,23 @@
       <div class="divider"></div>
       <!-- Mensajes y campo de entrada -->
       <v-col v-if="friendClicked" cols="8.5" class="d-flex flex-column chat-col">
-        <v-card class="my-3 pa-2 mr-3" color="#ff6961" rounded="lg">
+        <v-card class="mt-3 pa-2 mr-3" color="#ff6961" rounded="lg">
           <v-avatar :image="uImageR" size="40" class="ml-2 mr-5 my-2"></v-avatar>
           <strong style="color: white">{{ uNameR }}</strong>
         </v-card>
-        <div class="flex-grow-1 d-flex flex-column overflow-auto" ref="messageContainer">
-          <v-card class="flex-grow-1 overflow-auto">
-            <v-card-text v-if="!messageLoading">
-              <div v-for="(message, index) in messages" :key="index"
-                :class="{ 'message-container-left': message.user_from !== uId, 'message-container-right': message.user_from === uId }">
-                <div :class="{ 'message-left': message.user_from !== uId, 'message-right': message.user_from === uId }">
-                  <strong>{{ message.text }}</strong>
-                </div>
+        <div class="flex-grow-1 d-flex flex-column overflow-auto" ref="messageContainer"
+        style="height: 50%;">
+          <v-card-text v-if="!messageLoading">
+            <div v-for="(message, index) in messages" :key="index"
+              :class="{ 'message-container-left': message.user_from !== uId, 'message-container-right': message.user_from === uId }">
+              <div :class="{ 'message-left': message.user_from !== uId, 'message-right': message.user_from === uId }">
+                <strong>{{ message.text }}</strong>
               </div>
-            </v-card-text>
-            <div v-else class="text-center">
-              <v-progress-circular :size="25" color="red" indeterminate />
             </div>
-          </v-card>
+          </v-card-text>
+          <div v-else class="text-center">
+            <v-progress-circular :size="25" color="red" indeterminate />
+          </div>
         </div>
         <div>
           <v-textarea class="mr-3" auto-grow rows="1" row-height="20" v-model="newMessage" label="Escribe un mensaje"
@@ -88,6 +87,9 @@ export default {
   },
   computed: {
     ...mapGetters(["user"]),
+    filteredFriends() {
+      return this.friends.filter((item) => item.isVisible && !item.isBlocked && item.wantsToTalk)
+    },
   },
   created() {
     this.uId = this.user.user.id;

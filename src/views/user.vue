@@ -85,10 +85,11 @@
     <confirmDelete v-if="dialogDelete" :itemToDelete="itemToDelete" :deleteLoading="deleteLoading"
       @confirmed-delete="deleteConfirmed" @cancel-delete="deleteCancel" />
     <!-- ----------------------- dialog para ver amigos ------------------------ -->
-    <userDialog :dialog="dialogFriends" :isFriends="true" :isProfile="true" :userId="userId"
-      @closeDialog="dialogFriends = false" />
+    <userDialog :dialog="dialogFriends" :title="$t('USER.AMICS')" icon="mdi-account-multiple" :isFriends="true"
+      :userId="userId" @closeDialog="dialogFriends = false" />
     <!-- ----------------------- dialog para ver ranking ----------------------- -->
-    <userDialog :dialog="dialogRanking" :isRanking="true" @closeDialog="dialogRanking = false" />
+    <userDialog :dialog="dialogRanking" :title="$t('USER.RANKING')" icon="mdi-star-circle-outline" :isRanking="true"
+      @closeDialog="dialogRanking = false" />
     <!-- ----------------------------------------------------------------------- -->
     <v-dialog v-model="trophyDialog">
       <trophyInfo @quit-trophyDialog="quitTrophyDialog" :trophy="trophySelected" />
@@ -100,7 +101,6 @@
 <script setup>
 import confirmDelete from "@/components/confirmDelete.vue";
 import SlideGroup from "@/components/slideGroup.vue";
-import ListOfItems from "@/components/listOfItems.vue";
 import trophyInfo from "@/components/trophyInfo.vue";
 import userDialog from "@/components/userDialog.vue";
 import addFriend from "@/components/addFriend.vue";
@@ -133,7 +133,6 @@ export default {
   components: {
     SlideGroup,
     confirmDelete,
-    ListOfItems,
     trophyInfo,
     userDialog,
     addFriend,
@@ -176,22 +175,22 @@ export default {
                 'Content-Type': 'application/json',
               }
             }
-          axios
-            .get("https://cultucat.hemanuelpc.es/trophies/", config)
-            .then((response2) => {
-              if (response2.status == 200) {
-                this.agregarSlideGroup(
-                  this.profile_favs,
-                  3,
-                  this.$t('USER.TROFEUS'),
-                  response2.data
-                );
-              }
-            })
-            .catch((error) => {
-              // Maneja errores aquí
-              console.error("Error al obtener los trofeos del usuario:", error);
-            });
+            axios
+              .get("https://cultucat.hemanuelpc.es/trophies/", config)
+              .then((response2) => {
+                if (response2.status == 200) {
+                  this.agregarSlideGroup(
+                    this.profile_favs,
+                    3,
+                    this.$t('USER.TROFEUS'),
+                    response2.data
+                  );
+                }
+              })
+              .catch((error) => {
+                // Maneja errores aquí
+                console.error("Error al obtener los trofeos del usuario:", error);
+              });
 
           }
           // ============================= GET TROFEOS =============================
