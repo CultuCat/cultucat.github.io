@@ -1,6 +1,6 @@
 <template>
   <h1 style="color: #ff6961" class="mt-4 ml-5">{{ $t('HOME.Benvingut') }}, {{ user.user.first_name }}</h1>
-  <v-card class="mx-5 mt-4" rounded="lg" elevation="4">
+  <v-card class="mx-5 my-4" rounded="lg" elevation="4">
     <v-col cols="12">
       <v-row justify="center">
         <template v-for="button in buttons" :key="button.label">
