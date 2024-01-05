@@ -26,11 +26,12 @@
                 </v-chip>
               </v-chip-group>
               <v-spacer class="my-16" />
-              <v-card class="mt-2 d-flex justify-center align-center" rounded="lg" color="#ff6961" style="max-width: 245px">
-                  <div class="mx-2">
-                    {{ isNumber(eventInfo.preu) ? `Preu: ${eventInfo.preu} €` : eventInfo.preu }}
-                  </div>
-                  <v-btn class="ma-2" @click="dialogBuy = true" :disabled="!canIBuy">{{ $t('EVENT.Buy') }}</v-btn>
+              <v-card class="mt-2 d-flex justify-center align-center" rounded="lg" color="#ff6961"
+                style="max-width: 245px">
+                <div class="mx-2">
+                  {{ isNumber(eventInfo.preu) ? `Preu: ${eventInfo.preu} €` : eventInfo.preu }}
+                </div>
+                <v-btn class="ma-2" @click="dialogBuy = true" :disabled="!canIBuy">{{ $t('EVENT.Buy') }}</v-btn>
               </v-card>
             </v-col>
           </v-col>
@@ -38,29 +39,8 @@
             <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true" :disabled="!canSeeAssistants">
               {{ $t('EVENT.Veure_assistents') }} ({{ this.eventInfo.assistants.length }})
             </v-btn>
-
-            <!-- --------------------- dialog para ver asistentes ---------------------- -->
-            <v-dialog v-model="dialog" scrollable max-width="600px">
-              <v-card>
-                <v-toolbar color="#ff6961" dark>
-                  <v-icon size="35" class="ml-6">mdi-account-group</v-icon>
-                  <v-toolbar-title class="ml-6">{{ $t('EVENT.Assistents') }}</v-toolbar-title>
-                  <v-spacer></v-spacer>
-
-                  <v-toolbar-items>
-                    <v-btn icon dark variant="plain" @click="dialog = false">
-                      <v-icon>mdi-close</v-icon>
-                    </v-btn>
-                  </v-toolbar-items>
-                </v-toolbar>
-                <v-card-text style="height: 600px">
-
-                  <ListOfItems v-if="eventInfo.assistants.length > 0" :items="eventInfo.assistants" :isAssistants=true />
-                  <span v-else style="display: flex; justify-content: center;">{{ $t('EVENT.No_usuaris') }}</span>
-                </v-card-text>
-              </v-card>
-            </v-dialog>
-            <!-- ----------------------------------------------------------------------- -->
+            <userDialog :dialog="dialog" :usersArray="eventInfo.assistants" :title="$t('EVENT.Assistents')"
+              icon="mdi-account-group" @closeDialog="dialog = false" />
             <v-btn @click="agregarEventoAlCalendario" class="ma-2 pa-2" rounded="lg">{{ $t('EVENT.Calendari') }}</v-btn>
             <v-btn @click="handleButtonMaps" class="ma-2 pa-2" rounded="lg">{{ $t('EVENT.localitzacio') }}</v-btn>
           </v-col>
@@ -102,7 +82,7 @@
 <script>
 import commentForm from "@/components/commentForm.vue";
 import comment from "@/components/comment.vue";
-import ListOfItems from "@/components/listOfItems.vue";
+import userDialog from "@/components/userDialog.vue";
 import BuyComponent from "@/components/buy.vue";
 import { mapGetters } from "vuex";
 import axios from "axios";
@@ -113,7 +93,7 @@ export default {
     commentForm,
     comment,
     BuyComponent,
-    ListOfItems,
+    userDialog,
   },
   data() {
     return {

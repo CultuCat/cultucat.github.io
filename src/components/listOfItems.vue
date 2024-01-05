@@ -31,7 +31,7 @@
           </v-text-field>
 
           <template v-slot:append v-if="view === 'admin_events'">
-            <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ {{$t('EVENT.Crear')}}</v-btn>
+            <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ {{ $t('EVENT.Crear') }}</v-btn>
           </template>
           <template v-slot:append v-else>
             <v-btn rounded="xl" variant="plain" icon="mdi-restart" @click="resetView"></v-btn>
@@ -39,17 +39,9 @@
         </v-card-item>
         <v-divider class="my-4" v-if="view === 'events' || view === 'admin_events'" />
         <v-list v-if="items_get.length > 0">
-          <v-list-item v-for="(item, index) in filteredItems" :key="item">
-            <v-row>
-              <v-col>
-                <eventPreview v-if="item.espai" :item="item" />
-                <userPreview v-else :item="item" :index="index" :isAdmin="isAdmin" @update="getUsers" />
-              </v-col>
-              <v-col cols="auto" class="d-flex align-center"
-                v-if="isAssistants && myUser && String(item.id) !== String(this.user.user.id)">
-                <addFriend :user="myUser" :id="String(item.id)" />
-              </v-col>
-            </v-row>
+          <v-list-item v-for="item in filteredItems" :key="item.id">
+            <eventPreview v-if="item.espai" :item="item" />
+            <userPreview v-else :item="item" :isAdmin="isAdmin" @update="getUsers" />
           </v-list-item>
         </v-list>
         <div v-else style="text-align: center" class="my-10">
@@ -66,7 +58,6 @@
 <script>
 import eventPreview from "@/components/eventPreview.vue";
 import userPreview from "@/components/userPreview.vue";
-import addFriend from "@/components/addFriend.vue";
 import { mapGetters } from "vuex";
 import eventsFilters from "@/components/eventsFilters.vue";
 
@@ -75,7 +66,6 @@ export default {
   components: {
     eventPreview,
     userPreview,
-    addFriend,
     eventsFilters,
   },
   data() {
@@ -84,7 +74,6 @@ export default {
       expanded: false,
       searchInput: "",
       loaded: false,
-      myUser: null,
       orderByList: [
         { title: 'Ascending Date', value: "dataIni" },
         { title: 'Descending Date', value: "-dataIni" },
@@ -112,10 +101,6 @@ export default {
     type: String,
     userId: Number,
     view: String,
-    isAssistants: {
-      type: Boolean,
-      default: false,
-    },
   },
   methods: {
     expandSearch() {
@@ -166,22 +151,6 @@ export default {
         })
         .catch((error) => {
           console.error(error);
-        });
-    },
-    getUser() {
-      fetch("https://cultucat.hemanuelpc.es/users/" + this.user.user.id + "/")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Error al obtener el usuario: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          this.myUser = data;
-        })
-        .catch((error) => {
-          // Maneja errores aquí
-          console.error("Error al obtener el perfil del usuario:", error);
         });
     },
     sortBy(index) {
@@ -253,9 +222,6 @@ export default {
     },
   },
   created() {
-    if (this.isAssistants) {
-      this.getUser();
-    }
     if (this.items) {
       this.items_get = this.items;
       this.loaded = true;
