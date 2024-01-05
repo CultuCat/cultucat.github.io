@@ -1,41 +1,48 @@
 <template>
   <template v-if="items != null">
-  <v-col>
-    <h1 style="color: #ff6961" class="my-5 ml-5">{{$t('ADMIN.Users')}}</h1>
-    <ListOfItems :type="'list_users'" view="admin_users" />
-  </v-col>
+    <v-col>
+      <h1 style="color: #ff6961" class="mt-4 ml-5">{{ $t('ADMIN.Users') }}</h1>
+      <ListOfItems :items="items" :type="'list_users'" view="admin_users" />
+    </v-col>
+  </template>
 </template>
-</template>
-
-<script setup>
-import ListOfItems from "@/components/listOfItems.vue";
-import axios from "axios";
-</script>
 
 <script>
+import ListOfItems from "@/components/listOfItems.vue";
+import { mapGetters } from 'vuex';
+
 export default {
-data() {
-  return {
-    items: null,
-  };
-},
-methods: {
-},
-mounted() {
-  axios
-    .get("https://cultucat.hemanuelpc.es/users/")
-    .then((response) => {
-      if (response.status === 200) {
-        this.items = response.data;
-      }
-    })
-    .catch((error) => {
-      // Maneja errores aquí
-      console.error("Error al obtener el perfil del usuario:", error);
-    });
-},
-components: {
-  ListOfItems,
-},
+  data() {
+    return {
+      items: null,
+    };
+  },
+  computed: {
+    ...mapGetters(['user']),
+  },
+  mounted() {
+    fetch("https://cultucat.hemanuelpc.es/users/")
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Error al obtener el perfil del usuario");
+        }
+      })
+      .then(data => {
+        console.log(data);
+        this.items = data.filter(item => {
+          console.log(item.id);
+          return item.id !== this.user.user.id;
+        });
+        console.log(this.items);
+      })
+      .catch(error => {
+        console.error("Error al obtener el perfil del usuario:", error);
+      });
+  },
+  components: {
+    ListOfItems,
+  },
 };
 </script>

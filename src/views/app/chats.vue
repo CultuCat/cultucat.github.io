@@ -1,16 +1,16 @@
 <template>
-  <h1 class="mt-4 ml-5" style="color: #ff6961">Xat</h1>
+  <h1 class="mt-4 ml-5" style="color: #ff6961">{{ $t('CHAT.chat') }}</h1>
   <v-card class="mx-5 mt-4 card" rounded="lg" :loading="loading" elevation="4">
     <v-row v-if="loading">
       <v-col cols="12" class="text-center mt-2">
-        <p>{{$t('loading')}}</p>
+        <p>{{ $t('loading') }}</p>
       </v-col>
     </v-row>
     <v-row v-else-if="!haveFriends && !loading">
       <v-col cols="12" class="text-center">
         <v-icon size="100">mdi-account-multiple</v-icon>
-        <h1>No tienes amigos</h1>
-        <h1>Ve a hacer algunos!</h1>
+        <h1>{{ $t('CHAT.No_friends') }}</h1>
+        <h1>{{ $t('CHAT.No_friends2') }}</h1>
       </v-col>
     </v-row>
     <v-row v-else>
@@ -50,7 +50,7 @@
             no-resize />
         </div>
         <div>
-          <v-btn @click="sendMessage">Enviar</v-btn>
+          <v-btn @click="sendMessage">{{ $t('CHAT.Send') }}</v-btn>
         </div>
       </v-col>
       <v-col v-else class="justify-center align-center">

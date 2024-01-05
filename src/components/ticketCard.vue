@@ -1,8 +1,8 @@
 <template>
-    <v-card class="v-card" :image="ticket.imatge || ticket.imatges_list[0]" link width="250" height="250">
+    <v-card class="v-card" :image="ticket.imatges_list[0]" link width="250" height="250">
         <div class="overlay d-flex flex-column justify-end">
             <v-card-title class="text">{{ ticket.nom || ticket.nomEvent }}</v-card-title>
-            <v-card-subtitle class="text">{{ transformDate(ticket.dataIni || ticket.data) }}</v-card-subtitle>
+            <v-card-subtitle class="text">{{ transformDate(ticket.dataIni) }} - {{ transformDate(ticket.dataFi) }}</v-card-subtitle>
             <v-card-subtitle class="text mb-3">{{ ticket.espai.nom || ticket.espai }}</v-card-subtitle>
         </div>
     </v-card>
@@ -21,6 +21,7 @@ export default {
                 weekday: "short",
                 month: "short",
                 day: "numeric",
+                year: "numeric",
             };
             const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
             return formatter.format(dateObj);

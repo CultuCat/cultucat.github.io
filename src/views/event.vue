@@ -1,106 +1,98 @@
 <template>
-  <v-row justify="center">
-    <v-col class="mb-0 pb-0">
-      <h1 style="color: #ff6961" class="mt-5 ml-5">{{$t('EVENT.Event')}}</h1>
-    </v-col>
-  </v-row>
-  <v-row>
-    <template v-if="eventInfo.nom">
-      <!-- ============================== CONTENIDO ============================== -->
-      <v-container class="justify-center align-center">
-        <v-card rounded="lg">
-          <v-col cols="12">
-            <v-btn @click="handleButtonLink" style="position: absolute; top: 10px; right: 10px" rounded="lg">
-              <v-icon>mdi-link</v-icon>
-              <span style="margin-left: 5px;">{{$t('EVENT.Enlace')}}</span>
-            </v-btn>
-            <v-row justify="center">
-              <v-col cols="3.5">
-                <v-img class="ma-5" :src="eventInfo.imatges_list[0]" :max-height="250" :max-width="250" aspect-ratio="1"
-                  cover style="border-radius: 15px" />
-              </v-col>
-              <v-col cols="5" class="d-flex fill-height">
-                <v-col>
-                  <v-card-title>{{ eventInfo.nom }}</v-card-title>
-                  <v-card-subtitle>{{ transformDate(eventInfo.dataIni) }}</v-card-subtitle>
-                  <v-card-subtitle>{{ eventInfo.espai }}</v-card-subtitle>
-
-                  <v-chip-group class="mx-2">
-                    <v-chip v-for="tag in eventInfo.tags" :key="tag.id" class="mx-1" style="background-color: #87CEEC;">
-                      {{ tag.nom }}
-                    </v-chip>
-                  </v-chip-group>
-                  <v-spacer class="my-16"/>
-                  <v-card class="mt-2" rounded="lg" color="#ff6961" style="max-width: 220px">
-                    <div class="d-flex justify-center align-center">
-                      <div class="mr-2">
-                        {{ isNumber(eventInfo.preu) ? `Preu: ${eventInfo.preu} €` : eventInfo.preu }}
-                      </div>
-                      <v-btn class="ma-2" @click="dialogBuy = true" :disabled="!canIBuy">{{$t('EVENT.Buy')}}</v-btn>
-                    </div>
-                  </v-card>
-                </v-col>
-              </v-col>
-              <v-col class="d-flex flex-column fill-height ma-5 mt-15">
-                <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true" :disabled="!canSeeAssistants">{{$t('EVENT.Veure_assistents')}} ({{ this.eventInfo.assistants.length }})</v-btn>
-
-                <!-- --------------------- dialog para ver asistentes ---------------------- -->
-                <v-dialog v-model="dialog" scrollable max-width="600px">
-                  <v-card>
-                    <v-toolbar color="#ff6961" dark>
-                      <v-icon size="35" class="ml-6">mdi-account-group</v-icon>
-                      <v-toolbar-title class="ml-6">{{$t('EVENT.Assistents')}}</v-toolbar-title>
-                      <v-spacer></v-spacer>
-
-                      <v-toolbar-items>
-                        <v-btn icon dark variant="plain" @click="dialog = false">
-                          <v-icon>mdi-close</v-icon>
-                        </v-btn>
-                      </v-toolbar-items>
-                    </v-toolbar>
-                    <v-card-text style="height: 600px">
-
-                      <ListOfItems v-if="eventInfo.assistants.length > 0" :items="eventInfo.assistants"
-                        :isAssistants=true />
-                      <span v-else style="display: flex; justify-content: center;">{{$t('EVENT.No_usuaris')}}</span>
-                    </v-card-text>
-                  </v-card>
-                </v-dialog>
-                <!-- ----------------------------------------------------------------------- -->
-                <v-btn @click="agregarEventoAlCalendario" class="ma-2 pa-2" rounded="lg">{{$t('EVENT.Calendari')}}</v-btn>
-                <v-btn @click="handleButtonMaps" class="ma-2 pa-2" rounded="lg">{{$t('EVENT.localitzacio')}}</v-btn>
-              </v-col>
-            </v-row>
-            <v-row class="d-flex ma-2" justify="center">
-              <v-col class="ma-5" style="width: 80%">
-                <h2>{{$t('EVENT.Descripcio')}}</h2>
-                <div style="text-align: justify">
-                  {{ eventInfo.descripcio }}
-                </div>
-                <v-divider class="my-2" />
-
-                <template v-if="eventInfo.curiosity">
-                  <h2>Do you know?</h2>
-                  <div style="text-align: justify">
-                    {{ eventInfo.curiosity.question.content }}
-                  </div>
-                  <div style="text-align: justify">
-                    {{ eventInfo.curiosity.question.correct_answer }}
-                  </div>
-                  <v-divider class="my-2" />
-                </template>
-                <h2>Comment</h2>
-                <commentForm @comment-posted="fetchComments"></commentForm>
-                <template v-for="comment in eventInfo.comments.results" :key="comment.id">
-                  <comment :commentProp="comment"></comment>
-                </template>
-              </v-col>
-            </v-row>
+  <h1 style="color: #ff6961" class="mt-4 ml-5">{{ $t('EVENT.Event') }}</h1>
+  <template v-if="eventInfo.nom">
+    <!-- ============================== CONTENIDO ============================== -->
+    <v-card class="mx-5 my-4" rounded="lg" elevation="4">
+      <v-col cols="12">
+        <v-btn @click="handleButtonLink" style="position: absolute; top: 15px; right: 15px" rounded="lg">
+          <v-icon>mdi-link</v-icon>
+          <span style="margin-left: 5px;">{{ $t('EVENT.Enlace') }}</span>
+        </v-btn>
+        <v-row justify="center">
+          <v-col class="ml-5" cols="3.5">
+            <v-img class="ma-5" :src="eventInfo.imatges_list[0]" :max-height="250" :max-width="250" aspect-ratio="1" cover
+              style="border-radius: 15px" />
           </v-col>
-        </v-card>
-      </v-container>
-    </template>
-  </v-row>
+          <v-col cols="5" class="d-flex fill-height">
+            <v-col>
+              <v-card-title>{{ eventInfo.nom }}</v-card-title>
+              <v-card-subtitle>{{ transformDate(eventInfo.dataIni) }} - {{ transformDate(eventInfo.dataFi)
+              }}</v-card-subtitle>
+              <v-card-subtitle>{{ eventInfo.espai }}</v-card-subtitle>
+
+              <v-chip-group class="mx-2">
+                <v-chip v-for="tag in eventInfo.tags" :key="tag.id" class="mx-1" style="background-color: #87CEEC;">
+                  {{ tag.nom }}
+                </v-chip>
+              </v-chip-group>
+              <v-spacer class="my-16" />
+              <v-card class="mt-2 d-flex justify-center align-center" rounded="lg" color="#ff6961" style="max-width: 245px">
+                  <div class="mx-2">
+                    {{ isNumber(eventInfo.preu) ? `Preu: ${eventInfo.preu} €` : eventInfo.preu }}
+                  </div>
+                  <v-btn class="ma-2" @click="dialogBuy = true" :disabled="!canIBuy">{{ $t('EVENT.Buy') }}</v-btn>
+              </v-card>
+            </v-col>
+          </v-col>
+          <v-col class="d-flex flex-column fill-height ma-5 mt-15 mr-8">
+            <v-btn class="ma-2 pa-2" rounded="lg" @click="dialog = true" :disabled="!canSeeAssistants">
+              {{ $t('EVENT.Veure_assistents') }} ({{ this.eventInfo.assistants.length }})
+            </v-btn>
+
+            <!-- --------------------- dialog para ver asistentes ---------------------- -->
+            <v-dialog v-model="dialog" scrollable max-width="600px">
+              <v-card>
+                <v-toolbar color="#ff6961" dark>
+                  <v-icon size="35" class="ml-6">mdi-account-group</v-icon>
+                  <v-toolbar-title class="ml-6">{{ $t('EVENT.Assistents') }}</v-toolbar-title>
+                  <v-spacer></v-spacer>
+
+                  <v-toolbar-items>
+                    <v-btn icon dark variant="plain" @click="dialog = false">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                  </v-toolbar-items>
+                </v-toolbar>
+                <v-card-text style="height: 600px">
+
+                  <ListOfItems v-if="eventInfo.assistants.length > 0" :items="eventInfo.assistants" :isAssistants=true />
+                  <span v-else style="display: flex; justify-content: center;">{{ $t('EVENT.No_usuaris') }}</span>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+            <!-- ----------------------------------------------------------------------- -->
+            <v-btn @click="agregarEventoAlCalendario" class="ma-2 pa-2" rounded="lg">{{ $t('EVENT.Calendari') }}</v-btn>
+            <v-btn @click="handleButtonMaps" class="ma-2 pa-2" rounded="lg">{{ $t('EVENT.localitzacio') }}</v-btn>
+          </v-col>
+        </v-row>
+        <v-row class="d-flex ma-2 mt-0" justify="center">
+          <v-col class="ma-5 mt-0" style="width: 80%">
+            <h2>{{ $t('EVENT.Descripcio') }}</h2>
+            <div style="text-align: justify">
+              {{ eventInfo.descripcio }}
+            </div>
+            <v-divider class="my-2" />
+
+            <template v-if="eventInfo.curiosity">
+              <h2>Do you know?</h2>
+              <div style="text-align: justify">
+                {{ eventInfo.curiosity.question.content }}
+              </div>
+              <div style="text-align: justify">
+                {{ eventInfo.curiosity.question.correct_answer }}
+              </div>
+              <v-divider class="my-2" />
+            </template>
+            <h2>Comment</h2>
+            <commentForm @comment-posted="fetchComments"></commentForm>
+            <template v-for="comment in eventInfo.comments.results" :key="comment.id">
+              <comment :commentProp="comment"></comment>
+            </template>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-card>
+  </template>
   <v-dialog v-model="dialogBuy" scrollable max-width="600px">
     <BuyComponent :eventInfo="eventInfo" :buyLoading="buyLoading" :discounts="discounts" @confirmed-buy="buyConfirmed"
       @cancel-buy="reset" />
@@ -131,6 +123,7 @@ export default {
         descripcio: null,
         tags: [],
         dataIni: null,
+        dataFi: null,
         espai: null,
         preu: null,
         imatges_list: null,
@@ -178,6 +171,7 @@ export default {
         this.eventInfo.descripcio = data.descripcio;
         this.eventInfo.tags = data.tags;
         this.eventInfo.dataIni = data.dataIni;
+        this.eventInfo.dataFi = data.dataFi;
         this.eventInfo.espai = data.espai.nom;
         this.eventInfo.preu = data.preu;
         this.eventInfo.imatges_list = data.imatges_list;

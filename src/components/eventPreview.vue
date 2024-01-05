@@ -9,7 +9,7 @@
         <v-col cols="10">
           <v-card-title style="overflow: hidden;">
             <strong>{{ item.nom }}</strong>
-            <p v-if="item.dataIni" class="dates">{{ transformDate(item.dataIni) }}</p>
+            <p v-if="item.dataIni" class="dates">{{ transformDate(item.dataIni) }} - {{ transformDate(item.dataFi) }}</p>
             <p v-if="item.espai" class="dates">{{ item.espai.nom }}</p>
           </v-card-title>
           <v-divider class="mr-2" />
@@ -26,7 +26,7 @@
             <strong>{{ item.nom }}</strong>
           </v-card-title>
           <v-card-text>
-            <p v-if="item.dataIni">{{ transformDate(item.dataIni) }}</p>
+            <p v-if="item.dataIni">{{ transformDate(item.dataIni) }} - {{ transformDate(item.dataFi) }}</p>
             <p v-if="item.espai">{{ item.espai.nom }}</p>
             <strong>{{ isNumber(item.preu) ? `Preu: ${item.preu} €` : item.preu }}</strong>
           </v-card-text>
@@ -57,6 +57,7 @@ export default {
         weekday: "short",
         month: "long",
         day: "numeric",
+        year: "numeric",
       };
       const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
       return formatter.format(dateObj);
