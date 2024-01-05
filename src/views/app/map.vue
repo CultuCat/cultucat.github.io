@@ -3,10 +3,10 @@
     <v-col v-if="currentEvents.length">
       <v-row>
         <v-col>
-          <h1 style="color: #ff6961" class="my-5 ml-5">Events</h1>
+          <h1 style="color: #ff6961" class="my-5 ml-5">{{$t('EVENT.Events')}}</h1>
         </v-col>
         <v-col align="right" class="my-5 mr-5">
-          <v-btn rounded="xl" @click="closeClick()">Close</v-btn>
+          <v-btn rounded="xl" @click="closeClick()">{{$t('close')}}</v-btn>
         </v-col>
       </v-row>
       <v-row>

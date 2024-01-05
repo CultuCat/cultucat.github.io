@@ -24,7 +24,7 @@
         <v-card-text class="ml-8">
           {{ acortarTexto(item.descripcio) }}
           <br /><br /><strong>{{
-            item.preu ? extraerTextoPreu(item.preu) : "Preu no disponible."
+            item.preu ? extraerTextoPreu(item.preu) : $t('EVENT.Preu_NoDisponible')
           }}</strong>
         </v-card-text>
       </v-col>
@@ -42,7 +42,7 @@
       </template>
       <template v-slot:append>
         <template v-if="view === 'ranking'">
-          Score: {{ item.puntuacio }}
+          {{$t('USER.PUNTUACIO')}}: {{ item.puntuacio }}
         </template>
         <v-icon v-if="view === 'admin_users' && item.isBlocked">mdi-lock</v-icon>
         <v-icon v-else-if="view === 'admin_users'">mdi-lock-open-outline</v-icon>
@@ -51,28 +51,28 @@
     </v-card-item>
     <v-dialog v-model="dialogBlock" persistent max-width="500px">
       <v-card>
-        <v-card-text>Estas segur que vols bloquejar aquest usuari?</v-card-text>
+        <v-card-text>{{$t('USER.Bloquejar')}}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red-darken-1" variant="text" @click="dialogBlock = false">
-            Cancel
+            {{$t('cancel')}}
           </v-btn>
           <v-btn color="blue-darken-1" variant="text" @click="blockUser(item.id)">
-            Block
+            {{$t('USER.Block')}}
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
     <v-dialog v-model="dialogUnblock" persistent max-width="500px">
       <v-card>
-        <v-card-text>Estas segur que vols desbloquejar aquest usuari?</v-card-text>
+        <v-card-text>{{$t('USER.Desbloquejar')}}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red-darken-1" variant="text" @click="dialogUnblock = false">
-            Cancel
+            {{$t('cancel')}}
           </v-btn>
           <v-btn color="blue-darken-1" variant="text" @click="blockUser(item.id)">
-            Unblock
+            {{$t('USER.Unblock')}}
           </v-btn>
         </v-card-actions>
       </v-card>

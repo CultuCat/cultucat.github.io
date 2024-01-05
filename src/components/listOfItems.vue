@@ -31,7 +31,7 @@
           </v-text-field>
 
           <template v-slot:append v-if="view === 'admin_events'">
-            <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ Create Event</v-btn>
+            <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ {{$t('EVENT.Crear')}}</v-btn>
           </template>
           <template v-slot:append v-else>
             <v-btn rounded="xl" variant="plain" icon="mdi-restart" @click="resetView"></v-btn>

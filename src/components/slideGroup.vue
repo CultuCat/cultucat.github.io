@@ -35,11 +35,10 @@
 
         <v-chip v-else>
           <template v-if="!trophyTab">
-            There aren't any {{ compData.title.toLowerCase() }}. Try adding new
-            ones!
+            {{$t('TROFEUS.No_hay')}} {{ compData.title.toLowerCase() }}. {{$t('TROFEUS.Afegir')}}
           </template>
           <template v-else>
-            There aren't any {{ compData.title.toLowerCase() }}. Go win some!
+            {{$t('TROFEUS.No_hay')}} {{ compData.title.toLowerCase() }}. {{$t('TROFEUS.Guanya')}}
           </template>
         </v-chip>
       </v-sheet>

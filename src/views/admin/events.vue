@@ -5,7 +5,7 @@
 <template>
   <template v-if="itemsJSON.length > 0">
     <v-col>
-      <h1 style="color: #ff6961" class="mt-4 ml-5">Events</h1>
+      <h1 style="color: #ff6961" class="mt-4 ml-5">{{ $t('EVENT.Events') }}</h1>
       <ListOfItems :items="itemsJSON" view="admin_events" />
     </v-col>
   </template>

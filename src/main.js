@@ -13,6 +13,9 @@ import { createApp } from 'vue'
 // Plugins
 import { registerPlugins } from '@/plugins'
 
+//languages
+import i18n from './languages/i18n'
+
 import VueGoogleMaps from '@fawmi/vue-google-maps';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -31,7 +34,7 @@ export default "$W4#yLz2*QsFv@6uG8hJ1pA5nDx@9oP3r";
 
 const appf = initializeApp(firebaseConfig);
 getAnalytics(appf);
-const app = createApp(App)
+const app = i18n(createApp(App))
 app.use(VueGoogleMaps, {
     load: {
     key: 'AIzaSyBcncMehtx6yWI0OD0oWqEbc3HTGmBYNrQ',

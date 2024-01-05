@@ -1,7 +1,7 @@
 <template>
   <template v-if="items != null">
     <v-col>
-      <h1 style="color: #ff6961" class="mt-4 ml-5">Users</h1>
+      <h1 style="color: #ff6961" class="mt-4 ml-5">{{ $t('ADMIN.Users') }}</h1>
       <ListOfItems :items="items" :type="'list_users'" view="admin_users" />
     </v-col>
   </template>

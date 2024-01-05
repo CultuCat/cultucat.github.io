@@ -2,10 +2,10 @@
   <v-img class="ma-5" src="../assets/full_logo.png" width="250" style="position:absolute;"></v-img>
   <v-container class="custom-fill-height">
     <v-card-text class="d-flex flex-column justify-center" :style="{ width: '80%', marginTop: '15%', maxWidth: '500px' }">
-      <div class="text-h5 text-left">Registra't</div>
+      <div class="text-h5 text-left">{{ $t('LOGIN.Registrat') }}</div>
       <v-btn class="mt-5 mb-5" @click="signup" :style="{ width: '100%' }">
         <img src="..\assets\google_icon.svg" alt="googlelogo" :style="{ width: '20px', height: '20px' }" />
-        <span :style="{ marginLeft: '10%' }">Continue with Google</span>
+        <span :style="{ marginLeft: '10%' }">{{ $t('LOGIN.Google') }}</span>
       </v-btn>
       <v-divider />
       <br>
@@ -24,19 +24,19 @@
         <v-card v-if="usernameError" class="text-medium-emphasis text-caption mb-6" color="red" variant="tonal">
           <v-card-text class="pa-3">
             <v-icon icon="mdi-alert-circle" />
-            <span class="ml-2">Ja existeix una usuari amb aquest username</span>
+            <span class="ml-2">{{ $t('LOGIN.user_existeix') }}</span>
           </v-card-text>
         </v-card>
         <v-card v-else-if="emailError" class="text-medium-emphasis text-caption mb-6" color="red" variant="tonal">
           <v-card-text class="pa-3">
             <v-icon icon="mdi-alert-circle" />
-            <span class="ml-2">Ja existeix un usuari amb aquest email</span>
+            <span class="ml-2">{{ $t('LOGIN.email_existeix') }}</span>
           </v-card-text>
         </v-card>
         <v-card v-else-if="passwordError" class="text-medium-emphasis text-caption mb-6" color="red" variant="tonal">
           <v-card-text class="pa-3">
             <v-icon icon="mdi-alert-circle" />
-            <span class="ml-2">Les contrasenyes no són iguals</span>
+            <span class="ml-2">{{ $t('LOGIN.contra_igual') }}</span>
           </v-card-text>
         </v-card>
         <br v-else>
@@ -69,18 +69,18 @@ export default {
       password2: null,
       image: null,
       emailRules: [
-        v => !!v || 'El correo electrónico es obligatorio',
-        v => /^(\S+@\S+\.\S+){1,5}$/.test(v) || 'El formato del correo electrónico no es válido',
+        v => !!v || $t('LOGIN.email_obligatori'),
+        v => /^(\S+@\S+\.\S+){1,5}$/.test(v) || $t('LOGIN.format_email'),
       ],
-      nameRules: [v => !!v || 'El nombre es obligatorio'],
-      userRules: [v => !!v || 'El username es obligatorio'],
+      nameRules: [v => !!v || $t('LOGIN.nom_obligatori')],
+      userRules: [v => !!v || $t('LOGIN.username_obligatori')],
       passwordRules: [
-        v => !!v || 'La contraseña es obligatoria',
-        v => (v && v.length >= 8) || 'La contraseña debe tener al menos 8 caracteres',
-        v => /[0-9]/.test(v) || 'La contraseña debe contener al menos un número',
-        v => /[A-Z]/.test(v) || 'La contraseña debe contener al menos una letra mayúscula',
-        v => /[a-z]/.test(v) || 'La contraseña debe contener al menos una letra minúscula',
-        v => /[!@#$%^&*(),.?":{}|<>+-]/.test(v) || 'La contraseña debe contener al menos un carácter especial'
+        v => !!v || $t('LOGIN.contra_obligatori'),
+        v => (v && v.length >= 8) || $t('LOGIN.contra_min'),
+        v => /[0-9]/.test(v) || $t('LOGIN.contra_num'),
+        v => /[A-Z]/.test(v) || $t('LOGIN.contra_mayuscula'),
+        v => /[a-z]/.test(v) || $t('LOGIN.contra_minuscula'),
+        v => /[!@#$%^&*(),.?":{}|<>+-]/.test(v) || $t('LOGIN.contra_especial')
       ],
       usernameError: false,
       emailError: false,

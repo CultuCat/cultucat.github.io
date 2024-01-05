@@ -4,11 +4,11 @@
       <v-toolbar color="#ff6961">
         <template v-if="isRanking">
           <v-icon size="35" class="ml-6">mdi-star-circle-outline</v-icon>
-          <v-toolbar-title class="ml-6">Ranking</v-toolbar-title>
+          <v-toolbar-title class="ml-6">{{$t('USER.RANKING')}}</v-toolbar-title>
         </template>
         <template v-else-if="isFriends">
           <v-icon size="35" class="ml-6">mdi-account-multiple</v-icon>
-          <v-toolbar-title class="ml-6">Friends</v-toolbar-title>
+          <v-toolbar-title class="ml-6">{{ $t('USER.AMICS') }}</v-toolbar-title>
         </template>
         <v-spacer></v-spacer>
         <v-toolbar-items>
@@ -39,7 +39,7 @@
           </v-list-item>
         </v-list>
         <div v-else-if="!isLoading" style="text-align: center" class="my-10">
-          <v-chip> Sorry, no results found. </v-chip>
+          <v-chip>{{ $t('USER.No_Results') }}.</v-chip>
         </div>
       </v-card-text>
     </v-card>

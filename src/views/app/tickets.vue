@@ -1,8 +1,8 @@
 <template>
-  <h1 style="color: #ff6961" class="mt-4 ml-5">Tickets</h1>
+  <h1 style="color: #ff6961" class="mt-4 ml-5">{{$t('TICKETS.tickets')}}</h1>
   <v-card class="mx-5 mt-4 card" rounded="lg" :loading="loading" elevation="4">
     <template v-if="loading == true">
-      <v-card-text>Carregant...</v-card-text>
+      <v-card-text>{{$t('loading')}}</v-card-text>
     </template>
     <template v-else>
       <template v-if="tickets.length > 0">
@@ -13,10 +13,10 @@
               :ticket="ticket" />
             <ticket-popup ref="popUp" :ticket="ticket" />
           </template>
-          <v-card-text v-else>No tens entrades per propers esdeveniments</v-card-text>
+          <v-card-text v-else>{{$t('TICKETS.no_ticket_proper')}}</v-card-text>
         </template>
       </template>
-      <v-card-text v-else>No tens entrades a esdeveniments</v-card-text>
+      <v-card-text v-else>{{$t('TICKETS.no_ticket')}}</v-card-text>
     </template>
   </v-card>
 </template>

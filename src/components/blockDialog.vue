@@ -1,16 +1,16 @@
 <template>
   <v-dialog v-model="openDialog" persistent max-width="500px">
     <v-card>
-      <v-card-text v-if="isBlocked">Estas segur que vols desbloquejar aquest usuari?</v-card-text>
-      <v-card-text v-else>Estas segur que vols bloquejar aquest usuari?</v-card-text>
+      <v-card-text v-if="isBlocked">{{$t('USER.Desbloquejar')}}</v-card-text>
+      <v-card-text v-else>{{$t('USER.Bloquejar')}}</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="red-darken-1" variant="text" @click="closeDialog(false)">
-          Cancel
+          {{$t('cancel')}}
         </v-btn>
         <v-btn color="blue-darken-1" variant="text" :loading="isLoading" @click="blockUser(id)">
-          <span v-if="isBlocked">Unblock</span>
-          <span v-else>Block</span>
+          <span v-if="isBlocked">{{$t('USER.Unblock')}}</span>
+          <span v-else>{{$t('USER.Block')}}</span>
         </v-btn>
       </v-card-actions>
     </v-card>

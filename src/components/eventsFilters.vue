@@ -4,7 +4,7 @@
             <v-btn icon @click="quitFiltersDialog">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
-            <v-toolbar-title>Filter results</v-toolbar-title>
+            <v-toolbar-title>{{$t('EVENT.Filtrar_res')}}</v-toolbar-title>
         </v-toolbar>
         <template v-if="loading">
             <v-progress-linear indeterminate class="mb-4"></v-progress-linear>
@@ -12,7 +12,7 @@
         <template v-else>
             <v-card-text>
                 <h2 class="text-h6 mb-2">
-                    Tags
+                    {{$t('EVENT.Tags')}}
                 </h2>
                 <v-chip-group v-model="tagsSelected" column multiple>
                     <v-chip v-for="tag in tags" filter variant="outlined">
@@ -21,7 +21,7 @@
                 </v-chip-group>
             </v-card-text>
             <v-btn class="position-relative ma-4" @click="filterBy" color="#87CEEC">
-                Filter
+                {{$t('EVENT.Filtrar')}}
             </v-btn>
         </template>
     </v-card>

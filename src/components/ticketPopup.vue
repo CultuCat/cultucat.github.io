@@ -2,7 +2,7 @@
   <v-dialog v-model="show" persistent max-width="500px">
     <v-card class="pa-8" rounded="lg">
       <v-row>
-        <h1>Entrada a</h1>
+        <h1>{{$t('TIKETS.ticket')}}</h1>
       </v-row>
       <v-row class="align-center justify-center">
         <v-col cols="4">
@@ -19,7 +19,7 @@
       </v-row>
       <v-row justify="center">
         <v-btn block color="#ff6961" type="submit" variant="elevated" @click="closePopup">
-          Close
+          {{$t('close')}}
         </v-btn>
       </v-row>
     </v-card>

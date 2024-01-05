@@ -1,14 +1,14 @@
 <template>
   <v-col>
-    <h1 style="color: #ff6961" class="my-5 ml-5">Creació d'un esdeveniment</h1>
+    <h1 style="color: #ff6961" class="my-5 ml-5">{{$t('ADMIN.Crear_event')}}</h1>
     <v-container class="d-flex justify-center align-center">
       <v-col cols="12">
         <v-card>
 
           <v-form @submit.prevent="submitForm">
-            <p v-if="v$.formData.nom.$error" style="color: red;" class="ma-4">Name can't be empty.</p>
+            <p v-if="v$.formData.nom.$error" style="color: red;" class="ma-4">{{$t('ADMIN.Nom_empty')}}.</p>
             <v-text-field label="Nom" v-model="formData.nom" variant="outlined" class="ma-4"></v-text-field>
-            <p v-if="v$.formData.descripcio.$error" style="color: red;" class="ma-4">Descripció max characters=560.</p>
+            <p v-if="v$.formData.descripcio.$error" style="color: red;" class="ma-4">{{$t('ADMIN.Descripcio_max')}}</p>
             <v-textarea label="Descripció" v-model="formData.descripcio" variant="outlined" auto-grow class="ma-4"></v-textarea>
 
             <v-row>
@@ -46,7 +46,7 @@
 
             <v-text-field label="Espai" v-model="formData.espai" variant="outlined" class="ma-4"></v-text-field>
 
-            <v-btn type="submit" color="#FF6961" :disabled="v$.formData.$invalid || this.dateError" class="ma-4">Crea</v-btn>
+            <v-btn type="submit" color="#FF6961" :disabled="v$.formData.$invalid || this.dateError" class="ma-4">{{$t('ADMIN.Crea')}}</v-btn>
           </v-form>
           
         </v-card>
