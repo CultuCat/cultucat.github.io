@@ -26,12 +26,12 @@
     "PLACES": "Llocs Preferits",
     "TROFEUS": "Trofeus",
     "No_Results": "No s'han trobat resultats",
-    "Bloquejar": "Estas segur que vols bloquejar aquest usuari?",
+    "Bloquejar": "Estas segur/a que vols bloquejar aquest usuari?",
     "Block": "Bloquejar",
-    "Desbloquejar": "Estas segur que vols desbloquejar aquest usuari?",
+    "Desbloquejar": "Estas segur/a que vols desbloquejar aquest usuari?",
     "Unblock": "Desbloquejar",
     "Delete": "Confirmació d'esborrar",
-    "Delete_conf": "Estas segur/a que vols esborrar el teu compte?",
+    "Delete_conf": "estas segur/a que vols esborrar el teu compte?",
     "No_reversible": "Aquesta acció no és reversible!",
     "Estas_segur": "Estas segur/a que vols esborrar",
     "De": "del teu",
@@ -122,7 +122,14 @@
   },
   "CONFIG": {
     "Config": "Configuració",
-    "Idioma": "Idiomes"
+    "Idioma": "Idiomes",
+    "Permissions": "Permisos d'usuari",
+    "Privacy": "Privacitat del perfil",
+    "PrivacyTxt": "No apareixeràs a cap llista d'assistents ni al rànquing d'usuaris, i per tant, els altres usuaris no podran accedir al teu perfil.",
+    "WantsToTalk": "Vols parlar",
+    "WantsToTalkTxt": "No apareixeràs a la llista d'usuaris del xat dels teus amics i, per tant, no podran escriure't.",
+    "DeleteAccount": "Eliminar compte",
+    "DeleteAccountTxt": "Si elimines el teu compte, perdràs totes les teves dades i no podràs recuperar-les."
   },
   "CHAT": {
     "Chat": "Xat",

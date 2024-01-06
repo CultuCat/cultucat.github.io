@@ -3,7 +3,7 @@
 <!-- ======================================================================= -->
 
 <template>
-  <div class="d-flex justify-center mb-10">
+  <div class="d-flex justify-center my-5">
     <!-- ======================== AVATAR Y ICONO EDITAR ======================== -->
     <div style="position: relative; width: 150px; height: 150px">
       <v-avatar

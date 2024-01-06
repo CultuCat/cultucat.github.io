@@ -5,9 +5,10 @@
 <template>
   <v-row justify="center">
     <v-dialog v-model="dialogDelete" max-width="600">
-      <v-card>
+      <v-card rounded="lg">
         <v-card-title class="headline">{{ $t('USER.Delete') }}</v-card-title>
-        <v-card-text v-if="delUser"><strong>¿ {{ itemToDelete.first_name }}, {{ $t('USER.Delete_conf') }}</strong>
+        <v-card-text v-if="delUser">
+          <strong>¿{{ itemToDelete.first_name }}, {{ $t('USER.Delete_conf') }}</strong>
           <br><br>
           <span style="color: #B00020;"><strong>*** {{ $t('USER.No_reversible') }} ***</strong></span>
         </v-card-text>
@@ -37,6 +38,7 @@ export default {
   props: {
     itemToDelete: Object, //Recibe datos de la vista padre
     deleteLoading: Boolean,
+    delUser: Boolean,
   },
   methods: {
     deleteConfirmed() {

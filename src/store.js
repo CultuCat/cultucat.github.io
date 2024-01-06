@@ -25,6 +25,16 @@ export default createStore({
         state.user.user.language = language;
       }
     },
+    setUserIsVisible(state, isVisible) {
+      if (state.user && state.user.user) {
+        state.user.user.isVisible = isVisible;
+      }
+    },
+    setUserWantsToTalk(state, wantsToTalk) {
+      if (state.user && state.user.user) {
+        state.user.user.wantsToTalk = wantsToTalk;
+      }
+    },
   },
   actions: {
     loginUser({ commit }, user) {
@@ -35,6 +45,12 @@ export default createStore({
     },
     setUserLanguage({ commit }, language) {
       commit("setUserLanguage", language);
+    },
+    setUserIsVisible({ commit }, isVisible) {
+      commit("setUserIsVisible", isVisible);
+    },
+    setUserWantsToTalk({ commit }, wantsToTalk) {
+      commit("setUserWantsToTalk", wantsToTalk);
     },
   },
   getters: {

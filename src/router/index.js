@@ -47,11 +47,6 @@ const routes = [
     component: () => import('@/views/user.vue'),
   },  
   {
-    path: '/users/:user_id/edit',
-    name: 'edit_user',
-    component: () => import('@/views/edit_user.vue'),
-  },
-  {
     path: '/settings',
     name: 'settings',
     component: () => import('@/views/settings.vue'),

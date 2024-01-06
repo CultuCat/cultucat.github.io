@@ -40,8 +40,10 @@
             </v-row>
           </v-col>
           <v-col cols="auto">
-            <v-btn v-if="canIEdit" variant="text" icon="mdi-pencil"
-              @click="handleIconClick('/users/' + userId + '/edit')" />
+            <template v-if="canIEdit">
+              <v-btn variant="text" icon="mdi-pencil" @click="editDialog = true" />
+              <editUser :dialog="editDialog" @closeDialog="editDialog = false" />
+            </template>
             <template v-else>
               <div v-if="profile.id !== user.user.id && myUser" style="float: right;">
                 <addFriend :user="myUser" :id="String(profile.id)" />
@@ -104,6 +106,7 @@ import SlideGroup from "@/components/slideGroup.vue";
 import trophyInfo from "@/components/trophyInfo.vue";
 import userDialog from "@/components/userDialog.vue";
 import addFriend from "@/components/addFriend.vue";
+import editUser from "@/components/editUser.vue";
 import { mapGetters } from "vuex";
 import axios from "axios";
 </script>
@@ -128,6 +131,7 @@ export default {
       loadingUser: false,
       trophyDialog: false,
       trophySelected: null,
+      editDialog: false,
     };
   },
   components: {
@@ -136,6 +140,7 @@ export default {
     trophyInfo,
     userDialog,
     addFriend,
+    editUser,
   },
   computed: {
     ...mapGetters(["user"]),

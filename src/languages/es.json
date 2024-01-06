@@ -31,7 +31,7 @@
     "Desbloquejar": "¿Estás seguro/a de desbloquear a este usuario?",
     "Unblock": "Desbloquear",
     "Delete": "Confirmación de eliminación",
-    "Delete_conf": "¿Estás seguro/a de eliminar tu cuenta?",
+    "Delete_conf": "estás seguro/a de eliminar tu cuenta?",
     "No_reversible": "¡Esta acción no se puede deshacer!",
     "Estas_segur": "¿Estás seguro/a de eliminar",
     "De": "de tu",
@@ -122,7 +122,14 @@
   },
   "CONFIG": {
     "Config": "Configuración",
-    "Idioma": "Idiomas"
+    "Idioma": "Idiomas",
+    "Permissions": "Permisos de usuario",
+    "Privacy": "Privacidad del perfil",
+    "PrivacyTxt": "No apareceras en ninguna lista de asistentes ni en el ranking de usuarios y por lo tanto los otros usuarios no podran entrar a tu perfil.",
+    "WantsToTalk": "Quieres hablar",
+    "WantsToTalkTxt": "No apareceras en la lista de usuarios del chat de tus amigos y por lo tanto no podrán escribirte.",
+    "DeleteAccount": "Borrar Cuenta",
+    "DeleteAccountTxt": "Si eliminas tu cuenta, perderás todos tus datos y no podrás recuperarlos."
   },
   "CHAT": {
     "Chat": "Chat",
