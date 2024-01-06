@@ -53,8 +53,8 @@ export default {
       password: null,
       error: false,
       block: false,
-      userRules: [v => !!v || $t('LOGIN.contra_obligatori')],
-      passwordRules: [v => !!v || $t('LOGIN.username_obligatori')],
+      userRules: [v => !!v || this.$t('LOGIN.username_obligatori')],
+      passwordRules: [v => !!v || this.$t('LOGIN.contra_obligatori')],
       isLoading: false,
     };
   },

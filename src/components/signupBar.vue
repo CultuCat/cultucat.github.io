@@ -69,18 +69,18 @@ export default {
       password2: null,
       image: null,
       emailRules: [
-        v => !!v || $t('LOGIN.email_obligatori'),
-        v => /^(\S+@\S+\.\S+){1,5}$/.test(v) || $t('LOGIN.format_email'),
+        v => !!v || this.$t('LOGIN.email_obligatori'),
+        v => /^(\S+@\S+\.\S+){1,5}$/.test(v) || this.$t('LOGIN.format_email'),
       ],
-      nameRules: [v => !!v || $t('LOGIN.nom_obligatori')],
-      userRules: [v => !!v || $t('LOGIN.username_obligatori')],
+      nameRules: [v => !!v || this.$t('LOGIN.nom_obligatori')],
+      userRules: [v => !!v || this.$t('LOGIN.username_obligatori')],
       passwordRules: [
-        v => !!v || $t('LOGIN.contra_obligatori'),
-        v => (v && v.length >= 8) || $t('LOGIN.contra_min'),
-        v => /[0-9]/.test(v) || $t('LOGIN.contra_num'),
-        v => /[A-Z]/.test(v) || $t('LOGIN.contra_mayuscula'),
-        v => /[a-z]/.test(v) || $t('LOGIN.contra_minuscula'),
-        v => /[!@#$%^&*(),.?":{}|<>+-]/.test(v) || $t('LOGIN.contra_especial')
+        v => !!v || this.$t('LOGIN.contra_obligatori'),
+        v => (v && v.length >= 8) || this.$t('LOGIN.contra_min'),
+        v => /[0-9]/.test(v) || this.$t('LOGIN.contra_num'),
+        v => /[A-Z]/.test(v) || this.$t('LOGIN.contra_mayuscula'),
+        v => /[a-z]/.test(v) || this.$t('LOGIN.contra_minuscula'),
+        v => /[!@#$%^&*(),.?":{}|<>+-]/.test(v) || this.$t('LOGIN.contra_especial')
       ],
       usernameError: false,
       emailError: false,
