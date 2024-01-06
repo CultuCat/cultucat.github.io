@@ -5,7 +5,7 @@
       <v-col cols="12">
         <v-card>
 
-          <v-form @submit.prevent="submitForm">
+          <v-form @submit.prevent="submitForm" enctype="multipart/form-data">
             <p v-if="v$.formData.nom.$error" style="color: red;" class="ma-4">{{$t('ADMIN.Nom_empty')}}.</p>
             <v-text-field label="Nom" v-model="formData.nom" variant="outlined" class="ma-4"></v-text-field>
             <p v-if="v$.formData.descripcio.$error" style="color: red;" class="ma-4">{{$t('ADMIN.Descripcio_max')}}</p>
@@ -32,6 +32,12 @@
             <p v-if="v$.formData.enllac.$error" style="color: red;" class="ma-4">Enllaç has to be a url.</p>
             <v-text-field label="Enllaç" v-model="formData.enllac" variant="outlined" class="ma-4"></v-text-field>
             <v-text-field label="Adreça" v-model="formData.adreca" variant="outlined" class="ma-4"></v-text-field>
+
+            <v-row>
+              <v-col cols="12">
+                <input type="file" ref="fileInput" @change="handleFileInputChange" accept="image/*" class="ma-4" />
+              </v-col>
+            </v-row>
 
             <v-row>
               <v-col cols="6">
@@ -77,6 +83,7 @@
           latitud: '',
           longitud: '',
           espai: '',
+          image: '',
         },
         dateError: false,
       };
@@ -118,24 +125,43 @@
         }
       },
 
+      handleFileInputChange(event) {
+        const file = event.target.files[0];
+        this.formData.image = file;
+      },
+
       async submitForm() {
         try {
+          const formData = new FormData();
+          
+          formData.append('nom', this.formData.nom);
+          formData.append('descripcio', this.formData.descripcio);
+          formData.append('dataIni', new Date(this.formData.dataIni).toISOString().slice(0, 19));
+          formData.append('dataFi', new Date(this.formData.dataFi).toISOString().slice(0, 19));
+          formData.append('preu', this.formData.preu);
+          formData.append('horaris', this.formData.horaris);
+          formData.append('enllac', this.formData.enllac);
+          formData.append('adreca', this.formData.adreca);
+          formData.append('latitud', this.formData.latitud);
+          formData.append('longitud', this.formData.longitud);
+          formData.append('espai', this.formData.espai);
+          formData.append('image', this.formData.image);
+
           const response = await fetch('https://cultucat.hemanuelpc.es/events/', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
               'Authorization': `Token ${this.user.token}`,
             },
-            body: JSON.stringify(this.formData),
+            body: formData,
           });
 
-          if (!response.ok) {
-            console.error('Error de solicitud:', response.status, response.statusText);
-          }
-          else {
+          if (response.status === 201) {
             const responseData = await response.json();
             window.location.href = 'https://cultucat.netlify.app/events/' + responseData.id +'/';
+          } else {
+            console.error('Error de solicitud:', response.status, response.statusText);
           }
+
         } catch (error) {
           console.error('Error de solicitud:', error);
         }
