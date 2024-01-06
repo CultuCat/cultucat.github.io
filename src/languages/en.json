@@ -28,7 +28,7 @@
     "No_Results": "No results found",
     "Bloquejar": "Are you sure you want to block this user?",
     "Block": "Block",
-    "Desbloquejar": "Are you sure you want to unblock this user?",
+    "Desbloquejar": "are you sure you want to unblock this user?",
     "Unblock": "Unblock",
     "Delete": "Delete Confirmation",
     "Delete_conf": "Are you sure you want to delete your account?",
@@ -122,7 +122,14 @@
   },
   "CONFIG": {
     "Config": "Settings",
-    "Idioma": "Languages"
+    "Idioma": "Languages",
+    "Permissions": "Profile permissions",
+    "Privacy": "Profile privacity",
+    "PrivacyTxt": "You will not appear in any attendee lists or user rankings, and therefore, other users will not be able to access your profile.",
+    "WantsToTalk": "Wants to talk",
+    "WantsToTalkTxt": "You won't appear in the user list of your friends' chat, and therefore, they won't be able to write to you.",
+    "DeleteAccount": "Delete Account",
+    "DeleteAccountTxt": "If you delete your account, you will lose all your data and you won't be able to recover it."
   },
   "CHAT": {
     "Chat": "Chat",
