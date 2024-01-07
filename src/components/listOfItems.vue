@@ -166,8 +166,8 @@ export default {
     setUrl() {
       let ordering = this.orderByList[this.orderBySelected].value;
       let params = "";
-      this.selectedDates.start ? params += "&data_min=" + this.selectedDates.start : null;
-      this.selectedDates.end ? params += "&data_max=" + this.selectedDates.end : null;
+      if (this.selectedDates.start) params += "&data_min=" + this.selectedDates.start;
+      if (this.selectedDates.end) params += "&data_max=" + this.selectedDates.end;
       if (this.filtered && this.selectedFilters.length > 0) {
         this.selectedFilters.forEach((fTag) => {
           params += ("&tag=" + fTag.id);
