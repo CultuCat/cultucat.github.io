@@ -89,6 +89,7 @@ export default {
       filtered: false,
       filtering: false,
       selectedFilters: [],
+      selectedDates: {},
       tagsSelected: [],
       urlToFetch: "",
       isLoading: false,
@@ -165,6 +166,8 @@ export default {
     setUrl() {
       let ordering = this.orderByList[this.orderBySelected].value;
       let params = "";
+      this.selectedDates.start ? params += "&data_min=" + this.selectedDates.start : null;
+      this.selectedDates.end ? params += "&data_max=" + this.selectedDates.end : null;
       if (this.filtered && this.selectedFilters.length > 0) {
         this.selectedFilters.forEach((fTag) => {
           params += ("&tag=" + fTag.id);
@@ -202,6 +205,7 @@ export default {
       this.filtersDialog = false;
       this.selectedFilters = obj.filterTags;
       this.tagsSelected = obj.idxTags;
+      this.selectedDates = obj.formattedDates;
       this.setUrl();
       this.getEvents();
     },
