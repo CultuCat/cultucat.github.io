@@ -1,8 +1,8 @@
 <template>
-  <v-dialog v-model="show" persistent max-width="500px">
+  <v-dialog v-model="show" persistent max-width="500px" scrollable>
     <v-card class="pa-8" rounded="lg">
       <v-row>
-        <h1>{{$t('TIKETS.ticket')}}</h1>
+        <h1>{{ $t('TICKETS.ticket') }}</h1>
       </v-row>
       <v-row class="align-center justify-center">
         <v-col cols="4">
@@ -17,9 +17,10 @@
       <v-row class="mb-2" justify="center">
         <v-img height="240" :src="ticket.image" />
       </v-row>
-      <v-row justify="center">
-        <v-btn block color="#ff6961" type="submit" variant="elevated" @click="closePopup">
-          {{$t('close')}}
+      <v-row class="align-center" style="justify-content: space-between;">
+        <v-icon color="medium-emphasis" @click="downloadTicket">mdi-download</v-icon>
+        <v-btn class="text-none" color="medium-emphasis" min-width="92" rounded variant="outlined" @click="closePopup">
+          {{ $t('close') }}
         </v-btn>
       </v-row>
     </v-card>
@@ -40,6 +41,9 @@ export default {
     };
   },
   methods: {
+    downloadTicket() {
+      window.open(this.ticket.pdf_url, '_blank');
+    },
     closePopup() {
       this.show = false;
     },
@@ -61,5 +65,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
