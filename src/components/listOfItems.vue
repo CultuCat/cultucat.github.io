@@ -51,8 +51,8 @@
       </v-card>
     </template>
   </v-col>
-  <v-dialog v-model="filtersDialog">
-    <eventsFilters @quit-filters-dialog="filtersDialog = false" @filter-by="filterByEvent" :idxTagsProp="tagsSelected" />
+  <v-dialog v-model="filtersDialog" scrollable>
+    <eventsFilters @quit-filters-dialog="filtersDialog = false" @filter-by="filterByEvent" :idxTagsProp="tagsSelected" :datesSelectedProp="selectedDates"/>
   </v-dialog>
 </template>
 
@@ -92,6 +92,7 @@ export default {
       filtered: false,
       filtering: false,
       selectedFilters: [],
+      selectedDates: {},
       tagsSelected: [],
       urlToFetch: "",
       isLoading: false,
@@ -169,6 +170,12 @@ export default {
     setUrl() {
       let ordering = this.orderByList[this.orderBySelected].value;
       let params = "";
+      if (this.selectedDates.start) params += "&data_min=" + new Date(this.selectedDates.start)
+          .toLocaleDateString()
+          .replace(/\//g, "-");
+      if (this.selectedDates.end) params += "&data_max=" + new Date(this.selectedDates.end)
+          .toLocaleDateString()
+          .replace(/\//g, "-");
       if (this.filtered && this.selectedFilters.length > 0) {
         this.selectedFilters.forEach((fTag) => {
           params += ("&tag=" + fTag.id);
@@ -206,12 +213,14 @@ export default {
       this.filtersDialog = false;
       this.selectedFilters = obj.filterTags;
       this.tagsSelected = obj.idxTags;
+      this.selectedDates = obj.formattedDates;
       this.setUrl();
       this.getEvents();
     },
     resetView() {
       this.items_get = this.items;
       this.tagsSelected = [];
+      this.selectedDates = {};
     },
     handleScroll() {
       if (!this.isLoading) {
