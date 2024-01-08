@@ -15,12 +15,7 @@
           {{ $t("EVENT.Tags") }}
         </h2>
         <v-chip-group v-model="tagsSelected" column multiple>
-          <v-chip
-            v-for="(tag, idx) in tags"
-            :key="idx"
-            filter
-            variant="outlined"
-          >
+          <v-chip v-for="(tag, idx) in tags" :key="idx" filter variant="outlined">
             {{
               tag.nom.replace(/-/g, " ").replace(/^\w/, (c) => c.toUpperCase())
             }}
@@ -34,56 +29,44 @@
           <v-expansion-panel>
             <v-expansion-panel-title>
               <v-col cols="8">
-                <strong>{{this.$t('EVENT.Data_inicial')}}:</strong>
+                <strong>{{ this.$t('EVENT.Data_inicial') }}:</strong>
                 {{
                   datesSelected.start
-                    ? new Date(datesSelected.start)
-                        .toLocaleDateString()
-                        .replace(/\//g, "-")
-                    : this.$t('EVENT.No_seleccionada')
+                  ? new Date(datesSelected.start)
+                    .toLocaleDateString()
+                    .replace(/\//g, "-")
+                  : this.$t('EVENT.No_seleccionada')
                 }}
               </v-col>
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <v-date-picker
-                v-model="datesSelected.start"
-                color="#FF6961"
-                class="ma-auto"
-                :locale="es"
-                :header="this.$t('EVENT.Data_inicial')"
-                :title="this.$t('EVENT.Selecciona_data')"
-              ></v-date-picker>
+              <v-date-picker v-model="datesSelected.start" color="#FF6961" class="ma-auto" :locale="es"
+                :header="this.$t('EVENT.Data_inicial')" :title="this.$t('EVENT.Selecciona_data')"></v-date-picker>
             </v-expansion-panel-text>
           </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-title>
               <v-col cols="8">
-                <strong>{{this.$t('EVENT.Data_final')}}:</strong>
+                <strong>{{ this.$t('EVENT.Data_final') }}:</strong>
                 {{
                   datesSelected.end
-                    ? new Date(datesSelected.end)
-                        .toLocaleDateString()
-                        .replace(/\//g, "-")
-                    : this.$t('EVENT.No_seleccionada')
+                  ? new Date(datesSelected.end)
+                    .toLocaleDateString()
+                    .replace(/\//g, "-")
+                  : this.$t('EVENT.No_seleccionada')
                 }}
               </v-col>
             </v-expansion-panel-title>
             <v-expansion-panel-text>
-              <v-date-picker
-                v-model="datesSelected.end"
-                :min="datesSelected.start"
-                color="#FF6961"
-                class="ma-auto"
-                :locale="es - ES"
-                landscape="true"
-                :header="this.$t('EVENT.Data_final')"
-                :title="this.$t('EVENT.Selecciona_data')"
-              ></v-date-picker>
+              <v-date-picker v-model="datesSelected.end" :min="datesSelected.start" color="#FF6961" class="ma-auto"
+                :locale="es - ES" landscape="true" :header="this.$t('EVENT.Data_final')"
+                :title="this.$t('EVENT.Selecciona_data')"></v-date-picker>
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
       </v-card-text>
-      <v-btn class="position-relative ma-4" @click="filterBy" color="#87CEEC">
+      <v-btn class="text-none" rounded variant="flat" @click="filterBy"
+        style="position: absolute; top: 15px; right: 15px; background-color: white;">
         {{ $t("EVENT.Filtrar") }}
       </v-btn>
     </template>
