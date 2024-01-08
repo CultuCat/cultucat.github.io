@@ -25,10 +25,10 @@
         <h2 class="text-h6 mb-2">
           {{ $t("EVENT.Dates") }}
         </h2>
-        <v-text-field class="mb-2" type="date" label="Data Inici" v-model="datesSelected.start" :rules="[rules.data]"
-            variant="outlined" />
-          <v-text-field class="mb-2" type="date" label="Data Fi" v-model="datesSelected.end"
-            :rules="[rules.data, rules.dataFi]" variant="outlined" />
+        <v-text-field class="mb-2" type="date" label="Data Inici" v-model="datesSelected.start" clearable
+          :rules="[rules.data]" variant="outlined" />
+        <v-text-field class="mb-2" type="date" label="Data Fi" v-model="datesSelected.end" clearable
+          :rules="[rules.data, rules.dataFi]" variant="outlined" />
       </v-card-text>
       <v-btn class="text-none" rounded variant="flat" @click="filterBy" :disabled="this.dateError"
         style="position: absolute; top: 15px; right: 15px; background-color: white;">
@@ -63,6 +63,7 @@ export default {
   },
   props: {
     idxTagsProp: Array,
+    datesSelectedProp: Object,
   },
   methods: {
     getTags() {
@@ -113,14 +114,7 @@ export default {
         return indiceEnTagsSelected !== -1;
       });
       const idxTags = this.tagsSelected;
-      const formattedDates = {
-        start: this.datesSelected.start ? new Date(this.datesSelected.start)
-          .toLocaleDateString()
-          .replace(/\//g, "-") : null,
-        end: this.datesSelected.end ? new Date(this.datesSelected.end)
-          .toLocaleDateString()
-          .replace(/\//g, "-") : null,
-      };
+      const formattedDates = this.datesSelected;
       this.$emit("filter-by", { filterTags, idxTags, formattedDates });
     },
     checkDates() {
@@ -129,10 +123,25 @@ export default {
 
       this.dateError = start && end ? start > end : false;
     },
+    formatDate(fecha) {
+      if (fecha != null) {
+        var date = new Date(fecha);
+
+        var año = date.getFullYear();
+        var mes = ('0' + (date.getMonth() + 1)).slice(-2);
+        var día = ('0' + date.getDate()).slice(-2);
+
+        return año + '-' + mes + '-' + día;
+      }
+      return null;
+    }
   },
   mounted() {
     this.getTags();
     this.tagsSelected = this.idxTagsProp;
+    this.datesSelected.start = this.formatDate(this.datesSelectedProp.start);
+    this.datesSelected.end = this.formatDate(this.datesSelectedProp.end);
+    console.log(this.datesSelected);
   },
   watch: {
     'datesSelected.start': 'checkDates',
