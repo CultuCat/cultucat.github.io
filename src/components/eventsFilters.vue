@@ -25,47 +25,12 @@
         <h2 class="text-h6 mb-2">
           {{ $t("EVENT.Dates") }}
         </h2>
-        <v-expansion-panels>
-          <v-expansion-panel>
-            <v-expansion-panel-title>
-              <v-col cols="8">
-                <strong>{{ this.$t('EVENT.Data_inicial') }}:</strong>
-                {{
-                  datesSelected.start
-                  ? new Date(datesSelected.start)
-                    .toLocaleDateString()
-                    .replace(/\//g, "-")
-                  : this.$t('EVENT.No_seleccionada')
-                }}
-              </v-col>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <v-date-picker v-model="datesSelected.start" color="#FF6961" class="ma-auto" :locale="es"
-                :header="this.$t('EVENT.Data_inicial')" :title="this.$t('EVENT.Selecciona_data')"></v-date-picker>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-          <v-expansion-panel>
-            <v-expansion-panel-title>
-              <v-col cols="8">
-                <strong>{{ this.$t('EVENT.Data_final') }}:</strong>
-                {{
-                  datesSelected.end
-                  ? new Date(datesSelected.end)
-                    .toLocaleDateString()
-                    .replace(/\//g, "-")
-                  : this.$t('EVENT.No_seleccionada')
-                }}
-              </v-col>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <v-date-picker v-model="datesSelected.end" :min="datesSelected.start" color="#FF6961" class="ma-auto"
-                :locale="es - ES" landscape="true" :header="this.$t('EVENT.Data_final')"
-                :title="this.$t('EVENT.Selecciona_data')"></v-date-picker>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-        </v-expansion-panels>
+        <v-text-field class="mb-2" type="date" label="Data Inici" v-model="datesSelected.start" :rules="[rules.data]"
+            variant="outlined" />
+          <v-text-field class="mb-2" type="date" label="Data Fi" v-model="datesSelected.end"
+            :rules="[rules.data, rules.dataFi]" variant="outlined" />
       </v-card-text>
-      <v-btn class="text-none" rounded variant="flat" @click="filterBy"
+      <v-btn class="text-none" rounded variant="flat" @click="filterBy" :disabled="this.dateError"
         style="position: absolute; top: 15px; right: 15px; background-color: white;">
         {{ $t("EVENT.Filtrar") }}
       </v-btn>
@@ -84,6 +49,16 @@ export default {
       },
       tags: [],
       loading: false,
+      rules: {
+        data: v => !!v || "Data no pot se buida",
+        dataFi: v => {
+          if (this.datesSelected.start) {
+            return new Date(this.datesSelected.start) < new Date(v) || "La data de finalització no pot ser anterior a la de inici";
+          }
+          return true;
+        },
+      },
+      dateError: false,
     };
   },
   props: {
@@ -148,10 +123,20 @@ export default {
       };
       this.$emit("filter-by", { filterTags, idxTags, formattedDates });
     },
+    checkDates() {
+      const start = this.datesSelected.start ? new Date(this.datesSelected.start) : null;
+      const end = this.datesSelected.end ? new Date(this.datesSelected.end) : null;
+
+      this.dateError = start && end ? start > end : false;
+    },
   },
   mounted() {
     this.getTags();
     this.tagsSelected = this.idxTagsProp;
+  },
+  watch: {
+    'datesSelected.start': 'checkDates',
+    'datesSelected.end': 'checkDates',
   },
 };
 </script>
