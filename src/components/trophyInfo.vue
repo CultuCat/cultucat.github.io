@@ -37,7 +37,6 @@ export default {
             logMessage: "",
             toAchieve: "",
             percentage: 0,
-            achieved: false,
         };
     },
     props: {
@@ -111,7 +110,11 @@ export default {
         this.calculateActionsToNextLevel()
         this.calculatePercentage();
         this.generateMessage(this.trophy);
-        this.achieved = this.trophy.level_achived_user != -1;
+    },
+    computed: {
+        achieved() {
+            return this.trophy.level_achived_user !== -1;
+        }
     }
 };
 </script>

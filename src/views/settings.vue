@@ -7,10 +7,10 @@
         <v-list dense class="language-list">
           <v-list-group :prepend-icon="languages.icon">
             <template v-slot:activator="{ props }">
-              <v-list-item v-bind="props" :title=currentLanguageTitle() />
+              <v-list-item v-bind="props" :title=getcurrentLanguageTitle() />
             </template>
             <v-list-item density="compact"
-              v-for="language in languages.values.filter(language => language.value !== this.$i18next.language)"
+              v-for="language in filteredLanguages"
               :key="language.value" :title="language.text" @click="changeLanguagePut(language.value)">
             </v-list-item>
           </v-list-group>
@@ -86,13 +86,16 @@ export default {
     userId() {
       return this.user.user.id;
     },
+    filteredLanguages() {
+    return this.languages.values.filter(language => language.value !== this.$i18next.language);
+    }
   },
   mounted() {
     this.userPrivacy = !this.user.user.isVisible;
     this.userWantsToTalk = this.user.user.wantsToTalk
   },
   methods: {
-    currentLanguageTitle() {
+    getcurrentLanguageTitle() {
       const currentLanguage = this.languages.values.find(lang => lang.value === this.$i18next.language);
       return currentLanguage ? currentLanguage.text : 'CAT';
     },

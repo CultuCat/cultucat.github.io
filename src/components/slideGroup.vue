@@ -25,7 +25,7 @@
               <v-icon class="mr-1" v-else-if="trophyTab && item.level_achived_user === 3">
                 mdi-trophy-award
               </v-icon>
-              {{ item.nom.replace(/-/g, ' ') }}
+              {{ item.nom.replace(/-/g, ' ') }} {{ !trophyTab ? '(' + item.count + ')' : ' ' }}
               <v-icon class="ml-1" v-if="showDeleteIcon === index && !trophyTab && permissions" @click="emitDeleteItem(index, item.id)">
                 mdi-delete
               </v-icon>
@@ -54,7 +54,6 @@ export default {
   data() {
     return {
       showDeleteIcon: -1,
-      trophyTab: this.compData.title === "Trophies",
     };
   },
   props: {
@@ -89,5 +88,11 @@ export default {
       this.$emit("show-trophyDialog", index);
     }
   },
+  computed: {
+  trophyTab() {
+    return this.compData.title === this.$t('USER.TROFEUS');
+    }
+  },
+
 };
 </script>

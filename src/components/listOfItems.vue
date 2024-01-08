@@ -31,7 +31,8 @@
           </v-text-field>
 
           <template v-slot:append v-if="view === 'admin_events'">
-            <v-btn rounded="xl" @click="handleBtnClick('/admin/events/create')">+ {{ $t('EVENT.Crear') }}</v-btn>
+            <v-btn rounded="xl" @click="createDialog = true">+ {{ $t('EVENT.Crear') }}</v-btn>
+            <createEvent :dialog="createDialog" @closeDialog="createDialog = false" />
           </template>
           <template v-slot:append v-else>
             <v-btn rounded="xl" variant="plain" icon="mdi-restart" @click="resetView"></v-btn>
@@ -60,6 +61,7 @@ import eventPreview from "@/components/eventPreview.vue";
 import userPreview from "@/components/userPreview.vue";
 import { mapGetters } from "vuex";
 import eventsFilters from "@/components/eventsFilters.vue";
+import createEvent from "./createEvent.vue";
 
 export default {
   name: "listOfItems",
@@ -67,6 +69,7 @@ export default {
     eventPreview,
     userPreview,
     eventsFilters,
+    createEvent,
   },
   data() {
     return {
@@ -93,6 +96,7 @@ export default {
       tagsSelected: [],
       urlToFetch: "",
       isLoading: false,
+      createDialog: false,
     };
   },
   props: {
