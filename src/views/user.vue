@@ -32,7 +32,7 @@
               </div>
               <div class="d-flex align-center mx-2" @click="dialogFriends = true">
                 <v-icon class="mdi mdi-account-multiple" />
-                <strong class="underline-on-hover mx-1">Friends: {{ profile.friends?.length }}</strong>
+                <strong class="underline-on-hover mx-1">Friends: {{ friends_nb }}</strong>
               </div>
             </v-row>
             <v-row>
@@ -146,6 +146,9 @@ export default {
     ...mapGetters(["user"]),
     canIEdit() {
       return this.userId == this.user.user.id;
+    },
+    friends_nb(){
+      return this.profile.friends.filter(friend => friend.isVisible).length;
     }
   },
   created() {
