@@ -141,7 +141,6 @@ export default {
     this.tagsSelected = this.idxTagsProp;
     this.datesSelected.start = this.formatDate(this.datesSelectedProp.start);
     this.datesSelected.end = this.formatDate(this.datesSelectedProp.end);
-    console.log(this.datesSelected);
   },
   watch: {
     'datesSelected.start': 'checkDates',
