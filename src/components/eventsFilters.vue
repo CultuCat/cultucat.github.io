@@ -25,9 +25,9 @@
         <h2 class="text-h6 mb-2">
           {{ $t("EVENT.Dates") }}
         </h2>
-        <v-text-field class="mb-2" type="date" label="Data Inici" v-model="datesSelected.start" clearable
+        <v-text-field class="mb-2" type="date" :label="$t('EVENT.Data_inicial')" v-model="datesSelected.start" clearable
           :rules="[rules.data]" variant="outlined" />
-        <v-text-field class="mb-2" type="date" label="Data Fi" v-model="datesSelected.end" clearable
+        <v-text-field class="mb-2" type="date" :label="$t('EVENT.Data_final')" v-model="datesSelected.end" clearable
           :rules="[rules.data, rules.dataFi]" variant="outlined" />
       </v-card-text>
       <v-btn class="text-none" rounded variant="flat" @click="filterBy" :disabled="this.dateError"

@@ -3,6 +3,8 @@
   "cancel": "Cancel",
   "Welcome": "Welcome to",
   "close": "Close",
+  "save": "Save",
+  "data": "en-US",
   "NAV_BAR": {
     "HOME": "Home",
     "SEARCH": "Search",
@@ -37,7 +39,10 @@
     "De": "from your",
     "Eliminar": "Delete",
     "Editar": "Edit profile",
-    "Eliminar_user": "Delete user"
+    "Eliminar_user": "Delete user",
+    "Username": "Username",
+    "Name": "Name",
+    "Bio": "Biography"
   },
   "EVENT": {
     "Preu_NoDisponible": "Price not available",
@@ -48,10 +53,12 @@
     "Preu": "Price",
     "Descompte": "Discount",
     "No_descompte": "No discounts available",
+    "Chose_discount": "Choose a discount",
     "Total": "Total",
     "Buy": "Buy",
     "Comentari": "Send comment",
     "Comment": "Comment",
+    "Comentaris": "Comments",
     "Filtrar_res": "Filter results",
     "Tags": "Tags",
     "Dates": "Dates",
@@ -75,7 +82,8 @@
     "Calendari": "Add to calendar",
     "localitzacio": "View location",
     "Descripcio": "Description",
-    "know": "Did you know?"
+    "know": "Did you know?",
+    "Filtres": "Filters"
   },
   "LOGIN": {
     "Entra": "Login",
@@ -103,13 +111,36 @@
     "Guanya": "Win some!",
     "Descripcio": "Description",
     "Nivell": "Level:",
-    "No_aconseguit": "Trophy not achieved"
+    "No_aconseguit": "Trophy not achieved",
+    "Tots_aconseguits": "You've already achieved all levels!",
+    "CollectorOr": "You have collected ",
+    "CollectorOr_trophy": "trophies.",
+    "CO_guanya": "Win",
+    "CO_achieve": "trophy most to achieve the level",
+    "P_you": "You have done",
+    "P_friends": "new friends.",
+    "P_make": "Make",
+    "P_mes_amics": "more friends to reach the level",
+    "E_attended": "You have attended",
+    "E_events": "events.",
+    "E_assist": "Attend",
+    "E_mes_events": "more events to reach the level",
+    "R_you": "You have written",
+    "R_comments": "comments.",
+    "R_write": "Write",
+    "R_mes_comments": "more comments to reach the level",
+    "X_you": "You have sent",
+    "X_messages": "messages.",
+    "X_enviar": "Send",
+    "X_mes_messages": "more messages to reach the level",
+    "T_unexpected": "Unexpected Trophy."  
   },
   "TICKETS": {
     "ticket": "Ticket to",
     "tickets": "Tickets",
     "no_ticket_proper": "You have no tickets for upcoming events",
-    "no_ticket": "You have no tickets for events"
+    "no_ticket": "You have no tickets for events",
+    "veure_tots": "See all the tickets"
   },
   "HOME": {
     "Benvingut": "Welcome",
@@ -123,7 +154,18 @@
     "Nom_empty": "Name cannot be empty",
     "Descripcio_max": "Max description = 560 characters",
     "Crea": "Create",
-    "Users": "Users"
+    "Users": "Users",
+    "Nom": "Name",
+    "Descripcio": "Description",
+    "Data_ini": "Start Date",
+    "Data_fi": "End Date",
+    "Preu": "Price",
+    "Horari": "Schedule",
+    "Enlace": "Link",
+    "Adress": "Address",
+    "Latitud": "Latitude",
+    "Longitut": "Longitude",
+    "Espai": "Place"  
   },
   "CONFIG": {
     "Config": "Settings",
@@ -140,6 +182,7 @@
     "Chat": "Chat",
     "No_friends": "Add some friends and",
     "No_friends2": "start chatting",
-    "Send": "Send"
+    "Send": "Send",
+    "Escriu": "Write a message"
   }
 }

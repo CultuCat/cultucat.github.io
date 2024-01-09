@@ -33,7 +33,7 @@ export default {
         return {
             nextLevelPoints: -1,
             actionsToNextLevel: -1,
-            allAchieved: "You've already achieved all levels!",
+            allAchieved: `${this.$t('TROFEUS.Tots_aconseguits')}`,
             logMessage: "",
             toAchieve: "",
             percentage: 0,
@@ -59,42 +59,42 @@ export default {
         generateMessage() {
             switch (this.trophy.nom) {
                 case "Col·leccionista d'or":
-                    this.logMessage = `You have collected ${this.trophy.progress} trophies.`;
+                    this.logMessage = `${this.$t('TROFEUS.CollectorOr')} ${this.trophy.progress} ${this.$t('TROFEUS.CollectorOr_trophy')}`;
                     if (this.trophy.level_achived_user < 3) {
-                        this.toAchieve = `Win ${this.actionsToNextLevel} more trophies to achieve level ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
+                        this.toAchieve = `${this.$t('TROFEUS.CO_guanya')} ${this.actionsToNextLevel} ${this.$t('TROFEUS.CO_achieve')} ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
                     }
                     break;
 
                 case "Popular":
-                    this.logMessage = `You have made ${this.trophy.progress} new friends.`;
+                    this.logMessage = `${this.$t('TROFEUS.P_you')} ${this.trophy.progress} ${this.$t('TROFEUS.P_friends')}`;
                     if (this.trophy.level_achived_user < 3) {
-                        this.toAchieve = `Make ${this.actionsToNextLevel} more friends to achieve level ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
+                        this.toAchieve = `${this.$t('TROFEUS.P_make')} ${this.actionsToNextLevel} ${this.$t('TROFEUS.P_mes_amics')} ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
                     }
                     break;
 
                 case "Explorador cultural":
-                    this.logMessage = `You have attended ${this.trophy.progress} events.`;
+                    this.logMessage = `${this.$t('TROFEUS.E_attended')} ${this.trophy.progress} ${this.$t('TROFEUS.E_events')}`;
                     if (this.trophy.level_achived_user < 3) {
-                        this.toAchieve = `Assist to ${this.actionsToNextLevel} more events to achieve level ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
+                        this.toAchieve = `${this.$t('TROFEUS.E_assist')} ${this.actionsToNextLevel} ${this.$t('TROFEUS.E_mes_events')} ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
                     }
                     break;
 
                 case "Reviewer":
-                    this.logMessage = `You wrote ${this.trophy.progress} comments.`;
+                    this.logMessage = `${this.$t('TROFEUS.R_you')} ${this.trophy.progress} ${this.$t('TROFEUS.R_comments')}`;
                     if (this.trophy.level_achived_user < 3) {
-                        this.toAchieve = `Write ${this.actionsToNextLevel} more comments to achieve level ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
+                        this.toAchieve = `${this.$t('TROFEUS.R_write')} ${this.actionsToNextLevel} ${this.$t('TROFEUS.R_mes_comments')} ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
                     }
                     break;
 
                 case "Xerraire":
-                    this.logMessage = `You sent ${this.trophy.progress} messages.`;
+                    this.logMessage = `${this.$t('TROFEUS.X_you')} ${this.trophy.progress} ${this.$t('TROFEUS.X_messages')}`;
                     if (this.trophy.level_achived_user < 3) {
-                        this.toAchieve = `Send ${this.actionsToNextLevel} more messages to achieve level ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
+                        this.toAchieve = `${this.$t('TROFEUS.X_enviar')} ${this.actionsToNextLevel} ${this.$t('TROFEUS.X_mes_messages')} ${this.achieved ? this.trophy.level_achived_user + 1 : 1}.`;
                     }
                     break;
 
                 default:
-                    this.logMessage = "Unexpected trophy.";
+                    this.logMessage = `${this.$t('TROFEUS.T_unexpected')}`;
                     break;
             }
             if (this.trophy.level_achived_user === 3) {

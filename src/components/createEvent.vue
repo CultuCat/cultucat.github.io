@@ -21,27 +21,27 @@
             </v-img>
           </v-row>
           <v-file-input ref="fileInput" accept="image/*" @change="handleFileChange" style="display: none" />
-          <v-text-field class="mb-2" label="Nom" v-model="formData.nom" :rules="[rules.nom]" variant="outlined" />
-          <v-textarea class="mb-2" label="Descripció" v-model="formData.descripcio" :rules="[rules.descripcio]"
+          <v-text-field class="mb-2" :label="$t('ADMIN.Nom')" v-model="formData.nom" :rules="[rules.nom]" variant="outlined" />
+          <v-textarea class="mb-2" :label="$t('ADMIN.Descripcio')" v-model="formData.descripcio" :rules="[rules.descripcio]"
             variant="outlined" auto-grow />
-          <v-text-field class="mb-2" type="date" label="Data Inici" v-model="formData.dataIni" :rules="[rules.data]"
+          <v-text-field class="mb-2" type="date" :label="$t('ADMIN.Data_ini')" v-model="formData.dataIni" :rules="[rules.data]"
             variant="outlined" />
-          <v-text-field class="mb-2" type="date" label="Data Fi" v-model="formData.dataFi"
+          <v-text-field class="mb-2" type="date" :label="$t('ADMIN.Data_fi')" v-model="formData.dataFi"
             :rules="[rules.data, rules.dataFi]" variant="outlined" />
-          <v-text-field class="mb-2" label="Preu" v-model="formData.preu" variant="outlined" />
-          <v-text-field class="mb-2" label="Horaris" v-model="formData.horaris" variant="outlined" />
-          <v-text-field class="mb-2" label="Enllaç" v-model="formData.enllac" :rules="[rules.enllac]"
+          <v-text-field class="mb-2" :label="$t('ADMIN.Preu')" v-model="formData.preu" variant="outlined" />
+          <v-text-field class="mb-2" :label="$t('ADMIN.Horari')" v-model="formData.horaris" variant="outlined" />
+          <v-text-field class="mb-2" :label="$t('ADMIN.Enlace')" v-model="formData.enllac" :rules="[rules.enllac]"
             variant="outlined" />
-          <v-text-field class="mb-2" label="Adreça" v-model="formData.adreca" variant="outlined" />
+          <v-text-field class="mb-2" :label="$t('ADMIN.Adress')" v-model="formData.adreca" variant="outlined" />
           <v-row>
             <v-col>
-              <v-text-field label="Latitud" v-model="formData.latitud" :rules="[rules.coordenada]" variant="outlined" />
+              <v-text-field :label="$t('ADMIN.Latitud')" v-model="formData.latitud" :rules="[rules.coordenada]" variant="outlined" />
             </v-col>
             <v-col>
-              <v-text-field label="Longitud" v-model="formData.longitud" :rules="[rules.coordenada]" variant="outlined" />
+              <v-text-field :label="$t('ADMIN.Longitut')" v-model="formData.longitud" :rules="[rules.coordenada]" variant="outlined" />
             </v-col>
           </v-row>
-          <v-text-field label="Espai" v-model="formData.espai" variant="outlined" />
+          <v-text-field :label="$t('ADMIN.Espai')" v-model="formData.espai" variant="outlined" />
           <v-btn type="submit" class="text-none" rounded variant="flat" :disabled="v$.formData.$invalid || this.dateError"
             style="position: absolute; top: 15px; right: 15px; background-color: white;">
             {{ $t('ADMIN.Crea') }}

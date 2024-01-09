@@ -16,7 +16,7 @@
           <v-card-text>
             {{ acortarTexto(item.descripcio) }}
             <br /><br />
-            <strong>{{ isNumber(item.preu) ? `Preu: ${item.preu} €` : item.preu }}</strong>
+            <strong>{{ isNumber(item.preu) ? `${$t('EVENT.Preu')}: ${item.preu} €` : item.preu }}</strong>
           </v-card-text>
         </v-col>
       </template>
@@ -28,7 +28,7 @@
           <v-card-text>
             <p v-if="item.dataIni">{{ transformDate(item.dataIni) }} - {{ transformDate(item.dataFi) }}</p>
             <p v-if="item.espai">{{ item.espai.nom }}</p>
-            <strong>{{ isNumber(item.preu) ? `Preu: ${item.preu} €` : item.preu }}</strong>
+            <strong>{{ isNumber(item.preu) ? `${$t('EVENT.Preu')}: ${item.preu} €` : item.preu }}</strong>
           </v-card-text>
         </v-col>
       </template>
@@ -59,7 +59,7 @@ export default {
         day: "numeric",
         year: "numeric",
       };
-      const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
+      const formatter = new Intl.DateTimeFormat(`${this.$t('data')}`, formatOptions);
       return formatter.format(dateObj);
     },
     acortarTexto(texto) {

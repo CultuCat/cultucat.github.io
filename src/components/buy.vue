@@ -48,7 +48,7 @@
                     <v-list-item-content>
                         <v-list-item-title><strong>{{$t('EVENT.Descompte')}}:</strong></v-list-item-title>
                         <v-select v-if="discounts.length > 0 && filteredDiscounts.length > 0" v-model="selectedDiscount"
-                            :items="filteredDiscounts" :item-props="itemProps" density="compact" label="Choose a discount"
+                            :items="filteredDiscounts" :item-props="itemProps" density="compact" :label="$t('EVENT.Chose_discount')"
                             clearable>
                         </v-select>
                         <v-alert v-else value="true" type="warning" class="mt-2">
@@ -67,7 +67,7 @@
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click="cancel">{{$t('Cancel')}}</v-btn>
+            <v-btn @click="cancel">{{$t('cancel')}}</v-btn>
             <v-btn @click="buy(selectedDiscount)" :loading="buyLoading" color="success">{{$t('EVENT.Buy')}}</v-btn>
         </v-card-actions>
     </v-card>
@@ -106,7 +106,7 @@ export default {
                 month: "long", // Long month format (e.g., October)
                 day: "numeric", // Numeric day format (e.g., 22)
             };
-            const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
+            const formatter = new Intl.DateTimeFormat(`${this.$t('data')}`, formatOptions);
             return formatter.format(dateObj);
         },
         itemProps(item) {

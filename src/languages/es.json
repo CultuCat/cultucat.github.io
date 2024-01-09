@@ -3,6 +3,8 @@
   "cancel": "Cancelar",
   "Welcome": "Bienvenido/a a",
   "close": "Cerrar",
+  "save": "Guardar",
+  "data": "es-ES",
   "NAV_BAR": {
     "HOME": "Inicio",
     "SEARCH": "Buscar",
@@ -37,7 +39,10 @@
     "De": "de tu",
     "Eliminar": "Eliminar",
     "Editar": "Editar perfil",
-    "Eliminar_user": "Eliminar usuario"
+    "Eliminar_user": "Eliminar usuario",
+    "Username": "Nombre de usuario",
+    "Name": "Nombre",
+    "Bio": "Biografia"
   },
   "EVENT": {
     "Preu_NoDisponible": "Precio no disponible",
@@ -48,10 +53,12 @@
     "Preu": "Precio",
     "Descompte": "Descuento",
     "No_descompte": "No hay descuentos disponibles",
+    "Chose_discount": "Selecciona un descuento",
     "Total": "Total",
     "Buy": "Comprar",
     "Comentari": "Enviar comentario",
     "Comment": "Comentar",
+    "Comentaris": "Comentarios",
     "Filtrar_res": "Filtrar resultados",
     "Tags": "Tags",
     "Dates": "Fechas",
@@ -75,7 +82,8 @@
     "Calendari": "Añadir al calendario",
     "localitzacio": "Ver ubicación",
     "Descripcio": "Descripción",
-    "know": "¿Sabías qué?"
+    "know": "¿Sabías qué?",
+    "Filtres": "Filtros"
   },
   "LOGIN": {
     "Entra": "Iniciar sesión",
@@ -103,13 +111,36 @@
     "Guanya": "¡Gana alguno!",
     "Descripcio": "Descripción",
     "Nivell": "Nivel:",
-    "No_aconseguit": "Trofeo no conseguido"
+    "No_aconseguit": "Trofeo no conseguido",
+    "Tots_aconseguits": "Ya has compledo todos los niveles!",
+    "CollectorOr": "Has conseguido ",
+    "CollectorOr_trophy": "trofeos.",
+    "CO_guanya": "Gana",
+    "CO_achieve": "trofeo más para alcanzar el nivel",
+    "P_you": "Has hecho",
+    "P_friends": "nuevos amigos.",
+    "P_make": "Haz",
+    "P_mes_amics": "más amigos para alcanzar el nivel",
+    "E_attended": "Has asistido a",
+    "E_events": "eventos.",
+    "E_assist": "Asiste a",
+    "E_mes_events": "más eventos para alcanzar el nivel",
+    "R_you": "Has escrito",
+    "R_comments": "comentarios.",
+    "R_write": "Escribe",
+    "R_mes_comments": "más comentarios para alcanzar el nivel",
+    "X_you": "Has enviado",
+    "X_messages": "mensajes.",
+    "X_enviar": "Envía",
+    "X_mes_messages": "más mensajes para alcanzar el nivel",
+    "T_unexpected": "Trofeo inesperado."  
   },
   "TICKETS": {
     "ticket": "Entrada a",
     "tickets": "Entradas",
     "no_ticket_proper": "No tienes entradas para próximos eventos",
-    "no_ticket": "No tienes entradas para eventos"
+    "no_ticket": "No tienes entradas para eventos",
+    "veure_tots": "Ver todas las entradas"
   },
   "HOME": {
     "Benvingut": "Bienvenido/a",
@@ -123,7 +154,18 @@
     "Nom_empty": "El nombre no puede estar vacío",
     "Descripcio_max": "Máx descripción = 560 caracteres",
     "Crea": "Crear",
-    "Users": "Usuarios"
+    "Users": "Usuarios",
+    "Nom": "Nombre",
+    "Descripcio": "Descripción",
+    "Data_ini": "Fecha de inicio",
+    "Data_fi": "Fecha final",
+    "Preu": "Precio",
+    "Horari": "Horario",
+    "Enlace": "Enlace",
+    "Adress": "Dirección",
+    "Latitud": "Latitud",
+    "Longitut": "Longitud",
+    "Espai": "Espacio"  
   },
   "CONFIG": {
     "Config": "Configuración",
@@ -140,6 +182,7 @@
     "Chat": "Chat",
     "No_friends": "Agrega algún amigo y",
     "No_friends2": "empieza a chatear",
-    "Send": "Enviar"
+    "Send": "Enviar",
+    "Escriu": "Escribe un mensaje"
   }
 }

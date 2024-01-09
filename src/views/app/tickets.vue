@@ -6,7 +6,7 @@
     </template>
     <template v-else>
       <template v-if="tickets.length > 0">
-        <v-switch class="switch" v-model="showAllTickets" label="See all events" color="primary"></v-switch>
+        <v-switch class="switch" v-model="showAllTickets" :label="$t('TICKETS.veure_tots')" color="primary"></v-switch>
         <template class="d-flex tickets">
           <template v-if="filteredTickets.length > 0">
             <ticket-card class="ma-5" v-for="ticket in filteredTickets" :key="ticket.id" @click="openPopup(ticket)"

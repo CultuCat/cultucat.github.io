@@ -3,6 +3,8 @@
   "cancel": "Cancel·lar",
   "Welcome": "Benvingut/da a",
   "close": "Tancar",
+  "save": "Guardar",
+  "data": "ca-CA",
   "NAV_BAR": {
     "HOME": "Inici",
     "SEARCH": "Cerca",
@@ -37,7 +39,10 @@
     "De": "del teu",
     "Eliminar": "Eliminar",
     "Editar": "Editar perfil",
-    "Eliminar_user": "Eliminar usuari"
+    "Eliminar_user": "Eliminar usuari",
+    "Username": "Nom d'usuari",
+    "Name": "Nom",
+    "Bio": "Biografia"
   },
   "EVENT": {
     "Preu_NoDisponible": "Preu no disponible",
@@ -48,10 +53,12 @@
     "Preu": "Preu",
     "Descompte": "Descompte",
     "No_descompte": "No hi ha descomptes disponibles",
+    "Chose_discount": "Selecciona un descompte",
     "Total": "Total",
     "Buy": "Comprar",
     "Comentari": "Enviar comentari",
     "Comment": "Comentar",
+    "Comentaris": "Comentaris",
     "Filtrar_res": "Filtrar resultats",
     "Tags": "Tags",
     "Dates": "Dates",
@@ -75,7 +82,8 @@
     "Calendari": "Afegir al calendari",
     "localitzacio": "Veure localització",
     "Descripcio": "Descripció",
-    "know": "Sabies què?"
+    "know": "Sabies què?",
+    "Filtres": "Filtres"
   },
   "LOGIN": {
     "Entra": "Entra",
@@ -103,13 +111,36 @@
     "Guanya": "Guanya algún!",
     "Descripcio": "Descripció",
     "Nivell": "Nivell:",
-    "No_aconseguit": "Trofeu no aconseguit"
+    "No_aconseguit": "Trofeu no aconseguit",
+    "Tots_aconseguits": "Ja has completat tots els nivells!",
+    "CollectorOr": "Has aconseguit ",
+    "CollectorOr_trophy": "trofeus.",
+    "CO_guanya": "Guanya",
+    "CO_achieve": "trofeu més per aconseguir el nivell",
+    "P_you": "Has fet",
+    "P_friends": "nous amics.",
+    "P_make": "Fes",
+    "P_mes_amics": "amics més per aconseguir el nivell",
+    "E_attended": "Has assistit a",
+    "E_events": "events.",
+    "E_assist": "Assisteix a",
+    "E_mes_events": "events més per aconseguir el nivell",
+    "R_you": "Has escrit",
+    "R_comments": "comentaris.",
+    "R_write": "Escriu",
+    "R_mes_comments": "comentaris més per aconseguir el nivell",
+    "X_you": "Has enviat",
+    "X_messages": "missatges.",
+    "X_enviar": "Envia",
+    "X_mes_messages": "missatges més per aconseguir el nivell",
+    "T_unexpected": "Trofeu inespesperat."
   },
   "TICKETS": {
     "ticket": "Entrada a",
     "tickets": "Entrades",
     "no_ticket_proper": "No tens entrades per a propers esdeveniments",
-    "no_ticket": "No tens entrades a esdeveniments"
+    "no_ticket": "No tens entrades a esdeveniments",
+    "veure_tots": "Veure totes les entrades"
   },
   "HOME": {
     "Benvingut": "Benvingut/da",
@@ -123,7 +154,18 @@
     "Nom_empty": "El nom no pot estar buit",
     "Descripcio_max": "Descripció màx = 560 caràcters",
     "Crea": "Crea",
-    "Users": "Usuaris"
+    "Users": "Usuaris",
+    "Nom": "Nom",
+    "Descripcio": "Descripció",
+    "Data_ini": "Data inici",
+    "Data_fi": "Data final",
+    "Preu": "Preu",
+    "Horari": "Horaris",
+    "Enlace": "Enllaç",
+    "Adress": "Adreça",
+    "Latitud": "Latitut",
+    "Longitut": "Longitut",
+    "Espai": "Espai"
   },
   "CONFIG": {
     "Config": "Configuració",
@@ -140,6 +182,7 @@
     "Chat": "Xat",
     "No_friends": "Afegeix algún amic i",
     "No_friends2": "comença a xatejar",
-    "Send": "Enviar"
+    "Send": "Enviar",
+    "Escriu": "Escriu un missatge"
   }
 }

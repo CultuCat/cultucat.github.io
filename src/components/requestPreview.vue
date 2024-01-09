@@ -46,7 +46,7 @@ export default {
         month: "long", // Long month format (e.g., October)
         day: "numeric", // Numeric day format (e.g., 22)
       };
-      const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
+      const formatter = new Intl.DateTimeFormat(`${this.$t('data')}`, formatOptions);
       return formatter.format(dateObj);
     },
     acortarTexto(texto) {

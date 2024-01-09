@@ -4,10 +4,10 @@
 
 <template>
   <template v-if="profile.username != undefined">
-    <h1 style="color: #ff6961" class="mt-4 ml-5">Profile</h1>
+    <h1 style="color: #ff6961" class="mt-4 ml-5">{{$t('USER.PROFILE')}}</h1>
     <template v-if="loadingUser == true">
       <v-card class="mx-5 mt-4 card" rounded="lg" :loading="loadingUser" elevation="4">
-        <v-card-text>Loading...</v-card-text>
+        <v-card-text>{{$t('loading')}}</v-card-text>
       </v-card>
     </template>
     <template v-else>
@@ -28,11 +28,11 @@
             <v-row class="d-flex align-center" style="color: #797979;">
               <div class="d-flex align-center mx-2">
                 <v-icon class="mdi mdi-star-circle" />
-                <strong class="mx-1">Score: {{ profile.puntuacio }}</strong>
+                <strong class="mx-1">{{$t('USER.PUNTUACIO')}}: {{ profile.puntuacio }}</strong>
               </div>
               <div class="d-flex align-center mx-2" @click="dialogFriends = true">
                 <v-icon class="mdi mdi-account-multiple" />
-                <strong class="underline-on-hover mx-1">Friends: {{ friends_nb }}</strong>
+                <strong class="underline-on-hover mx-1">{{$t('USER.AMICS')}}: {{ friends_nb }}</strong>
               </div>
             </v-row>
             <v-row>
@@ -77,7 +77,7 @@
           <v-col cols="4" md="4" sm="8">
             <v-btn block rounded="xl" class="my-8" color="#FF6961" size="large" elevation="4"
               append-icon="mdi-star-circle-outline" @click="dialogRanking = true">
-              Ranking
+              {{$t('USER.RANKING')}}
             </v-btn>
           </v-col>
         </v-row>

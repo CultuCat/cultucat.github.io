@@ -14,13 +14,13 @@
           <!-- ============================ EDITAR AVATAR ============================ -->
           <profileCard :img="formData.imatge" @update-img="updateImg" />
           <!-- ============================= TEXTFIELDS ============================== -->
-          <v-text-field class="mb-2" label="Username" v-model="formData.username" :rules="userRules" variant="outlined" />
-          <v-text-field class="mb-2" label="Name" v-model="formData.first_name" :rules="nameRules" variant="outlined" />
-          <v-textarea label="Biography" v-model="formData.bio" variant="outlined" no-resize rows="4" />
+          <v-text-field class="mb-2" :label="$t('USER.Username')" v-model="formData.username" :rules="userRules" variant="outlined" />
+          <v-text-field class="mb-2" :label="$t('USER.Name')" v-model="formData.first_name" :rules="nameRules" variant="outlined" />
+          <v-textarea :label="$t('USER.Bio')" v-model="formData.bio" variant="outlined" no-resize rows="4" />
           <!-- ============================= SUBMITFORM ============================== -->
           <v-btn :loading="loading" type="submit" class="text-none" rounded variant="flat"
             style="position: absolute; top: 15px; right: 15px; background-color: white;">
-            Save
+            {{ $t('save') }}
           </v-btn>
         </v-form>
       </v-card-text>

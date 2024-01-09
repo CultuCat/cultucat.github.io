@@ -10,7 +10,7 @@
       </template>
       <template v-slot:append>
         <template v-if="isRanking">
-          Score: {{ item.puntuacio }}
+          {{$t('USER.PUNTUACIO')}}: {{ item.puntuacio }}
         </template>
         <v-icon v-if="isAdmin && isBlocked">mdi-lock</v-icon>
         <v-icon v-else-if="isAdmin">mdi-lock-open-outline</v-icon>

@@ -5,7 +5,7 @@
         <v-card-item class="my-4" v-if="view === 'events' || view === 'admin_events'">
           <template v-slot:prepend v-if="view === 'events'">
             <v-btn rounded="xl" prepend-icon="mdi-filter-outline" @click="filtersDialog = true"
-              :loading="filtering">Filters</v-btn>
+              :loading="filtering">{{$t('EVENT.Filtres')}}</v-btn>
             <v-menu location="end">
               <template v-slot:activator="{ props }">
                 <v-btn dark v-bind="props" icon="mdi-swap-vertical" size="35" class="ml-4" :loading="loadingOrder">
@@ -19,7 +19,7 @@
               </v-list>
             </v-menu>
           </template>
-          <v-text-field v-model="searchInput" placeholder="Search"
+          <v-text-field v-model="searchInput" :placeholder="$t('NAV_BAR.SEARCH')"
             :prepend-inner-icon="!expanded ? 'mdi-magnify custom-cursor' : null" class="expanding-search mx-3 my-1"
             :style="textFieldStyle" @focus="expandSearch" @blur="expandSearch" clearable rounded="xl" variant="solo"
             density="compact" hide-details @keyup.enter="search" @click:clear="items_get = items">
@@ -46,7 +46,7 @@
           </v-list-item>
         </v-list>
         <div v-else style="text-align: center" class="my-10">
-          <v-chip> Sorry, no results found for your search. </v-chip>
+          <v-chip> {{ $t('EVENT.No_found') }} </v-chip>
         </div>
       </v-card>
     </template>
@@ -78,10 +78,10 @@ export default {
       searchInput: "",
       loaded: false,
       orderByList: [
-        { title: 'Ascending Date', value: "dataIni" },
-        { title: 'Descending Date', value: "-dataIni" },
-        { title: 'Ascending Name', value: "nom" },
-        { title: 'Descending Name', value: "-nom" },
+        { title: `${this.$t('EVENT.Data_asc')}`, value: "dataIni" },
+        { title: `${this.$t('EVENT.Data_desc')}`, value: "-dataIni" },
+        { title: `${this.$t('EVENT.Nom_asc')}`, value: "nom" },
+        { title: `${this.$t('EVENT.Nom_desc')}`, value: "-nom" },
       ],
       orderBySelected: 0,
       loadingOrder: false,

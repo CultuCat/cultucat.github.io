@@ -45,7 +45,7 @@
           </div>
         </div>
         <div>
-          <v-textarea class="mr-3" auto-grow rows="1" row-height="20" v-model="newMessage" label="Escribe un mensaje"
+          <v-textarea class="mr-3" auto-grow rows="1" row-height="20" v-model="newMessage" :label="$t('CHAT.Escriu')"
             no-resize />
         </div>
         <div>
