@@ -23,7 +23,7 @@ export default {
                 day: "numeric",
                 year: "numeric",
             };
-            const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
+            const formatter = new Intl.DateTimeFormat(`${this.$t('data')}`, formatOptions);
             return formatter.format(dateObj);
         },
     }

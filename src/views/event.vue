@@ -54,7 +54,7 @@
             <v-divider class="my-2" />
 
             <template v-if="eventInfo.curiosity">
-              <h2>Do you know?</h2>
+              <h2>{{ $t('EVENT.know') }}</h2>
               <div style="text-align: justify">
                 {{ eventInfo.curiosity.question.content }}
               </div>
@@ -63,7 +63,7 @@
               </div>
               <v-divider class="my-2" />
             </template>
-            <h2>Comment</h2>
+            <h2>{{$t('EVENT.Comentaris')}}</h2>
             <commentForm @comment-posted="fetchComments"></commentForm>
             <template v-for="comment in eventInfo.comments.results" :key="comment.id">
               <comment :commentProp="comment"></comment>
@@ -225,7 +225,7 @@ export default {
         day: "numeric",
         year: "numeric", // Agregando el año
       };
-      const formatter = new Intl.DateTimeFormat("en-US", formatOptions);
+      const formatter = new Intl.DateTimeFormat(`${this.$t('data')}`, formatOptions);
       return formatter.format(dateObj);
     },
     agregarEventoAlCalendario() {
