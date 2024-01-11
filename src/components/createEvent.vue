@@ -12,7 +12,8 @@
       <v-card-text class="py-0">
         <v-form @submit.prevent="submitForm" enctype="multipart/form-data">
           <v-row justify="center" class="ma-5">
-            <v-img class="align-center" :src="imatge" :max-height="150" :max-width="150" aspect-ratio="1" cover style="border-radius: 10px">
+            <v-img class="align-center" :src="imatge" :max-height="150" :max-width="150" aspect-ratio="1" cover
+              style="border-radius: 10px">
               <v-row class="justify-center">
                 <v-btn @click="openFileInput" icon variant="flat" style="opacity: 0.7">
                   <v-icon>mdi-image-plus-outline</v-icon>
@@ -21,7 +22,9 @@
             </v-img>
           </v-row>
           <v-file-input ref="fileInput" accept="image/*" @change="handleFileChange" style="display: none" />
+
           <v-text-field class="mb-2" :label="$t('ADMIN.Nom')" v-model="formData.nom" :rules="[rules.nom]" variant="outlined" />
+          <v-combobox v-model="formData.tags" clearable chips label="Tags" :items="this.tags" multiple variant="outlined" />
           <v-textarea class="mb-2" :label="$t('ADMIN.Descripcio')" v-model="formData.descripcio" :rules="[rules.descripcio]"
             variant="outlined" auto-grow />
           <v-text-field class="mb-2" type="date" :label="$t('ADMIN.Data_ini')" v-model="formData.dataIni" :rules="[rules.data]"
@@ -64,6 +67,7 @@ export default {
     return {
       formData: {
         nom: '',
+        tags: [],
         descripcio: '',
         dataIni: null,
         dataFi: null,
@@ -82,7 +86,7 @@ export default {
         data: v => !!v || "Data no pot se buida",
         dataFi: v => {
           if (this.formData.dataIni) {
-            return new Date(this.formData.dataIni) < new Date(v) || "La data de finalització no pot ser anterior a la de inici";
+            return new Date(this.formData.dataIni) <= new Date(v) || "La data de finalització no pot ser anterior a la de inici";
           }
           return true;
         },
@@ -91,6 +95,7 @@ export default {
       },
       dateError: false,
       imatge: 'https://www.escolesblaves.cat/wp-content/uploads/2017/12/no-image-slide.png',
+      tags: [],
     };
   },
   props: {
@@ -109,6 +114,7 @@ export default {
     return {
       formData: {
         nom: { required, $autoDirty: true },
+        tags:{},
         descripcio: { maxLengthValue: maxLength(560), $autoDirty: true },
         dataIni: {},
         dataFi: {},
@@ -122,7 +128,31 @@ export default {
       },
     };
   },
+  mounted() {
+    this.getTags();
+  },
   methods: {
+    getTags() {
+      fetch('https://cultucat.hemanuelpc.es/tags/', {
+        method: "GET",
+        headers: {
+          'Authorization': `Token ${this.user.token}`,
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Error en la solicitud');
+          }
+        })
+        .then((data) => {
+          this.tags = data.map(item => item.nom);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+    },
     checkDates() {
       const start = this.formData.dataIni ? new Date(this.formData.dataIni) : null;
       const end = this.formData.dataFi ? new Date(this.formData.dataFi) : null;
@@ -143,6 +173,7 @@ export default {
 
         formData.append('nom', this.formData.nom);
         formData.append('descripcio', this.formData.descripcio);
+        formData.append('tags', this.formData.tags);
         formData.append('dataIni', new Date(this.formData.dataIni).toISOString().slice(0, 19));
         formData.append('dataFi', new Date(this.formData.dataFi).toISOString().slice(0, 19));
         formData.append('preu', this.formData.preu);
